@@ -49,8 +49,8 @@ public class EnableController extends BaseController {
         Student selectStudent = studentService.getByStuId(student.getStuId());
         if (selectStudent != null) {
             enableService.save(new Enable().setStuId(selectStudent.getStuId()));
-            return JsonResponse.success("添加成功");
+            return JsonResponse.success("添加贫困学生成功");
         }
-        return JsonResponse.failure("添加失败");
+        return JsonResponse.failure("添加贫困学生失败");
     }
 }
