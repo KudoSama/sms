@@ -1,0 +1,52 @@
+package com.team14.sms.vo;
+
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+import io.swagger.annotations.ApiModel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.time.LocalDate;
+
+/**
+ * <p>
+ *
+ * </p>
+ *
+ * @author wmj
+ * @since 2022-06-24
+ */
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+@TableName("team14_t_student")
+@ApiModel(value="Student对象", description="")
+public class Student extends Model<Student> {
+
+    private static final long serialVersionUID = 1L;
+
+    private Long stuId;
+
+    private String stuName;
+
+    private String gender;
+
+    private LocalDate enDate;
+
+    private Long classId;
+
+    private Long manId;
+
+    private String stuPassword;
+
+    private String userType;
+
+
+    @Override
+    protected Serializable pkVal() {
+        return this.stuId;
+    }
+
+}
