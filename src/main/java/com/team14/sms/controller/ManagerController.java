@@ -40,12 +40,16 @@ public class ManagerController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "添加辅导员接口",notes = "应传入：manId, manName, manPassword, coId")
     public JsonResponse addManager(@RequestBody @Valid Manager manager){
-        try {
-            managerService.save(manager);
-            return JsonResponse.successMessage("添加成功");
-        } catch (Exception e) {
-            return JsonResponse.failure(e.toString());
+        User loginUser = SessionUtils.getCurUser();
+        if (loginUser.getUserType().equals("manager")) {
+            try {
+                managerService.save(manager);
+                return JsonResponse.successMessage("添加成功");
+            } catch (Exception e) {
+                return JsonResponse.failure(e.toString());
+            }
         }
+        return JsonResponse.failure("添加失败，您无本操作权限");
     }
 
     @RequestMapping(value = "/login", produces = "application/json;charset=utf-8")

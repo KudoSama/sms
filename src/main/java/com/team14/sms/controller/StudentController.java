@@ -46,13 +46,16 @@ public class StudentController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "添加学生接口",notes = "应传入：stuId, stuName, gender, enDate, classId, manId, stuPassword")
     public JsonResponse addStudent(@RequestBody @Valid Student student){
-        try {
-            studentService.save(student);
-            //studentService.removeById(student.getStuId());
-            return JsonResponse.successMessage("添加成功");
-        } catch (Exception e) {
-            return JsonResponse.failure("添加失败，ID已经存在!");
+        User loginUser = SessionUtils.getCurUser();
+        if (loginUser.getUserType().equals("manager")) {
+            try {
+                studentService.save(student);
+                return JsonResponse.successMessage("添加成功");
+            } catch (Exception e) {
+                return JsonResponse.failure("添加失败");
+            }
         }
+        return JsonResponse.failure("添加失败，您无本操作权限，请联系系统管理员!");
     }
 
     @RequestMapping(value = "/login", produces = "application/json;charset=utf-8")

@@ -40,14 +40,20 @@ public class CollegeController extends BaseController {
 
     @RequestMapping(value = "/add", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "添加学院接口",notes = "应传入：colId, colPassword")
+    @ApiOperation(value = "添加学院接口",notes = "应传入：colId,colName,colPassword")
     public JsonResponse addCollege(@RequestBody @Valid College college){
-        try {
-            collegeService.save(college);
-            return JsonResponse.successMessage("添加成功");
-        } catch (Exception e) {
-            return JsonResponse.failure(e.toString());
+        User loginUser = SessionUtils.getCurUser();
+        if (loginUser.getUserType().equals("school")) {
+            try {
+                college.setUserType("college");
+                collegeService.save(college);
+                return JsonResponse.successMessage("添加成功");
+            } catch (Exception e) {
+                return JsonResponse.failure("添加失败");
+            }
         }
+        return JsonResponse.failure("添加失败，您无本操作权限，请联系系统管理员!");
+
     }
 
     @RequestMapping(value = "/login", produces = "application/json;charset=utf-8")

@@ -7,8 +7,10 @@ import com.team14.sms.mapper.EnableMapper;
 import com.team14.sms.mapper.StudentMapper;
 import com.team14.sms.service.EnableService;
 import com.team14.sms.service.StudentService;
+import com.team14.sms.utls.SessionUtils;
 import com.team14.sms.vo.Enable;
 import com.team14.sms.vo.Student;
+import com.team14.sms.vo.User;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,11 +48,19 @@ public class EnableController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "添加贫困名单接口")
     public JsonResponse add(@RequestBody @Valid Student student) {
-        Student selectStudent = studentService.getByStuId(student.getStuId());
-        if (selectStudent != null) {
-            enableService.save(new Enable().setStuId(selectStudent.getStuId()));
-            return JsonResponse.success("添加贫困学生成功");
+        User loginUser = SessionUtils.getCurUser();
+        if (loginUser.getUserType().equals("manager")) {
+            if (loginUser.getId().equals(student.getManId())) {
+                Student selectStudent = studentService.getByStuId(student.getStuId());
+                if (selectStudent != null) {
+                    enableService.save(new Enable().setStuId(selectStudent.getStuId()));
+                    return JsonResponse.success("添加贫困学生成功");
+                }
+                return JsonResponse.failure("添加贫困学生失败");
+            } else {
+                return JsonResponse.failure("添加失败，您非本学生的辅导员");
+            }
         }
-        return JsonResponse.failure("添加贫困学生失败");
+        return JsonResponse.failure("添加失败，您无本操作权限");
     }
 }
