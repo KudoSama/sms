@@ -4,7 +4,10 @@ package com.team14.sms.controller;
 import com.team14.sms.base.JsonResponse;
 import com.team14.sms.mapper.CollegeMapper;
 import com.team14.sms.service.CollegeService;
+import com.team14.sms.utls.SessionUtils;
 import com.team14.sms.vo.College;
+import com.team14.sms.vo.Manager;
+import com.team14.sms.vo.User;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,5 +49,25 @@ public class CollegeController extends BaseController {
             return JsonResponse.failure(e.toString());
         }
     }
+
+    @RequestMapping(value = "/login", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "学院登录接口")
+    public JsonResponse login(@RequestBody @Valid College college) {
+        College loginCollege = collegeService.login(college);
+        System.out.println(loginCollege);
+        if (loginCollege != null) {
+            User loginUser = new User();
+
+            loginUser.setId(loginCollege.getColId());
+            loginUser.setName(loginCollege.getColName());
+            loginUser.setUserType(loginCollege.getUserType());
+
+            SessionUtils.saveCurUser(loginUser);
+            return JsonResponse.success(loginUser, "登陆成功");
+        }
+        return JsonResponse.failure("登陆失败");
+    }
+
 
 }

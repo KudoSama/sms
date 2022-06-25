@@ -13,4 +13,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ManagerService extends IService<Manager> {
 
+    Manager getByManId(Long manId);
+
+    Manager login(Manager manager);
 }
