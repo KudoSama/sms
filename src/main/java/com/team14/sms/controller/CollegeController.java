@@ -10,6 +10,7 @@ import com.team14.sms.vo.Manager;
 import com.team14.sms.vo.User;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -58,10 +59,10 @@ public class CollegeController extends BaseController {
 
     @RequestMapping(value = "/login", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "学院登录接口",notes = "应传入：colId,colPassword")
+    @ApiOperation(value = "学院登录接口")
     public JsonResponse login(@RequestBody @Valid College college) {
         College loginCollege = collegeService.login(college);
-        // System.out.println(loginCollege);
+        System.out.println(loginCollege);
         if (loginCollege != null) {
             User loginUser = new User();
 
@@ -72,8 +73,7 @@ public class CollegeController extends BaseController {
             SessionUtils.saveCurUser(loginUser);
             return JsonResponse.success(loginUser, "登陆成功");
         }
-        return JsonResponse.failure("登陆失败，请检查您的账号和密码");
+        return JsonResponse.failure("登陆失败");
     }
-
 
 }
