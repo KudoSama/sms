@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * <p>
@@ -33,7 +34,7 @@ public class Student extends Model<Student> {
 
     private String gender;
 
-    private LocalDate enDate;
+    private Date enDate;
 
     private Long classId;
 

@@ -29,7 +29,7 @@ import javax.validation.Valid;
  * @since 2022-06-24
  */
 @RestController
-@RequestMapping("/student")
+@RequestMapping("/api/student")
 public class StudentController extends BaseController {
 
 
@@ -44,11 +44,13 @@ public class StudentController extends BaseController {
 
     @RequestMapping(value = "/add", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "添加学生接口",notes = "应传入：stuId, stuName, gender, enDate, classId, manId, stuPassword")
+    @ApiOperation(value = "添加学生接口",notes = "应传入：stuId, stuName, gender, enDate（时间戳, classId, manId, stuPassword")
     public JsonResponse addStudent(@RequestBody @Valid Student student){
         User loginUser = SessionUtils.getCurUser();
+        // 仅辅导员用户才能添加学生
         if (loginUser.getUserType().equals("manager")) {
             try {
+                student.setManId(loginUser.getId()); // 绑定当前辅导员号，无需前端操作
                 studentService.save(student);
                 return JsonResponse.successMessage("添加成功");
             } catch (Exception e) {
@@ -60,7 +62,7 @@ public class StudentController extends BaseController {
 
     @RequestMapping(value = "/login", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "学生登录接口")
+    @ApiOperation(value = "学生登录接口",notes = "应传入：stuId,stuPassword")
     public JsonResponse login(@RequestBody @Valid Student student) {
         Student loginStudent = studentService.login(student);
         if (loginStudent != null) {
@@ -73,6 +75,6 @@ public class StudentController extends BaseController {
             SessionUtils.saveCurUser(loginUser);
             return JsonResponse.success(loginUser, "登陆成功");
         }
-        return JsonResponse.failure("登陆失败");
+        return JsonResponse.failure("登陆失败，请检查您的账号和密码");
     }
 }

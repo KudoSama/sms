@@ -29,7 +29,7 @@ import javax.validation.Valid;
  * @since 2022-06-25
  */
 @RestController
-@RequestMapping("/enable")
+@RequestMapping("/api/enable")
 public class EnableController extends BaseController {
 
     @Autowired
@@ -46,7 +46,7 @@ public class EnableController extends BaseController {
 
     @RequestMapping(value = "/add", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "添加贫困名单接口")
+    @ApiOperation(value = "添加贫困名单接口",notes = "传入学生相关信息")
     public JsonResponse add(@RequestBody @Valid Student student) {
         User loginUser = SessionUtils.getCurUser();
         if (loginUser.getUserType().equals("manager")) {
@@ -56,7 +56,7 @@ public class EnableController extends BaseController {
                     enableService.save(new Enable().setStuId(selectStudent.getStuId()));
                     return JsonResponse.success("添加贫困学生成功");
                 }
-                return JsonResponse.failure("添加贫困学生失败");
+                return JsonResponse.failure("添加贫困学生失败，不存在该学生");
             } else {
                 return JsonResponse.failure("添加失败，您非本学生的辅导员");
             }
