@@ -27,7 +27,7 @@ import javax.validation.Valid;
  * @author wmj
  * @since 2022-06-24
  */
-@RestController
+@Controller
 @RequestMapping("/api/college")
 public class CollegeController extends BaseController {
 
