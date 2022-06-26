@@ -187,7 +187,7 @@ public class CodeGenerator {
         strategy.setSuperControllerClass("com.team14.sms.base.BaseController");
         strategy.setEntityLombokModel(true);//启用lombok注解
         strategy.setChainModel(true);//启用lombok链式注解
-        strategy.setInclude("team14_t_enable");
+        strategy.setInclude("team14_t_cloth");
         strategy.setTablePrefix("team14_t_");//去表前缀配置
         mpg.setGlobalConfig(gc);
         mpg.setDataSource(dsc);
