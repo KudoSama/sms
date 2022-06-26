@@ -13,6 +13,7 @@ import com.team14.sms.vo.Student;
 import com.team14.sms.vo.User;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,8 +29,8 @@ import javax.validation.Valid;
  * @author wmj
  * @since 2022-06-25
  */
-@RestController
-@RequestMapping("/enable")
+@Controller
+@RequestMapping("/api/enable")
 public class EnableController extends BaseController {
 
     @Autowired

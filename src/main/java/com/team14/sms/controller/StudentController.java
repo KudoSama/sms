@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -28,8 +29,8 @@ import javax.validation.Valid;
  * @author wmj
  * @since 2022-06-24
  */
-@RestController
-@RequestMapping("/student")
+@Controller
+@RequestMapping("/api/student")
 public class StudentController extends BaseController {
 
 

@@ -9,6 +9,7 @@ import com.team14.sms.vo.Manager;
 import com.team14.sms.vo.User;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -26,8 +27,8 @@ import javax.validation.Valid;
  * @author wmj
  * @since 2022-06-24
  */
-@RestController
-@RequestMapping("/manager")
+@Controller
+@RequestMapping("/api/manager")
 public class ManagerController extends BaseController {
 
     @Autowired

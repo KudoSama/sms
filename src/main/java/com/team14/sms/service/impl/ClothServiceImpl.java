@@ -7,6 +7,8 @@ import com.team14.sms.service.ClothService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务实现类
@@ -23,5 +25,19 @@ public class ClothServiceImpl extends ServiceImpl<ClothMapper, Cloth> implements
         QueryWrapper<Cloth> wrapper =new QueryWrapper<>();
         wrapper.eq("cloth_id", clothId);
         return super.getOne(wrapper);
+    }
+
+    @Override
+    public List<Cloth> getByGender(String gender) {
+        QueryWrapper<Cloth> wrapper =new QueryWrapper<>();
+        wrapper.eq("gender", gender);
+        return super.list(wrapper);
+    }
+
+    @Override
+    public List<Cloth> getByBatchId(Long batchId) {
+        QueryWrapper<Cloth> wrapper =new QueryWrapper<>();
+        wrapper.eq("batch_id", batchId);
+        return super.list(wrapper);
     }
 }
