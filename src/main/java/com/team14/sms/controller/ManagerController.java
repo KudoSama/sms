@@ -42,8 +42,10 @@ public class ManagerController extends BaseController {
     @ApiOperation(value = "添加辅导员接口",notes = "应传入：manId, manName, manPassword, coId")
     public JsonResponse addManager(@RequestBody @Valid Manager manager){
         User loginUser = SessionUtils.getCurUser();
-        if (loginUser.getUserType().equals("manager")) {
+        // 仅学院用户才能添加辅导员
+        if (loginUser.getUserType().equals("college")) {
             try {
+                manager.setColId(loginUser.getId()); // 绑定学院号，无需前端操作
                 managerService.save(manager);
                 return JsonResponse.successMessage("添加成功");
             } catch (Exception e) {
@@ -55,7 +57,7 @@ public class ManagerController extends BaseController {
 
     @RequestMapping(value = "/login", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "辅导员登录接口")
+    @ApiOperation(value = "辅导员登录接口",notes = "应传入：manId,manPassword")
     public JsonResponse login(@RequestBody @Valid Manager manager) {
         Manager loginManager = managerService.login(manager);
         //System.out.println(loginManager);
@@ -69,7 +71,7 @@ public class ManagerController extends BaseController {
             SessionUtils.saveCurUser(loginUser);
             return JsonResponse.success(loginUser, "登陆成功");
         }
-        return JsonResponse.failure("登陆失败");
+        return JsonResponse.failure("登陆失败，请检查您的账号和密码");
     }
 
 }

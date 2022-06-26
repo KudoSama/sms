@@ -35,7 +35,7 @@ public class SchoolController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/login")
-    @ApiOperation(value = "学校登录接口")
+    @ApiOperation(value = "学校登录接口",notes = "传入schId,schPassword")
     public JsonResponse login(@RequestBody School school) {
         School loginSchool = schoolService.login(school);
         if (loginSchool != null) {
@@ -48,6 +48,6 @@ public class SchoolController extends BaseController {
             SessionUtils.saveCurUser(loginUser);
             return JsonResponse.success(loginUser, "登陆成功");
         }
-        return JsonResponse.failure("登陆失败");
+        return JsonResponse.failure("登陆失败，请检查您的账号和密码");
     }
 }
