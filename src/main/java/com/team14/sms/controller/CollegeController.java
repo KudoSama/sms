@@ -44,9 +44,9 @@ public class CollegeController extends BaseController {
     @ApiOperation(value = "添加学院接口",notes = "应传入：colId,colName,colPassword")
     public JsonResponse addCollege(@RequestBody @Valid College college){
         User loginUser = SessionUtils.getCurUser();
-        if (loginUser.getUserType().equals("school")) {
+        if (loginUser.getUserType().equals("4")) {
             try {
-                college.setUserType("college");
+                college.setUserType("3");
                 collegeService.save(college);
                 return JsonResponse.successMessage("添加成功");
             } catch (Exception e) {

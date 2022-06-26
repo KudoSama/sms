@@ -43,7 +43,7 @@ public class BatchController extends BaseController {
         User loginUser = SessionUtils.getCurUser();
         // System.out.println(loginUser);
         // 只有学校用户才能添加批次
-        if (loginUser.getUserType().equals("school")) {
+        if (loginUser.getUserType().equals("4")) {
             try {
                 // 结束时间小于开始时间
                 if (batch.getBatchDateend().compareTo(batch.getBatchDatestart()) <= 0 ) {

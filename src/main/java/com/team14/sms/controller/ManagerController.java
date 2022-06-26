@@ -43,9 +43,10 @@ public class ManagerController extends BaseController {
     public JsonResponse addManager(@RequestBody @Valid Manager manager){
         User loginUser = SessionUtils.getCurUser();
         // 仅学院用户才能添加辅导员
-        if (loginUser.getUserType().equals("college")) {
+        if (loginUser.getUserType().equals("3")) {
             try {
                 manager.setColId(loginUser.getId()); // 绑定学院号，无需前端操作
+                manager.setUserType("2");
                 managerService.save(manager);
                 return JsonResponse.successMessage("添加成功");
             } catch (Exception e) {

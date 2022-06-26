@@ -49,9 +49,10 @@ public class StudentController extends BaseController {
     public JsonResponse addStudent(@RequestBody @Valid Student student){
         User loginUser = SessionUtils.getCurUser();
         // 仅辅导员用户才能添加学生
-        if (loginUser.getUserType().equals("manager")) {
+        if (loginUser.getUserType().equals("2")) {
             try {
                 student.setManId(loginUser.getId()); // 绑定当前辅导员号，无需前端操作
+                student.setUserType("1");
                 studentService.save(student);
                 return JsonResponse.successMessage("添加成功");
             } catch (Exception e) {
