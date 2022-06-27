@@ -39,55 +39,13 @@ public class BatchController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "添加批次接口",notes = "应传入：batchId, batchDatestart（时间戳, batchDateend（时间戳")
     public JsonResponse addBatch(@RequestBody @Valid Batch batch) {
-        User loginUser = SessionUtils.getCurUser();
-        // System.out.println(loginUser);
-        // 只有学校用户才能添加批次
-        if (loginUser.getUserType().equals("4")) {
-            try {
-                // 未填写批次号、开始时间或结束时间
-                if (batch.getBatchId() == null || batch.getBatchDateend() == null ||
-                        batch.getBatchDatestart() == null) {
-                    return JsonResponse.failure("添加失败，您未填写批次号、开始日期或结束时间");
-                } else {
-                    // 结束时间小于开始时间
-                    if (batch.getBatchDateend().compareTo(batch.getBatchDatestart()) <= 0 ) {
-                        return JsonResponse.failure("添加失败，您填写的结束日期早于开始日期");
-                    } else {
-                        batchService.save(batch);
-                        return JsonResponse.successMessage("添加成功");
-                    }
-                }
-            } catch (Exception e) {
-                return JsonResponse.failure("添加失败");
-            }
-        }
-        return JsonResponse.failure("添加失败，您无本操作权限，请联系系统管理员!");
+        return batchService.addState(batch);
     }
 
     @RequestMapping(value = "/modify", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "修改批次接口",notes = "应传入：batchId, batchDatestart（时间戳, batchDateend（时间戳")
     public JsonResponse modifyBatch(@RequestBody @Valid Batch batch) {
-        User loginUser = SessionUtils.getCurUser();
-        System.out.println(loginUser);
-        // 只有学校用户才能修改批次
-        if (loginUser.getUserType().equals("school")) {
-            // 未填写开始时间或结束时间
-            if (batch.getBatchDateend() == null || batch.getBatchDatestart() == null) {
-                return JsonResponse.failure("添加失败，您未填写开始日期或结束时间");
-            } else {
-                // 结束时间小于开始时间
-                if (batch.getBatchDateend().compareTo(batch.getBatchDatestart()) <= 0) {
-                    return JsonResponse.failure("修改失败，您填写的结束日期早于开始日期");
-                } else {
-                    boolean temp = batchService.updateByBatch(batch);
-                    if (temp) {
-                        return JsonResponse.successMessage("修改成功");
-                    }
-                    return JsonResponse.successMessage("修改失败");
-                }
-            }
-        }
-        return JsonResponse.failure("添加失败，您无本操作权限，请联系系统管理员!");
+        return batchService.updateByBatch(batch);
     }
 }
