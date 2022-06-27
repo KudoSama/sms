@@ -1,5 +1,6 @@
 package com.team14.sms.service;
 
+import com.team14.sms.base.JsonResponse;
 import com.team14.sms.vo.Batch;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,5 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface BatchService extends IService<Batch> {
 
-    boolean updateByBatch(Batch batch);
+    JsonResponse updateByBatch(Batch batch);
+
+    JsonResponse addState(Batch batch);
 }
