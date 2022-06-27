@@ -60,7 +60,7 @@ public class ClothController extends BaseController {
 
     @RequestMapping(value = "/getClothByGender", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "服装性别接口",notes = "应传入：男、女（字符串）")
+    @ApiOperation(value = "服装性别接口",notes = "应传入gender：男、女（字符串）")
     @ApiImplicitParam(name = "gender", value = "性别", required = true, dataType = "String",dataTypeClass = String.class)
     public JsonResponse clothGender(String gender){
         // System.out.println(gender);
@@ -70,7 +70,7 @@ public class ClothController extends BaseController {
 
     @RequestMapping(value = "/getClothByBatchId", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "服装批次接口",notes = "应传入：批次号")
+    @ApiOperation(value = "服装批次接口",notes = "应传入：batchId")
     @ApiImplicitParam(name = "batchId", value = "批次号", required = true, dataType = "Long",dataTypeClass = Long.class)
     public JsonResponse clothBatch(Long batchId){
         // System.out.println(batchId);

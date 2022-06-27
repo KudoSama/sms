@@ -1,6 +1,8 @@
 package com.team14.sms.controller;
 
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.team14.sms.base.BaseController;
 import com.team14.sms.base.JsonResponse;
 import com.team14.sms.mapper.ManagerMapper;
 import com.team14.sms.service.ManagerService;
@@ -12,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import com.team14.sms.base.BaseController;
 
 import javax.validation.Valid;
 
@@ -39,17 +38,23 @@ public class ManagerController extends BaseController {
 
     @RequestMapping(value = "/add", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "添加辅导员接口",notes = "应传入：manId, manName, manPassword, coId")
+    @ApiOperation(value = "添加辅导员接口",notes = "应传入：manId, manName, manPassword")
     public JsonResponse addManager(@RequestBody @Valid Manager manager){
         User loginUser = SessionUtils.getCurUser();
         // 仅学院用户才能添加辅导员
-        if (loginUser.getUserType().equals("college")) {
-            try {
-                manager.setColId(loginUser.getId()); // 绑定学院号，无需前端操作
-                managerService.save(manager);
-                return JsonResponse.successMessage("添加成功");
-            } catch (Exception e) {
-                return JsonResponse.failure(e.toString());
+        if (loginUser.getUserType().equals("3")) {
+            // 未填写辅导员号或密码
+            if (manager.getManId() == null || StringUtils.isBlank(manager.getManPassword())) {
+                return JsonResponse.failure("添加失败，您未填写辅导员号或密码");
+            } else {
+                try {
+                    manager.setColId(loginUser.getId()); // 绑定学院号，无需前端操作
+                    manager.setUserType("2");
+                    managerService.save(manager);
+                    return JsonResponse.successMessage("添加成功");
+                } catch (Exception e) {
+                    return JsonResponse.failure(e.toString());
+                }
             }
         }
         return JsonResponse.failure("添加失败，您无本操作权限");

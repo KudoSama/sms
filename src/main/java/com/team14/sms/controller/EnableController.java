@@ -29,7 +29,7 @@ import javax.validation.Valid;
  * @author wmj
  * @since 2022-06-25
  */
-@RestController
+@Controller
 @RequestMapping("/api/enable")
 public class EnableController extends BaseController {
 
