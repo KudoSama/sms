@@ -66,10 +66,13 @@ public class CollegeController extends BaseController {
 
     @RequestMapping(value = "/login", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "学院登录接口")
-    public JsonResponse login(@RequestBody @Valid College college) {
+    @ApiOperation(value = "学院登录接口", notes = "应传入id password")
+    public JsonResponse login(@RequestBody @Valid User user) {
+        College college = new College();
+        college.setColId(user.getId());
+        college.setColPassword(user.getPassword());
         College loginCollege = collegeService.login(college);
-        System.out.println(loginCollege);
+        // System.out.println(loginCollege);
         if (loginCollege != null) {
             User loginUser = new User();
 

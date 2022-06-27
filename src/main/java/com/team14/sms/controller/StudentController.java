@@ -8,14 +8,15 @@ import com.team14.sms.service.StudentService;
 import com.team14.sms.utls.SessionUtils;
 import com.team14.sms.vo.Student;
 import com.team14.sms.vo.User;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Param;
 import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -68,8 +69,12 @@ public class StudentController extends BaseController {
 
     @RequestMapping(value = "/login", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "学生登录接口",notes = "应传入：stuId,stuPassword")
-    public JsonResponse login(@RequestBody @Valid Student student) {
+    @ApiOperation(value = "学生登录接口",notes = "应传入：id,password")
+    public JsonResponse login(@RequestBody @Valid User user) {
+        Student student = new Student();
+        student.setStuId(user.getId());
+        student.setStuPassword(user.getPassword());
+        System.out.println(student.getStuId());
         Student loginStudent = studentService.login(student);
         if (loginStudent != null) {
             User loginUser = new User();

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 /**
  * <p>
@@ -62,8 +63,11 @@ public class ManagerController extends BaseController {
 
     @RequestMapping(value = "/login", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "辅导员登录接口",notes = "应传入：manId,manPassword")
-    public JsonResponse login(@RequestBody @Valid Manager manager) {
+    @ApiOperation(value = "辅导员登录接口",notes = "应传入：id,password")
+    public JsonResponse login(@RequestBody @Valid User user) {
+        Manager manager = new Manager();
+        manager.setManId(user.getId());
+        manager.setManPassword(user.getPassword());
         Manager loginManager = managerService.login(manager);
         //System.out.println(loginManager);
         if (loginManager != null) {
