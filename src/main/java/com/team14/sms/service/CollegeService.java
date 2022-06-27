@@ -1,5 +1,6 @@
 package com.team14.sms.service;
 
+import com.team14.sms.base.JsonResponse;
 import com.team14.sms.vo.College;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -15,5 +16,7 @@ public interface CollegeService extends IService<College> {
 
     College getByColId(Long colId);
 
-    College login(College college);
+    JsonResponse login(College college);
+
+    JsonResponse addState(College college);
 }

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 /**
  * <p>
  *  前端控制器
@@ -35,19 +37,13 @@ public class SchoolController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/login")
-    @ApiOperation(value = "学校登录接口",notes = "传入schId,schPassword")
-    public JsonResponse login(@RequestBody School school) {
-        School loginSchool = schoolService.login(school);
-        if (loginSchool != null) {
-            User loginUser = new User();
+    @ApiOperation(value = "学校登录接口",notes = "传入id,password")
+    public JsonResponse login(@RequestBody @Valid User user) {
+        // 转打包
+        School school = new School();
+        school.setSchId(user.getId());
+        school.setSchPassword(user.getPassword());
 
-            loginUser.setId(loginSchool.getSchId());
-            loginUser.setName(loginSchool.getSchName());
-            loginUser.setUserType(loginSchool.getUserType());
-
-            SessionUtils.saveCurUser(loginUser);
-            return JsonResponse.success(loginUser, "登陆成功");
-        }
-        return JsonResponse.failure("登陆失败，请检查您的账号和密码");
+        return schoolService.login(school);
     }
 }
