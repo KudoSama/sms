@@ -1,22 +1,21 @@
 package com.team14.sms.controller;
 
 
+import com.team14.sms.base.BaseController;
 import com.team14.sms.base.JsonResponse;
 import com.team14.sms.mapper.StudentMapper;
-import com.team14.sms.vo.User;
 import com.team14.sms.service.StudentService;
 import com.team14.sms.utls.SessionUtils;
 import com.team14.sms.vo.Student;
+import com.team14.sms.vo.User;
 import io.swagger.annotations.ApiOperation;
 import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import com.team14.sms.base.BaseController;
 
 import javax.validation.Valid;
 
@@ -48,9 +47,10 @@ public class StudentController extends BaseController {
     public JsonResponse addStudent(@RequestBody @Valid Student student){
         User loginUser = SessionUtils.getCurUser();
         // 仅辅导员用户才能添加学生
-        if (loginUser.getUserType().equals("manager")) {
+        if (loginUser.getUserType().equals("2")) {
             try {
                 student.setManId(loginUser.getId()); // 绑定当前辅导员号，无需前端操作
+                student.setUserType("1");
                 studentService.save(student);
                 return JsonResponse.successMessage("添加成功");
             } catch (Exception e) {
