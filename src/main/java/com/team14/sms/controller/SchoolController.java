@@ -39,20 +39,11 @@ public class SchoolController extends BaseController {
     @RequestMapping("/login")
     @ApiOperation(value = "学校登录接口",notes = "传入id,password")
     public JsonResponse login(@RequestBody @Valid User user) {
+        // 转打包
         School school = new School();
         school.setSchId(user.getId());
         school.setSchPassword(user.getPassword());
-        School loginSchool = schoolService.login(school);
-        if (loginSchool != null) {
-            User loginUser = new User();
 
-            loginUser.setId(loginSchool.getSchId());
-            loginUser.setName(loginSchool.getSchName());
-            loginUser.setUserType(loginSchool.getUserType());
-
-            SessionUtils.saveCurUser(loginUser);
-            return JsonResponse.success(loginUser, "登陆成功");
-        }
-        return JsonResponse.failure("登陆失败，请检查您的账号和密码");
+        return schoolService.login(school);
     }
 }

@@ -1,7 +1,9 @@
 package com.team14.sms.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.team14.sms.base.JsonResponse;
 import com.team14.sms.vo.Student;
+import springfox.documentation.spring.web.json.Json;
 
 
 /**
@@ -14,7 +16,9 @@ import com.team14.sms.vo.Student;
  */
 public interface StudentService extends IService<Student> {
 
-    Student login(Student student);
+    JsonResponse login(Student student);
 
     Student getByStuId(Long stuId);
+
+    JsonResponse addStudent(Student student);
 }

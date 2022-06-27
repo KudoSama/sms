@@ -1,5 +1,6 @@
 package com.team14.sms.service;
 
+import com.team14.sms.base.JsonResponse;
 import com.team14.sms.vo.Manager;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -15,5 +16,7 @@ public interface ManagerService extends IService<Manager> {
 
     Manager getByManId(Long manId);
 
-    Manager login(Manager manager);
+    JsonResponse login(Manager manager);
+
+    JsonResponse addState(Manager manager);
 }

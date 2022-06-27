@@ -1,5 +1,6 @@
 package com.team14.sms.service;
 
+import com.team14.sms.base.JsonResponse;
 import com.team14.sms.vo.School;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,5 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface SchoolService extends IService<School> {
 
-    School login(School school);
+    JsonResponse login(School school);
 }

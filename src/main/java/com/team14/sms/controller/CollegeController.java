@@ -44,23 +44,7 @@ public class CollegeController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "添加学院接口",notes = "应传入：colId,colName,colPassword")
     public JsonResponse addCollege(@RequestBody @Valid College college){
-        User loginUser = SessionUtils.getCurUser();
-        if (loginUser.getUserType().equals("1")) {
-            // 检测装入数据的必要字段是否为空
-            if (college.getColId() == null || StringUtils.isBlank(college.getColName())
-                    || StringUtils.isBlank(college.getColPassword())) {
-                return JsonResponse.failure("添加失败，您未填写学院号、学院名或学院密码!");
-            } else {
-                try {
-                    college.setUserType("2");
-                    collegeService.save(college);
-                    return JsonResponse.successMessage("添加成功");
-                } catch (Exception e) {
-                    return JsonResponse.failure("添加失败");
-                }
-            }
-        }
-        return JsonResponse.failure("添加失败，您无本操作权限，请联系系统管理员!");
+        return collegeService.addState(college);
 
     }
 
@@ -68,22 +52,12 @@ public class CollegeController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "学院登录接口", notes = "应传入id password")
     public JsonResponse login(@RequestBody @Valid User user) {
+        // 转打包
         College college = new College();
         college.setColId(user.getId());
         college.setColPassword(user.getPassword());
-        College loginCollege = collegeService.login(college);
-        // System.out.println(loginCollege);
-        if (loginCollege != null) {
-            User loginUser = new User();
 
-            loginUser.setId(loginCollege.getColId());
-            loginUser.setName(loginCollege.getColName());
-            loginUser.setUserType(loginCollege.getUserType());
-
-            SessionUtils.saveCurUser(loginUser);
-            return JsonResponse.success(loginUser, "登陆成功");
-        }
-        return JsonResponse.failure("登陆失败");
+        return collegeService.login(college);
     }
 
 }

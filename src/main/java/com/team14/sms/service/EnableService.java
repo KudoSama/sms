@@ -1,7 +1,9 @@
 package com.team14.sms.service;
 
+import com.team14.sms.base.JsonResponse;
 import com.team14.sms.vo.Enable;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.team14.sms.vo.Student;
 
 /**
  * <p>
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface EnableService extends IService<Enable> {
 
+    JsonResponse addState(Student student);
 }
