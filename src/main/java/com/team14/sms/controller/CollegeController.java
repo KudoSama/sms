@@ -1,6 +1,7 @@
 package com.team14.sms.controller;
 
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.team14.sms.base.JsonResponse;
 import com.team14.sms.mapper.CollegeMapper;
 import com.team14.sms.service.CollegeService;
@@ -44,13 +45,19 @@ public class CollegeController extends BaseController {
     @ApiOperation(value = "添加学院接口",notes = "应传入：colId,colName,colPassword")
     public JsonResponse addCollege(@RequestBody @Valid College college){
         User loginUser = SessionUtils.getCurUser();
-        if (loginUser.getUserType().equals("4")) {
-            try {
-                college.setUserType("3");
-                collegeService.save(college);
-                return JsonResponse.successMessage("添加成功");
-            } catch (Exception e) {
-                return JsonResponse.failure("添加失败");
+        if (loginUser.getUserType().equals("1")) {
+            // 检测装入数据的必要字段是否为空
+            if (college.getColId() == null || StringUtils.isBlank(college.getColName())
+                    || StringUtils.isBlank(college.getColPassword())) {
+                return JsonResponse.failure("添加失败，您未填写学院号、学院名或学院密码!");
+            } else {
+                try {
+                    college.setUserType("2");
+                    collegeService.save(college);
+                    return JsonResponse.successMessage("添加成功");
+                } catch (Exception e) {
+                    return JsonResponse.failure("添加失败");
+                }
             }
         }
         return JsonResponse.failure("添加失败，您无本操作权限，请联系系统管理员!");

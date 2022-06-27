@@ -42,14 +42,14 @@ public class ManagerController extends BaseController {
     public JsonResponse addManager(@RequestBody @Valid Manager manager){
         User loginUser = SessionUtils.getCurUser();
         // 仅学院用户才能添加辅导员
-        if (loginUser.getUserType().equals("3")) {
+        if (loginUser.getUserType().equals("2")) {
             // 未填写辅导员号或密码
             if (manager.getManId() == null || StringUtils.isBlank(manager.getManPassword())) {
                 return JsonResponse.failure("添加失败，您未填写辅导员号或密码");
             } else {
                 try {
                     manager.setColId(loginUser.getId()); // 绑定学院号，无需前端操作
-                    manager.setUserType("2");
+                    manager.setUserType("3");
                     managerService.save(manager);
                     return JsonResponse.successMessage("添加成功");
                 } catch (Exception e) {
