@@ -31,7 +31,7 @@ import java.util.List;
  * @since 2022-06-27
  */
 @Controller
-@RequestMapping("/api/clothsize")
+@RequestMapping("/api/clothSize")
 public class ClothSizeController extends BaseController {
 
 
@@ -43,16 +43,16 @@ public class ClothSizeController extends BaseController {
 
     @RequestMapping(value = "/add", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "添加服装尺寸接口",notes = "应传入：id,clothId,clothSize")
+    @ApiOperation(value = "添加服装尺寸接口",notes = "应传入：clothId,clothSize")
     public JsonResponse addClothSize(@RequestBody @Valid ClothSize clothSize){
         return clothSizeService.addState(clothSize);
     }
 
-    @RequestMapping(value = "/getClothByClothId", produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/getClothSizeByClothId", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "服装号查询接口",notes = "应传入clothId")
     @ApiImplicitParam(name = "clothId", value = "服装编号", required = true, dataType = "Long",dataTypeClass = Long.class)
-    public JsonResponse clothById(Long clothId){
+    public JsonResponse getClothSizeById(Long clothId){
         List<ClothSize> cloth_size_list = clothSizeService.getByClothId(clothId);
         return JsonResponse.success(cloth_size_list, "查询成功");
     }

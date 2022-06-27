@@ -1,6 +1,7 @@
 package com.team14.sms.utls;
 
 
+import com.team14.sms.base.JsonResponse;
 import com.team14.sms.vo.User;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -22,5 +23,10 @@ public class SessionUtils {
 
     public static User getCurUser() {
        return  (User)session().getAttribute("curUser");
+    }
+
+    public static JsonResponse deleteCurUser() {
+        session().removeAttribute("curUser");
+        return JsonResponse.success("删除成功");
     }
 }
