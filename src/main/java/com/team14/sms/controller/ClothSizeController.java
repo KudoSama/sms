@@ -8,6 +8,7 @@ import com.team14.sms.service.ClothSizeService;
 import com.team14.sms.utls.SessionUtils;
 import com.team14.sms.vo.ClothSize;
 import com.team14.sms.vo.User;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.team14.sms.base.BaseController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * <p>
@@ -39,11 +41,19 @@ public class ClothSizeController extends BaseController {
     @Autowired
     private ClothSizeMapper clothSizeMapper;
 
-//    @RequestMapping(value = "/add", produces = "application/json;charset=utf-8")
-//    @ResponseBody
-//    @ApiOperation(value = "添加服装尺寸接口",notes = "应传入：clothId,clothSize")
-//    public JsonResponse addClothSize(@RequestBody @Valid ClothSize clothSize){
-//
-//    }
+    @RequestMapping(value = "/add", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "添加服装尺寸接口",notes = "应传入：id,clothId,clothSize")
+    public JsonResponse addClothSize(@RequestBody @Valid ClothSize clothSize){
+        return clothSizeService.addState(clothSize);
+    }
 
+    @RequestMapping(value = "/getClothByClothId", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "服装号查询接口",notes = "应传入clothId")
+    @ApiImplicitParam(name = "clothId", value = "服装编号", required = true, dataType = "Long",dataTypeClass = Long.class)
+    public JsonResponse clothById(Long clothId){
+        List<ClothSize> cloth_size_list = clothSizeService.getByClothId(clothId);
+        return JsonResponse.success(cloth_size_list, "查询成功");
+    }
 }
