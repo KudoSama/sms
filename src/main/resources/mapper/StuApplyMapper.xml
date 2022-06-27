@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team14.sms.mapper.StuApplyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.team14.sms.vo.StuApply">
+        <id column="id" property="id" />
+        <result column="stu_id" property="stuId" />
+        <result column="batch_id" property="batchId" />
+        <result column="app_reason" property="appReason" />
+        <result column="sc_date" property="scDate" />
+        <result column="cloth_id" property="clothId" />
+        <result column="cloth_size" property="clothSize" />
+        <result column="state" property="state" />
+        <result column="ref_reason" property="refReason" />
+    </resultMap>
+
+</mapper>

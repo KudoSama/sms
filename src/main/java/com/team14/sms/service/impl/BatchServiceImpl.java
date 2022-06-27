@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 public class BatchServiceImpl extends ServiceImpl<BatchMapper, Batch> implements BatchService {
 
     @Override
-    public JsonResponse updateByBatch(Batch batch) {
+    public JsonResponse modifyByBatch(Batch batch) {
         QueryWrapper<Batch> wrapper =new QueryWrapper<>();
         wrapper.eq("batch_id", batch.getBatchId());
         User loginUser = SessionUtils.getCurUser();
