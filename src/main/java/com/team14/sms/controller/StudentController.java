@@ -1,6 +1,6 @@
 package com.team14.sms.controller;
 
-
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.team14.sms.base.BaseController;
 import com.team14.sms.base.JsonResponse;
 import com.team14.sms.mapper.StudentMapper;
@@ -43,18 +43,24 @@ public class StudentController extends BaseController {
 
     @RequestMapping(value = "/add", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "添加学生接口",notes = "应传入：stuId, stuName, gender, enDate（时间戳, classId, manId, stuPassword")
+    @ApiOperation(value = "添加学生接口",notes = "应传入：stuId, stuName, gender, enDate（时间戳, classId, stuPassword")
     public JsonResponse addStudent(@RequestBody @Valid Student student){
         User loginUser = SessionUtils.getCurUser();
         // 仅辅导员用户才能添加学生
         if (loginUser.getUserType().equals("2")) {
-            try {
-                student.setManId(loginUser.getId()); // 绑定当前辅导员号，无需前端操作
-                student.setUserType("1");
-                studentService.save(student);
-                return JsonResponse.successMessage("添加成功");
-            } catch (Exception e) {
-                return JsonResponse.failure("添加失败");
+            // 未填写学生号、性别、入学时间、班级号或密码
+            if (student.getStuId() == null || StringUtils.isBlank(student.getGender()) || student.getEnDate() == null ||
+            student.getClassId() == null || StringUtils.isBlank(student.getStuPassword())) {
+                return JsonResponse.failure("添加失败，请检查学号、性别、入学时间、班级号、密码是否已经填写");
+            } else {
+                try {
+                    student.setManId(loginUser.getId()); // 绑定当前辅导员号，无需前端操作
+                    student.setUserType("1");
+                    studentService.save(student);
+                    return JsonResponse.successMessage("添加成功");
+                } catch (Exception e) {
+                    return JsonResponse.failure("添加失败");
+                }
             }
         }
         return JsonResponse.failure("添加失败，您无本操作权限，请联系系统管理员!");
