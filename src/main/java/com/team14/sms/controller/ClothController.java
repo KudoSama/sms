@@ -45,17 +45,7 @@ public class ClothController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "添加服装接口",notes = "应传入：clothId,clothName,gender,batchId")
     public JsonResponse addCloth(@RequestBody @Valid Cloth cloth){
-        User loginUser = SessionUtils.getCurUser();
-        if (loginUser.getUserType().equals("school")) {
-            try {
-                clothService.save(cloth);
-                return JsonResponse.successMessage("添加成功");
-            } catch (Exception e) {
-                return JsonResponse.failure("添加失败");
-            }
-        }
-        return JsonResponse.failure("添加失败，您无本操作权限，请联系系统管理员！");
-
+        return clothService.addState(cloth);
     }
 
     @RequestMapping(value = "/getClothByGender", produces = "application/json;charset=utf-8")

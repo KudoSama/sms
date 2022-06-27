@@ -1,5 +1,6 @@
 package com.team14.sms.service;
 
+import com.team14.sms.base.JsonResponse;
 import com.team14.sms.vo.Cloth;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -20,4 +21,6 @@ public interface ClothService extends IService<Cloth> {
     List<Cloth> getByGender(String gender);
 
     List<Cloth> getByBatchId(Long batchId);
+
+    JsonResponse addState(Cloth cloth);
 }
