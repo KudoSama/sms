@@ -31,7 +31,7 @@ import java.util.List;
  * @since 2022-06-27
  */
 @Controller
-@RequestMapping("/api/clothsize")
+@RequestMapping("/api/clothSize")
 public class ClothSizeController extends BaseController {
 
 
