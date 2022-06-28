@@ -32,6 +32,9 @@ public class ClothSizeServiceImpl extends ServiceImpl<ClothSizeMapper, ClothSize
 
     @Override
     public JsonResponse addState(ClothSize clothSize) {
+        if (clothSize.getClothId() == null) {
+            return JsonResponse.failure("添加失败，您未填写衣服商品号");
+        }
         User loginUser = SessionUtils.getCurUser();
         if (loginUser.getUserType().equals("1")) {
             try {
