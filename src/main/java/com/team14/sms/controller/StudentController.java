@@ -17,6 +17,7 @@ import org.mybatis.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.spring.web.json.Json;
 
 import javax.validation.Valid;
 
@@ -59,5 +60,16 @@ public class StudentController extends BaseController {
         student.setStuPassword(user.getPassword());
 
         return studentService.login(student);
+    }
+
+    @RequestMapping(value = "/getByStuId", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "根据学号查询学生", notes = "应传入id")
+    public JsonResponse getByStuId(@RequestBody @Valid User user) {
+        Student student = studentService.getByStuId(user.getId());
+        if (student == null) {
+            return JsonResponse.failure("查询失败，不存在该学生");
+        }
+        return JsonResponse.success(student, "查询成功");
     }
 }

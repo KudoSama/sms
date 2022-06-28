@@ -42,6 +42,9 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
 
     @Override
     public Student getByStuId(Long stuId) {
+        if (stuId == null) {
+            return null;
+        }
         QueryWrapper<Student> wrapper =new QueryWrapper<>();
         wrapper.eq("stu_id", stuId);
         return super.getOne(wrapper);
