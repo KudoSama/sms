@@ -30,7 +30,7 @@ public class FileController {
         this.resourceLoader = resourceLoader;
     }
 
-    @ApiOperation(value = "文件上传", notes = "文件上传")
+    @ApiOperation(value = "文件上传", notes = "文件上传，传入文件、clothId")
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
     @ApiImplicitParam(name = "clothId", value = "衣服商品号", required = true, dataType = "Long",dataTypeClass = Long.class)
