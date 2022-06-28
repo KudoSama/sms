@@ -48,4 +48,11 @@ public class BatchController extends BaseController {
     public JsonResponse modifyBatch(@RequestBody @Valid Batch batch) {
         return batchService.modifyByBatch(batch);
     }
+
+    @RequestMapping(value = "/getCurBatch", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "查询当前批次")
+    public JsonResponse getCurBatch() {
+        return batchService.getCurBatch();
+    }
 }

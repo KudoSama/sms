@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.spring.web.json.Json;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * <p>
@@ -71,5 +72,13 @@ public class StudentController extends BaseController {
             return JsonResponse.failure("查询失败，不存在该学生");
         }
         return JsonResponse.success(student, "查询成功");
+    }
+
+    @RequestMapping(value = "getByGender", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "通过性别查询学生列表", notes = "应传入：gender(string类型")
+    @ApiImplicitParam(name = "gender", value = "性别", required = true, dataType = "String",dataTypeClass = String.class)
+    public JsonResponse getByGender(String gender) {
+        return studentService.getByGender(gender);
     }
 }

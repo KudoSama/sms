@@ -5,6 +5,8 @@ import com.team14.sms.base.JsonResponse;
 import com.team14.sms.vo.Student;
 import springfox.documentation.spring.web.json.Json;
 
+import java.util.List;
+
 
 /**
  * <p>
@@ -21,4 +23,6 @@ public interface StudentService extends IService<Student> {
     Student getByStuId(Long stuId);
 
     JsonResponse addStudent(Student student);
+
+    JsonResponse getByGender(String gender);
 }

@@ -17,4 +17,6 @@ public interface BatchService extends IService<Batch> {
     JsonResponse modifyByBatch(Batch batch);
 
     JsonResponse addState(Batch batch);
+
+    JsonResponse getCurBatch();
 }

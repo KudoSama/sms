@@ -1,5 +1,6 @@
 package com.team14.sms.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.team14.sms.base.JsonResponse;
@@ -9,6 +10,8 @@ import com.team14.sms.utls.SessionUtils;
 import com.team14.sms.vo.Batch;
 import com.team14.sms.vo.User;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
  * <p>
@@ -76,5 +79,17 @@ public class BatchServiceImpl extends ServiceImpl<BatchMapper, Batch> implements
             }
         }
         return JsonResponse.failure("添加失败，您无本操作权限，请联系系统管理员!");
+    }
+
+    @Override
+    public JsonResponse getCurBatch() {
+        Date curDate = new Date();
+        QueryWrapper<Batch> wrapper = new QueryWrapper<>();
+        wrapper.le("batch_dateStart", curDate).ge("batch_dateEnd", curDate);
+        Batch curBatch = super.getOne(wrapper);
+        if (curBatch == null) {
+            return JsonResponse.failure("属于当前时间的申请批次不存在");
+        }
+        return JsonResponse.success(curBatch, "查询成功");
     }
 }

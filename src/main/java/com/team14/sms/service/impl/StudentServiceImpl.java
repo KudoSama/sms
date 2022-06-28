@@ -10,6 +10,9 @@ import com.team14.sms.utls.SessionUtils;
 import com.team14.sms.vo.Student;
 import com.team14.sms.vo.User;
 import org.springframework.stereotype.Service;
+import springfox.documentation.spring.web.json.Json;
+
+import java.util.List;
 
 /**
  * <p>
@@ -72,5 +75,16 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
             }
         }
         return JsonResponse.failure("添加失败，您无本操作权限，请联系系统管理员!");
+    }
+
+    @Override
+    public JsonResponse getByGender(String gender) {
+        if (gender.equals("男") || gender.equals("女")) {
+            QueryWrapper<Student> wrapper =new QueryWrapper<>();
+            wrapper.eq("gender", gender);
+            List<Student> stuList = super.list(wrapper);
+            return JsonResponse.success(stuList, "查询成功");
+        }
+        return JsonResponse.failure("查询失败，未填写性别或性别填写失败，应填写男或女");
     }
 }
