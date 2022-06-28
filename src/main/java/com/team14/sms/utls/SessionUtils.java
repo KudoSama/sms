@@ -26,7 +26,8 @@ public class SessionUtils {
     }
 
     public static JsonResponse deleteCurUser() {
-        session().removeAttribute("curUser");
+        session().invalidate();
+        // session().removeAttribute("curUser");
         return JsonResponse.success("删除成功");
     }
 }

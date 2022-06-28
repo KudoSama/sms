@@ -19,7 +19,12 @@ public class UserController extends BaseController {
     @RequestMapping("/getCurUserInfo")
     public JsonResponse getCurUserInfo() {
         // System.out.println(SecurityUtils.getUserInfo());
-        return JsonResponse.success(SecurityUtils.getUserInfo());
+        try{
+            JsonResponse temp = JsonResponse.success(SecurityUtils.getUserInfo());
+            return temp;
+        } catch(Exception e) {
+            return JsonResponse.failure("未登录，请重新登陆");
+        }
     }
 
     @ResponseBody
