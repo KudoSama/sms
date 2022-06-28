@@ -40,13 +40,6 @@ public class ClothImgController extends BaseController {
     @Autowired
     private ClothImgMapper clothImgMapper;
 
-    @RequestMapping(value = "/add", produces = "application/json;charset=utf-8")
-    @ResponseBody
-    @ApiOperation(value = "添加服装图片接口",notes = "应传入：clothId,clothImg")
-    public JsonResponse addClothSize(@RequestBody @Valid ClothImg clothImg){
-        return clothImgService.addState(clothImg);
-    }
-
     @RequestMapping(value = "/getClothImgByClothId", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "服装号查询接口",notes = "应传入：clothId")

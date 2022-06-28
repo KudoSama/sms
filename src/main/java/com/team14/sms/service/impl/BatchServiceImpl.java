@@ -88,7 +88,7 @@ public class BatchServiceImpl extends ServiceImpl<BatchMapper, Batch> implements
         wrapper.le("batch_dateStart", curDate).ge("batch_dateEnd", curDate);
         Batch curBatch = super.getOne(wrapper);
         if (curBatch == null) {
-            return JsonResponse.failure("属于当前时间的申请批次不存在");
+            return JsonResponse.failure("当前不属于申请阶段");
         }
         return JsonResponse.success(curBatch, "查询成功");
     }

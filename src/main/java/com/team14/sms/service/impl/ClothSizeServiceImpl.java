@@ -2,12 +2,14 @@ package com.team14.sms.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.team14.sms.base.JsonResponse;
+import com.team14.sms.service.ClothService;
 import com.team14.sms.utls.SessionUtils;
 import com.team14.sms.vo.ClothSize;
 import com.team14.sms.mapper.ClothSizeMapper;
 import com.team14.sms.service.ClothSizeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.team14.sms.vo.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +25,9 @@ import java.util.List;
 @Service
 public class ClothSizeServiceImpl extends ServiceImpl<ClothSizeMapper, ClothSize> implements ClothSizeService {
 
+    @Autowired
+    private ClothService clothService;
+
     @Override
     public List<ClothSize> getByClothId(Long clothId) {
         QueryWrapper<ClothSize> wrapper =new QueryWrapper<>();
@@ -34,6 +39,9 @@ public class ClothSizeServiceImpl extends ServiceImpl<ClothSizeMapper, ClothSize
     public JsonResponse addState(ClothSize clothSize) {
         if (clothSize.getClothId() == null) {
             return JsonResponse.failure("添加失败，您未填写衣服商品号");
+        }
+        if (clothService.getByClothId(clothSize.getClothId()) == null) {
+            return JsonResponse.failure("添加失败，衣服商品号不存在");
         }
         User loginUser = SessionUtils.getCurUser();
         if (loginUser.getUserType().equals("1")) {

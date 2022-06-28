@@ -12,7 +12,7 @@ spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     username: root
-    password: 123456
+    password: 18789513633gtxy
     url: jdbc:mysql://localhost:3306/team14_sms?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
 
   thymeleaf:
@@ -27,7 +27,7 @@ spring:
       max-request-size: 100MB
 
   resources:
-    static-locations:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${file-upload-path}
 
 
 ## mybatis的配置

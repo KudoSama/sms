@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author wmj
@@ -34,15 +34,17 @@ public class EnableServiceImpl extends ServiceImpl<EnableMapper, Enable> impleme
     public JsonResponse addState(Student student) {
         User loginUser = SessionUtils.getCurUser();
         if (loginUser.getUserType().equals("3")) {
-            if (loginUser.getId().equals(student.getManId())) {
-                Student selectStudent = studentService.getByStuId(student.getStuId());
-                if (selectStudent != null) {
+            Student selectStudent = studentService.getByStuId(student.getStuId());
+            // System.out.println(selectStudent);
+            if (selectStudent != null) {
+                if (loginUser.getId().equals(selectStudent.getManId())) {
                     super.save(new Enable().setStuId(selectStudent.getStuId()));
                     return JsonResponse.success("添加贫困学生成功");
+                } else {
+                    return JsonResponse.failure("添加失败，您非本学生的辅导员");
                 }
-                return JsonResponse.failure("添加贫困学生失败，不存在该学生");
             } else {
-                return JsonResponse.failure("添加失败，您非本学生的辅导员");
+                return JsonResponse.failure("添加贫困学生失败，不存在该学生");
             }
         }
         return JsonResponse.failure("添加失败，您无本操作权限");
