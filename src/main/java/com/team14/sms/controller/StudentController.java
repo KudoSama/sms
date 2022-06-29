@@ -66,7 +66,7 @@ public class StudentController extends BaseController {
     @RequestMapping(value = "/getByStuId", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "根据学号查询学生", notes = "应传入id")
-    public JsonResponse getByStuId(@RequestBody @Valid User user) {
+    public JsonResponse getByStuId(@Valid User user) {
         Student student = studentService.getByStuId(user.getId());
         if (student == null) {
             return JsonResponse.failure("查询失败，不存在该学生");
@@ -74,11 +74,12 @@ public class StudentController extends BaseController {
         return JsonResponse.success(student, "查询成功");
     }
 
-    @RequestMapping(value = "getByGender", produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/getByGender", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "通过性别查询学生列表", notes = "应传入：gender(string类型")
     @ApiImplicitParam(name = "gender", value = "性别", required = true, dataType = "String",dataTypeClass = String.class)
     public JsonResponse getByGender(String gender) {
+        // System.out.println(studentService.getByManId(2L));
         return studentService.getByGender(gender);
     }
 }

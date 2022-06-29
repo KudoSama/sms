@@ -87,4 +87,18 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         }
         return JsonResponse.failure("查询失败，未填写性别或性别填写失败，应填写男或女");
     }
+
+    @Override
+    public List<Student> getByManId() {
+        User loginUser = SessionUtils.getCurUser();
+        Long manId = null;
+        // 通过辅导员号查询属于该辅导员的学生
+        if (loginUser.getUserType().equals("3")) {
+            manId = loginUser.getId();
+            QueryWrapper<Student> wrapper = new QueryWrapper<>();
+            wrapper.eq("man_id", manId);
+            return super.list(wrapper);
+        }
+        return null;
+    }
 }

@@ -2,7 +2,10 @@ package com.team14.sms.controller;
 
 
 import com.team14.sms.base.JsonResponse;
+import com.team14.sms.mapper.StudentMapper;
+import com.team14.sms.service.StudentService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -23,5 +26,10 @@ import java.util.Date;
 @Controller
 @RequestMapping("/api/stuApply")
 public class StuApplyController extends BaseController {
+    @Autowired
+    private StudentMapper studentMapper;
+
+    @Autowired
+    private StudentService studentService;
 
 }

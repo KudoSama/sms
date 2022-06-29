@@ -24,4 +24,6 @@ public interface StudentService extends IService<Student> {
     JsonResponse addStudent(Student student);
 
     JsonResponse getByGender(String gender);
+
+    List<Student> getByManId();
 }
