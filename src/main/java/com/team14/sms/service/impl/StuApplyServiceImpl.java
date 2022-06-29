@@ -135,14 +135,18 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
         if (loginUser.getUserType().equals("3")) {
             wrapper.eq("man_id", loginUser.getId());
             wrapper.eq("state", 4);
-            page = this.baseMapper.selectPage(page, wrapper);
+            page = super.page(page, wrapper);
             // System.out.println(stuApplyPage);
         }
         // 学院
         else if (loginUser.getUserType().equals("2")) {
             wrapper.eq("col_id", loginUser.getId());
             wrapper.eq("state", 3);
-            page = this.baseMapper.selectPage(page, wrapper);
+            page = super.page(page, wrapper);
+        }
+        else if (loginUser.getUserType().equals("1")) {
+            wrapper.eq("state", 2);
+            page = super.page(page, wrapper);
         }
         return page;
     }
