@@ -92,4 +92,11 @@ public class BatchServiceImpl extends ServiceImpl<BatchMapper, Batch> implements
         }
         return JsonResponse.success(curBatch, "查询成功");
     }
+
+    @Override
+    public Batch getByBatchId (Long batchId) {
+        QueryWrapper<Batch> wrapper = new QueryWrapper<>();
+        wrapper.eq("batch_id", batchId);
+        return super.getOne(wrapper);
+    }
 }

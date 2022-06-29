@@ -1,5 +1,6 @@
 package com.team14.sms.service;
 
+import com.team14.sms.base.JsonResponse;
 import com.team14.sms.vo.StuApply;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface StuApplyService extends IService<StuApply> {
 
+    JsonResponse apply(StuApply stuApply);
 }

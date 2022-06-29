@@ -1,5 +1,6 @@
 package com.team14.sms.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.team14.sms.base.JsonResponse;
 import com.team14.sms.mapper.StudentMapper;
 import com.team14.sms.service.StudentService;
@@ -48,5 +49,12 @@ public class EnableServiceImpl extends ServiceImpl<EnableMapper, Enable> impleme
             }
         }
         return JsonResponse.failure("添加失败，您无本操作权限");
+    }
+
+    @Override
+    public Enable getByStuId (Long stuId) {
+        QueryWrapper<Enable> wrapper = new QueryWrapper<>();
+        wrapper.eq("stu_id", stuId);
+        return super.getOne(wrapper);
     }
 }

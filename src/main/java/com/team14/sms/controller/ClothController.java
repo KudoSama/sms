@@ -63,6 +63,7 @@ public class ClothController extends BaseController {
     @ApiImplicitParam(name = "batchId", value = "批次号", required = true, dataType = "Long",dataTypeClass = Long.class)
     public JsonResponse clothBatch(Long batchId){
         List<Cloth> cloth_list =clothService.getByBatchId(batchId);
+        System.out.println(cloth_list);
         return JsonResponse.success(cloth_list, "查询成功");
     }
 

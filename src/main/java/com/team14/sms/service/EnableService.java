@@ -16,4 +16,6 @@ import com.team14.sms.vo.Student;
 public interface EnableService extends IService<Enable> {
 
     JsonResponse addState(Student student);
+
+    Enable getByStuId(Long id);
 }
