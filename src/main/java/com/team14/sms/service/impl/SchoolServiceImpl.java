@@ -9,7 +9,6 @@ import com.team14.sms.service.SchoolService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.team14.sms.vo.User;
 import org.springframework.stereotype.Service;
-import springfox.documentation.spring.web.json.Json;
 
 /**
  * <p>

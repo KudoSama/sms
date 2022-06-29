@@ -1,15 +1,17 @@
 package com.team14.sms.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.team14.sms.base.JsonResponse;
+import com.team14.sms.dto.PageDTO;
 import com.team14.sms.service.*;
 import com.team14.sms.utls.SessionUtils;
-import com.team14.sms.vo.ClothSize;
-import com.team14.sms.vo.StuApply;
+import com.team14.sms.vo.*;
 import com.team14.sms.mapper.StuApplyMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.team14.sms.vo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,9 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
 
     @Autowired
     private ClothSizeService clothSizeService;
+    @Autowired
+    private ManagerService managerService;
+
 
     @Autowired
     private StudentService studentService;
@@ -77,7 +82,7 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
 
                 // 衣服尺码填写错误
                 QueryWrapper<ClothSize> sizeQueryWrapper = new QueryWrapper<>();
-                sizeQueryWrapper.eq("cloth_id", stuApply.getClothId()).eq("cloth_size",stuApply.getClothSize());
+                sizeQueryWrapper.eq("cloth_id", stuApply.getClothId()).eq("cloth_size", stuApply.getClothSize());
                 if (clothSizeService.getOne(sizeQueryWrapper) == null) {
                     return JsonResponse.failure("您填写的衣服尺码不存在，请重新填写");
                 }
@@ -98,13 +103,47 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
                         return JsonResponse.failure("申请失败，请填写申请理由");
                     }
                 }
+
+                // 如果入学时间晚于批次年份，则返回错误
+                if (enYear.get(Calendar.YEAR) > batchYear.get(Calendar.YEAR)) {
+                    return JsonResponse.failure("申请失败，您非该批次准许学生，该批次早于您的入学时间");
+                }
                 // 老生填写了申请理由或新生无需检测
+                Student student = studentService.getByStuId(loginUser.getId());
+                stuApply.setManId(student.getManId()); // 添加辅导员号
+                Manager manager = managerService.getByManId(student.getManId());
+                stuApply.setColId(manager.getColId()); // 添加学院号
                 stuApply.setStuId(loginUser.getId());
+                stuApply.setState(4L); // 未审批状态
                 stuApply.setScDate(new Date());
                 super.save(stuApply);
                 return JsonResponse.success(stuApply, "申请成功，请等待审批结果");
             }
         }
         return JsonResponse.failure("您非本校学生，无提交寒衣申请补助的权限，请联系系统管理员");
+    }
+
+
+    // 根据学生id查询学生的所有申请记录
+    @Override
+    public Page<StuApply> selectStuApply(PageDTO pageDTO) {
+        User loginUser = SessionUtils.getCurUser();
+        Page<StuApply> page = new Page<>(pageDTO.getPageNo(),pageDTO.getPageSize());
+        QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
+
+        // 辅导员
+        if (loginUser.getUserType().equals("3")) {
+            wrapper.eq("man_id", loginUser.getId());
+            wrapper.eq("state", 4);
+            page = this.baseMapper.selectPage(page, wrapper);
+            // System.out.println(stuApplyPage);
+        }
+        // 学院
+        else if (loginUser.getUserType().equals("2")) {
+            wrapper.eq("col_id", loginUser.getId());
+            wrapper.eq("state", 3);
+            page = this.baseMapper.selectPage(page, wrapper);
+        }
+        return page;
     }
 }

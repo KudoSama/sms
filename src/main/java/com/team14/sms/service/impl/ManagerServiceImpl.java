@@ -8,10 +8,8 @@ import com.team14.sms.mapper.ManagerMapper;
 import com.team14.sms.service.ManagerService;
 import com.team14.sms.utls.SessionUtils;
 import com.team14.sms.vo.Manager;
-import com.team14.sms.vo.Student;
 import com.team14.sms.vo.User;
 import org.springframework.stereotype.Service;
-import springfox.documentation.spring.web.json.Json;
 
 /**
  * <p>

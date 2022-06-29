@@ -42,7 +42,9 @@ mybatis:
 pagehelper:
   helper-dialect: mysql
 
-
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 springfox:
   documentation:
     swagger-ui:

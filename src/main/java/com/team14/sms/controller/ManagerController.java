@@ -1,12 +1,10 @@
 package com.team14.sms.controller;
 
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.team14.sms.base.BaseController;
 import com.team14.sms.base.JsonResponse;
 import com.team14.sms.mapper.ManagerMapper;
 import com.team14.sms.service.ManagerService;
-import com.team14.sms.utls.SessionUtils;
 import com.team14.sms.vo.Manager;
 import com.team14.sms.vo.User;
 import io.swagger.annotations.ApiOperation;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
-import java.util.Map;
 
 /**
  * <p>

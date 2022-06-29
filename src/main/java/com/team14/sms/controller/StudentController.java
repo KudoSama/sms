@@ -1,26 +1,20 @@
 package com.team14.sms.controller;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.team14.sms.base.BaseController;
 import com.team14.sms.base.JsonResponse;
 import com.team14.sms.mapper.StudentMapper;
 import com.team14.sms.service.StudentService;
-import com.team14.sms.utls.SessionUtils;
 import com.team14.sms.vo.Student;
 import com.team14.sms.vo.User;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.ibatis.annotations.Param;
 import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.spring.web.json.Json;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * <p>

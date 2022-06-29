@@ -8,10 +8,8 @@ import com.team14.sms.vo.College;
 import com.team14.sms.mapper.CollegeMapper;
 import com.team14.sms.service.CollegeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.team14.sms.vo.Manager;
 import com.team14.sms.vo.User;
 import org.springframework.stereotype.Service;
-import springfox.documentation.spring.web.json.Json;
 
 /**
  * <p>

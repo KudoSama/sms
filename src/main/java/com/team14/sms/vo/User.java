@@ -1,10 +1,8 @@
 package com.team14.sms.vo;
 
 import com.baomidou.mybatisplus.annotation.TableId;
-import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Value;
 import lombok.experimental.Accessors;
 
 @Data
