@@ -52,7 +52,7 @@ public class ClothController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "服装性别接口",notes = "应传入gender：男、女（字符串）")
     @ApiImplicitParam(name = "gender", value = "性别", required = true, dataType = "String",dataTypeClass = String.class)
-    public JsonResponse clothGender(String gender){
+    public JsonResponse getClothByGender(String gender){
         List<Cloth> cloth_list = clothService.getByGender(gender);
         return JsonResponse.success(cloth_list, "查询成功");
     }
@@ -61,10 +61,21 @@ public class ClothController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "服装批次接口",notes = "应传入：batchId")
     @ApiImplicitParam(name = "batchId", value = "批次号", required = true, dataType = "Long",dataTypeClass = Long.class)
-    public JsonResponse clothBatch(Long batchId){
+    public JsonResponse getClothByBatchId(Long batchId){
         List<Cloth> cloth_list =clothService.getByBatchId(batchId);
         System.out.println(cloth_list);
         return JsonResponse.success(cloth_list, "查询成功");
     }
 
+    @RequestMapping(value = "/getClothByClothId", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "根据衣服号查询衣服接口",notes = "应传入：clothId")
+    @ApiImplicitParam(name = "clothId", value = "衣服号", required = true, dataType = "Long",dataTypeClass = Long.class)
+    public JsonResponse getClothByClothId(Long clothId){
+        Cloth cloth = clothService.getByClothId(clothId);
+        if (cloth == null) {
+            return JsonResponse.failure("查询失败，不存在该衣服");
+        }
+        return JsonResponse.success(cloth, "查询成功");
+    }
 }
