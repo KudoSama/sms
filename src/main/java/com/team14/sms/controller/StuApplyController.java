@@ -82,11 +82,11 @@ public class StuApplyController extends BaseController {
         return JsonResponse.success("拒绝审批成功");
     }
 
-    @RequestMapping(value = "/export", produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/exportState", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "导出接口", notes = " ")
-    public void export(HttpServletResponse response) {
-        stuApplyService.export(response);
+    public void exportState(HttpServletResponse response) {
+        stuApplyService.exportState(response);
     }
 
 }

@@ -1,12 +1,15 @@
 package com.team14.sms.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.team14.sms.base.JsonResponse;
+import com.team14.sms.dto.PageDTO;
 import com.team14.sms.utls.SessionUtils;
 import com.team14.sms.vo.Cloth;
 import com.team14.sms.mapper.ClothMapper;
 import com.team14.sms.service.ClothService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.team14.sms.vo.StuApply;
 import com.team14.sms.vo.User;
 import org.springframework.stereotype.Service;
 
@@ -31,17 +34,21 @@ public class ClothServiceImpl extends ServiceImpl<ClothMapper, Cloth> implements
     }
 
     @Override
-    public List<Cloth> getByGender(String gender) {
-        QueryWrapper<Cloth> wrapper =new QueryWrapper<>();
+    public Page<Cloth> getByGender(String gender, PageDTO pageDTO) {
+        Page<Cloth> page = new Page<>(pageDTO.getPageNo(), pageDTO.getPageSize());
+        QueryWrapper<Cloth> wrapper = new QueryWrapper<>();
         wrapper.eq("gender", gender);
-        return super.list(wrapper);
+        page = super.page(page, wrapper);
+        return page;
     }
 
     @Override
-    public List<Cloth> getByBatchId(Long batchId) {
-        QueryWrapper<Cloth> wrapper =new QueryWrapper<>();
+    public Page<Cloth> getByBatchId(Long batchId, PageDTO pageDTO) {
+        Page<Cloth> page = new Page<>(pageDTO.getPageNo(), pageDTO.getPageSize());
+        QueryWrapper<Cloth> wrapper = new QueryWrapper<>();
         wrapper.eq("batch_id", batchId);
-        return super.list(wrapper);
+        page = super.page(page, wrapper);
+        return page;
     }
 
     @Override

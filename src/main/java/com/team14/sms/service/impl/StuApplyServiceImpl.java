@@ -55,41 +55,59 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
     private EnableService enableService;
 
     @Override
-    public void export(HttpServletResponse response) {
+    public void exportState(HttpServletResponse response) {
         response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Content-Disposition", "attachment; filename=output.xls");
+        response.setHeader("Content-Disposition", "attachment; filename=exportState.xls");
         List<StuApply> stuApplies = baseMapper.selectList(null);
         Workbook wb = new HSSFWorkbook();
         Sheet sheet = wb.createSheet();
 
         Row row = sheet.createRow(0);
 
+//        Cell cell = row.createCell(0);
+//        cell.setCellValue("ID");
+
         Cell cell = row.createCell(0);
-        cell.setCellValue("ID");
+        cell.setCellValue("学号");
 
         cell = row.createCell(1);
-        cell.setCellValue("学号");
+        cell.setCellValue("姓名");
 
         cell = row.createCell(2);
         cell.setCellValue("批次号");
 
+
         cell = row.createCell(3);
         cell.setCellValue("审核状态");
 
-        for(int i = 0; i < stuApplies.size(); i++) {
-            row = sheet.createRow(i+1);
+        for (int i = 0; i < stuApplies.size(); i++) {
+            row = sheet.createRow(i + 1);
+
+//            cell = row.createCell(0);
+//            cell.setCellValue(stuApplies.get(i).getId());
 
             cell = row.createCell(0);
-            cell.setCellValue(stuApplies.get(i).getId());
+            cell.setCellValue(stuApplies.get(i).getStuId());
 
             cell = row.createCell(1);
-            cell.setCellValue(stuApplies.get(i).getStuId());
+            Student student = studentService.getByStuId(stuApplies.get(i).getStuId());
+            cell.setCellValue(student.getStuName());
 
             cell = row.createCell(2);
             cell.setCellValue(stuApplies.get(i).getBatchId());
 
             cell = row.createCell(3);
-            cell.setCellValue(stuApplies.get(i).getState());
+            if (stuApplies.get(i).getState() == 1) {
+                cell.setCellValue("学校同意申请");
+            } else if (stuApplies.get(i).getState() == 2) {
+                cell.setCellValue("学院同意申请");
+            } else if (stuApplies.get(i).getState() == 3) {
+                cell.setCellValue("辅导员同意申请");
+            } else if (stuApplies.get(i).getState() == 4) {
+                cell.setCellValue("当前未审批");
+            } else {
+                cell.setCellValue("已拒绝该申请");
+            }
         }
 
         try {

@@ -1,6 +1,8 @@
 package com.team14.sms.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.team14.sms.base.JsonResponse;
+import com.team14.sms.dto.PageDTO;
 import com.team14.sms.vo.Cloth;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -18,9 +20,9 @@ public interface ClothService extends IService<Cloth> {
 
     Cloth getByClothId(Long clothId);
 
-    List<Cloth> getByGender(String gender);
+    Page<Cloth> getByGender(String gender, PageDTO pageDTO);
 
-    List<Cloth> getByBatchId(Long batchId);
+    Page<Cloth> getByBatchId(Long batchId, PageDTO pageDTO);
 
     JsonResponse addState(Cloth cloth);
 }
