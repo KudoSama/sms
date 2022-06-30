@@ -6,6 +6,7 @@ import com.team14.sms.base.JsonResponse;
 import com.team14.sms.dto.PageDTO;
 import com.team14.sms.vo.StuApply;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -17,6 +18,8 @@ import java.util.List;
  * @since 2022-06-27
  */
 public interface StuApplyService extends IService<StuApply> {
+
+    void export(HttpServletResponse response);
 
     JsonResponse apply(StuApply stuApply);
 

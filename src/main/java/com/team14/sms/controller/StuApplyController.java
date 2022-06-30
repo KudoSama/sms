@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.team14.sms.base.BaseController;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -79,6 +80,13 @@ public class StuApplyController extends BaseController {
             return JsonResponse.failure("拒绝审批失败");
         }
         return JsonResponse.success("拒绝审批成功");
+    }
+
+    @RequestMapping(value = "/export", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "导出接口", notes = " ")
+    public void export(HttpServletResponse response) {
+        stuApplyService.export(response);
     }
 
 }
