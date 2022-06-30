@@ -338,7 +338,9 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
                     } else {
                         // System.out.println(stuApply.getId());
                         stuApply.setState(0L);// 拒绝
-                        stuApply.setRefReason(temp.getRefReason());
+                        if (temp.getRefReason() != null) {
+                            stuApply.setRefReason(temp.getRefReason());
+                        }
                         wrapper.eq("id", temp.getId());
                         super.update(stuApply, wrapper);
                     }
