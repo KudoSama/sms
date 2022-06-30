@@ -3,6 +3,7 @@ package com.team14.sms.controller;
 
 import com.team14.sms.service.FileService;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ResourceLoader;
@@ -33,10 +34,9 @@ public class FileController {
     @ApiOperation(value = "文件上传", notes = "文件上传，传入文件、clothId")
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
-    @ApiImplicitParam(name = "clothId", value = "衣服商品号", required = true, dataType = "Long",dataTypeClass = Long.class)
-    public ResponseEntity<Map<String, String>> upload(Long clothId, MultipartFile file, HttpServletRequest request) throws IOException {
+    public ResponseEntity<Map<String, String>> upload(MultipartFile file, HttpServletRequest request) throws IOException {
         Map<String, String> map = new HashMap();
-        map = fileService.upload(clothId, file);
+        map = fileService.upload(file);
         return ResponseEntity.ok().body(map);
     }
 

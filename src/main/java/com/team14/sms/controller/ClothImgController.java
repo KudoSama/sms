@@ -8,11 +8,13 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.team14.sms.base.BaseController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -41,6 +43,13 @@ public class ClothImgController extends BaseController {
     public JsonResponse getClothImgById(Long clothId){
         List<ClothImg> cloth_img_list = clothImgService.getByClothId(clothId);
         return JsonResponse.success(cloth_img_list, "查询成功");
+    }
+
+    @RequestMapping(value = "/upload", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "保存衣服对应图片路径",notes = "上传clothId，clothImg")
+    public JsonResponse upload(@RequestBody @Valid ClothImg clothImg) {
+        return clothImgService.addState(clothImg);
     }
 
 }

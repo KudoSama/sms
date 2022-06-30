@@ -33,13 +33,13 @@ public class FileServiceImpl implements FileService {
     private String fileUploadPath;// ./file   当前项目路径下的文件夹file
 
     @Override
-    public Map upload(Long clothId, MultipartFile file) throws IOException {
-        Map<String, String> map = storeFile(clothId, file, Paths.get(fileUploadPath, "image").toString());
+    public Map upload(MultipartFile file) throws IOException {
+        Map<String, String> map = storeFile(file, Paths.get(fileUploadPath, "image").toString());
         return map;
     }
 
 
-    private Map<String, String> storeFile(Long clothId, MultipartFile file, String fileUploadPath) throws IOException {
+    private Map<String, String> storeFile(MultipartFile file, String fileUploadPath) throws IOException {
         //   ./file/image
         String yearMonth = SDF.format(new Date());//当前年月
         //String random = "" + (int) (Math.random() * 1000);//随机4位数,没补0
@@ -50,10 +50,6 @@ public class FileServiceImpl implements FileService {
         String toPath = fileUploadPath + relPath;
         FileOutputStream out = null;
 
-        // 保存到clothImg表的部分
-        ClothImg clothImg = new ClothImg().setClothId(clothId).setClothImg("/image" + relPath);
-        JsonResponse test = clothImgService.addState(clothImg);
-        // System.out.println(test.getMessage());
 
         File toFile = new File(toPath).getParentFile();
         if (!toFile.exists()) {

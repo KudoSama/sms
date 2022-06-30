@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface FileService {
 
-    Map upload(Long clothId, MultipartFile file) throws IOException;
+    Map upload(MultipartFile file) throws IOException;
 
     void download(HttpServletResponse response);
 }

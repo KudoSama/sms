@@ -80,5 +80,4 @@ public class StuApplyController extends BaseController {
         }
         return JsonResponse.success("拒绝审批成功");
     }
-
 }
