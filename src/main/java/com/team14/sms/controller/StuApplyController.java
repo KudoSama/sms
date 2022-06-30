@@ -42,33 +42,43 @@ public class StuApplyController extends BaseController {
     @RequestMapping(value = "/selectNotExamineStuApply", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "查询当前登录辅导员/学院直属学生中未审核的的申请记录", notes = "需传入pageNo, pageSize")
-    public JsonResponse selectNotExamineStuApply (@RequestBody @Valid PageDTO pageDTO) {
+    public JsonResponse selectNotExamineStuApply(@RequestBody @Valid PageDTO pageDTO) {
         // System.out.println(pageDTO.getPageNo());
         if (stuApplyService.selectExaminedStuApply(pageDTO) == null) {
             return JsonResponse.failure("当前不属于审批时间，请等待学生申请结束");
         }
-        return JsonResponse.success(stuApplyService.selectNotExamineStuApply(pageDTO),"查询成功");
+        return JsonResponse.success(stuApplyService.selectNotExamineStuApply(pageDTO), "查询成功");
     }
 
     @RequestMapping(value = "/selectExaminedStuApply", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "查询当前登录辅导员/学院直属学生中已审核的的申请记录", notes = "需传入pageNo, pageSize")
-    public JsonResponse selectExaminedStuApply (@RequestBody @Valid PageDTO pageDTO) {
+    public JsonResponse selectExaminedStuApply(@RequestBody @Valid PageDTO pageDTO) {
         // System.out.println(pageDTO.getPageNo());
         if (stuApplyService.selectExaminedStuApply(pageDTO) == null) {
             return JsonResponse.failure("当前不属于审批时间，请等待学生申请结束");
         }
-        return JsonResponse.success(stuApplyService.selectExaminedStuApply(pageDTO),"查询成功");
+        return JsonResponse.success(stuApplyService.selectExaminedStuApply(pageDTO), "查询成功");
     }
 
     @RequestMapping(value = "/agreeBatch", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "辅导员批量同意接口", notes = "需填入idList（申请记录的乱码id，非学生id,JSON数组格式为[number1, number2]")
-    public JsonResponse agreeBatch (@RequestBody @Valid List<Long> idList) {
-        if (!stuApplyService.agreeBatch(idList)){
+    @ApiOperation(value = "高级用户（非学生）批量同意接口", notes = "需填入idList（申请记录的乱码id，非学生id,JSON数组格式为[number1, number2]")
+    public JsonResponse agreeBatch(@RequestBody @Valid List<Long> idList) {
+        if (!stuApplyService.agreeBatch(idList)) {
             return JsonResponse.failure("同意审批失败");
         }
         return JsonResponse.success("同意审批成功");
+    }
+
+    @RequestMapping(value = "/disagreeBatch", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "高级用户（非学生）批量拒绝接口", notes = "需填入idList（申请记录的乱码id，非学生id,JSON数组格式为[number1, number2]")
+    public JsonResponse disagreeBatch(@RequestBody @Valid List<Long> idList) {
+        if (!stuApplyService.disagreeBatch(idList)) {
+            return JsonResponse.failure("拒绝审批失败");
+        }
+        return JsonResponse.success("拒绝审批成功");
     }
 
 }

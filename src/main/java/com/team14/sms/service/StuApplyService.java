@@ -25,4 +25,6 @@ public interface StuApplyService extends IService<StuApply> {
     Page<StuApply> selectExaminedStuApply(PageDTO pageDTO);
 
     boolean agreeBatch(List<Long> idList);
+
+    boolean disagreeBatch(List<Long> idList);
 }

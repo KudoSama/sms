@@ -132,9 +132,9 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
             return null;
         }
         User loginUser = SessionUtils.getCurUser();
-        Page<StuApply> page = new Page<>(pageDTO.getPageNo(),pageDTO.getPageSize());
+        Page<StuApply> page = new Page<>(pageDTO.getPageNo(), pageDTO.getPageSize());
         QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
-        Batch batch = (Batch)batchService.getNotExamineBatch().getData();
+        Batch batch = (Batch) batchService.getNotExamineBatch().getData();
 
         switch (loginUser.getUserType()) {
             // 辅导员
@@ -170,9 +170,9 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
             return null;
         }
         User loginUser = SessionUtils.getCurUser();
-        Page<StuApply> page = new Page<>(pageDTO.getPageNo(),pageDTO.getPageSize());
+        Page<StuApply> page = new Page<>(pageDTO.getPageNo(), pageDTO.getPageSize());
         QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
-        Batch batch = (Batch)batchService.getNotExamineBatch().getData();
+        Batch batch = (Batch) batchService.getNotExamineBatch().getData();
 
         switch (loginUser.getUserType()) {
             // 辅导员
@@ -214,10 +214,10 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
             return false;
         } else {
             if (userType.contains(loginUser.getUserType())) {
-                for (Long id:idList) {
+                for (Long id : idList) {
                     QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
                     StuApply stuApply = super.getById(id);
-                    if (stuApply == null) {
+                    if (stuApply == null || stuApply.getState().equals(0L)) {
                         continue;
                     } else {
                         switch (loginUser.getUserType()) {
@@ -237,6 +237,39 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
                                 super.update(stuApply, wrapper);
                                 break;
                         }
+                    }
+                }
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean disagreeBatch(List<Long> idList) {
+        // System.out.println(idList);
+        User loginUser = SessionUtils.getCurUser();
+        List<String> userType = new ArrayList<>();
+        userType.add("1"); // 学校
+        userType.add("2"); // 学院
+        userType.add("3"); // 辅导员
+
+
+        if (idList == null) {
+            return false;
+        } else {
+            if (userType.contains(loginUser.getUserType())) {
+                for (Long id : idList) {
+                    QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
+                    StuApply stuApply = super.getById(id);
+                    if (stuApply == null) {
+                        continue;
+                    } else {
+                        // System.out.println(stuApply.getId());
+                        stuApply.setState(0L);// 辅导员通过
+                        wrapper.eq("id", id);
+                        super.update(stuApply, wrapper);
                     }
                 }
             } else {
