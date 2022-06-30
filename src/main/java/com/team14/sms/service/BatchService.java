@@ -20,5 +20,7 @@ public interface BatchService extends IService<Batch> {
 
     JsonResponse getCurBatch();
 
+    JsonResponse getNotExamineBatch();
+
     Batch getByBatchId(Long batchId);
 }

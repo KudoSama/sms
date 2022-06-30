@@ -6,6 +6,8 @@ import com.team14.sms.base.JsonResponse;
 import com.team14.sms.dto.PageDTO;
 import com.team14.sms.vo.StuApply;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -18,6 +20,9 @@ public interface StuApplyService extends IService<StuApply> {
 
     JsonResponse apply(StuApply stuApply);
 
-    Page<StuApply> selectStuApply(PageDTO pageDTO);
+    Page<StuApply> selectNotExamineStuApply(PageDTO pageDTO);
 
+    Page<StuApply> selectExaminedStuApply(PageDTO pageDTO);
+
+    boolean agreeBatch(List<Long> idList);
 }

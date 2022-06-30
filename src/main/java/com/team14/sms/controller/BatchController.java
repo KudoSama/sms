@@ -53,4 +53,11 @@ public class BatchController extends BaseController {
     public JsonResponse getCurBatch() {
         return batchService.getCurBatch();
     }
+
+    @RequestMapping(value = "/getNotExamineBatch", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "查询待审批批次", notes = "检索已经结束批次中，结束时间 + 1 month比当前时间大的批次")
+    public JsonResponse getNotExamineBatch() {
+        return batchService.getNotExamineBatch();
+    }
 }

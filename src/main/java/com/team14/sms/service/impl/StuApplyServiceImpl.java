@@ -13,8 +13,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -122,16 +124,22 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
     }
 
 
-    // 根据学生id查询学生的所有申请记录
+    // 根据学院号、辅导员号查询所属学生中未审核的记录
     @Override
-    public Page<StuApply> selectStuApply(PageDTO pageDTO) {
+    public Page<StuApply> selectNotExamineStuApply(PageDTO pageDTO) {
+
+        if (batchService.getNotExamineBatch().getData() == null) {
+            return null;
+        }
         User loginUser = SessionUtils.getCurUser();
         Page<StuApply> page = new Page<>(pageDTO.getPageNo(),pageDTO.getPageSize());
         QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
+        Batch batch = (Batch)batchService.getNotExamineBatch().getData();
 
         switch (loginUser.getUserType()) {
             // 辅导员
             case "3":
+                wrapper.eq("batch_id", batch.getBatchId()); // 待审核批次
                 wrapper.eq("man_id", loginUser.getId());
                 wrapper.eq("state", 4); // 未审核
                 page = super.page(page, wrapper);
@@ -139,16 +147,102 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
                 break;
             // 学院
             case "2":
+                wrapper.eq("batch_id", batch.getBatchId()); // 待审核批次
                 wrapper.eq("col_id", loginUser.getId());
                 wrapper.eq("state", 3); // 辅导员审核通过
                 page = super.page(page, wrapper);
                 break;
             // 学校
             case "1":
+                wrapper.eq("batch_id", batch.getBatchId()); // 待审核批次
                 wrapper.eq("state", 2);
                 page = super.page(page, wrapper); // 学院审核通过
                 break;
         }
         return page;
+    }
+
+    // 根据学院号、辅导员号查询所属学生已未审核的记录
+    @Override
+    public Page<StuApply> selectExaminedStuApply(PageDTO pageDTO) {
+
+        if (batchService.getNotExamineBatch().getData() == null) {
+            return null;
+        }
+        User loginUser = SessionUtils.getCurUser();
+        Page<StuApply> page = new Page<>(pageDTO.getPageNo(),pageDTO.getPageSize());
+        QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
+        Batch batch = (Batch)batchService.getNotExamineBatch().getData();
+
+        switch (loginUser.getUserType()) {
+            // 辅导员
+            case "3":
+                wrapper.eq("batch_id", batch.getBatchId()); // 待审核批次
+                wrapper.eq("man_id", loginUser.getId());
+                wrapper.ne("state", 0).ne("state", 4);
+                page = super.page(page, wrapper);
+                // System.out.println(stuApplyPage);
+                break;
+            // 学院
+            case "2":
+                wrapper.eq("batch_id", batch.getBatchId()); // 待审核批次
+                wrapper.eq("col_id", loginUser.getId());
+                wrapper.ne("state", 0).ne("state", 4).ne("state", 3);
+                page = super.page(page, wrapper);
+                break;
+            // 学校
+            case "1":
+                wrapper.eq("batch_id", batch.getBatchId()); // 待审核批次
+                wrapper.ne("state", 0).ne("state", 4)
+                        .ne("state", 3).ne("state", 2);
+                page = super.page(page, wrapper); // 学院审核通过
+                break;
+        }
+        return page;
+    }
+
+    @Override
+    public boolean agreeBatch(List<Long> idList) {
+        User loginUser = SessionUtils.getCurUser();
+        List<String> userType = new ArrayList<>();
+        userType.add("1"); // 学校
+        userType.add("2"); // 学院
+        userType.add("3"); // 辅导员
+
+
+        if (idList == null) {
+            return false;
+        } else {
+            if (userType.contains(loginUser.getUserType())) {
+                for (Long id:idList) {
+                    QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
+                    StuApply stuApply = super.getById(id);
+                    if (stuApply == null) {
+                        continue;
+                    } else {
+                        switch (loginUser.getUserType()) {
+                            case "1":
+                                stuApply.setState(1L); // 学校通过
+                                wrapper.eq("id", id);
+                                super.update(stuApply, wrapper);
+                                break;
+                            case "2":
+                                stuApply.setState(2L);// 学院通过
+                                wrapper.eq("id", id);
+                                super.update(stuApply, wrapper);
+                                break;
+                            case "3":
+                                stuApply.setState(3L);// 辅导员通过
+                                wrapper.eq("id", id);
+                                super.update(stuApply, wrapper);
+                                break;
+                        }
+                    }
+                }
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 }

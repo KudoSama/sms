@@ -10,7 +10,9 @@ import com.team14.sms.vo.Batch;
 import com.team14.sms.vo.User;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -90,6 +92,35 @@ public class BatchServiceImpl extends ServiceImpl<BatchMapper, Batch> implements
             return JsonResponse.failure("当前不属于申请阶段");
         }
         return JsonResponse.success(curBatch, "查询成功");
+    }
+
+    @Override
+    public JsonResponse getNotExamineBatch() {
+        Date curDate = new Date();
+        QueryWrapper<Batch> wrapper = new QueryWrapper<>();
+
+        // 查找结束时间早于等于今天，且今天早于等于批次结束日期的下个月
+        wrapper.le("batch_dateEnd", curDate);//.ge("batch_deteEnd", nextMonth)
+        List<Batch> notExamineBatchList = super.list(wrapper);// 查询到比当前时间早结束的批次列表
+
+        Batch notExamineBatch = null;
+        Date notExamineDate;
+        for (Batch batch: notExamineBatchList) {
+            Calendar temp = Calendar.getInstance();
+            temp.setTime(batch.getBatchDateend());
+            temp.add(Calendar.MONTH, 1); // 获取批次结束后一个月的时间
+            notExamineDate = temp.getTime();
+
+            if (notExamineDate.after(curDate)) {
+                notExamineBatch = batch;
+                break;
+            }
+        }
+
+        if (notExamineBatch == null) {
+            return JsonResponse.failure("当前不属于审批阶段");
+        }
+        return JsonResponse.success(notExamineBatch, "查询成功");
     }
 
     @Override
