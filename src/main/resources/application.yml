@@ -38,13 +38,20 @@ mybatis:
     ## 下划线转驼峰
     map-underscore-to-camel-case: true
 
+logging:
+  level:
+    com:
+      team14:
+        sms:
+          mapper: debug
+
 ## 分页助手设置
 pagehelper:
   helper-dialect: mysql
 
-mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#mybatis-plus:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 springfox:
   documentation:
     swagger-ui:

@@ -1,8 +1,6 @@
 package com.team14.sms.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.team14.sms.base.JsonResponse;
@@ -131,22 +129,25 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
         Page<StuApply> page = new Page<>(pageDTO.getPageNo(),pageDTO.getPageSize());
         QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
 
-        // 辅导员
-        if (loginUser.getUserType().equals("3")) {
-            wrapper.eq("man_id", loginUser.getId());
-            wrapper.eq("state", 4);
-            page = super.page(page, wrapper);
-            // System.out.println(stuApplyPage);
-        }
-        // 学院
-        else if (loginUser.getUserType().equals("2")) {
-            wrapper.eq("col_id", loginUser.getId());
-            wrapper.eq("state", 3);
-            page = super.page(page, wrapper);
-        }
-        else if (loginUser.getUserType().equals("1")) {
-            wrapper.eq("state", 2);
-            page = super.page(page, wrapper);
+        switch (loginUser.getUserType()) {
+            // 辅导员
+            case "3":
+                wrapper.eq("man_id", loginUser.getId());
+                wrapper.eq("state", 4); // 未审核
+                page = super.page(page, wrapper);
+                // System.out.println(stuApplyPage);
+                break;
+            // 学院
+            case "2":
+                wrapper.eq("col_id", loginUser.getId());
+                wrapper.eq("state", 3); // 辅导员审核通过
+                page = super.page(page, wrapper);
+                break;
+            // 学校
+            case "1":
+                wrapper.eq("state", 2);
+                page = super.page(page, wrapper); // 学院审核通过
+                break;
         }
         return page;
     }

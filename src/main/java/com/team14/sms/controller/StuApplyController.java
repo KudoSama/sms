@@ -38,9 +38,9 @@ public class StuApplyController extends BaseController {
         return stuApplyService.apply(stuApply);
     }
 
-    @RequestMapping(value = "/selectStuApply", produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/selectNotExamineStuApply", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "查询当前登录辅导员/学院直属学生的申请记录", notes = "需传入pageNo, pageSize")
+    @ApiOperation(value = "查询当前登录辅导员/学院直属学生中未审核的的申请记录", notes = "需传入pageNo, pageSize")
     public JsonResponse selectStuApply (@RequestBody @Valid PageDTO pageDTO) {
         // System.out.println(pageDTO.getPageNo());
         return JsonResponse.success(stuApplyService.selectStuApply(pageDTO),"查询成功");
