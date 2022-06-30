@@ -19,7 +19,7 @@ import java.util.List;
  */
 public interface StuApplyService extends IService<StuApply> {
 
-    void export(HttpServletResponse response);
+    void exportState(HttpServletResponse response);
 
     JsonResponse apply(StuApply stuApply);
 
