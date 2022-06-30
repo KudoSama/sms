@@ -247,7 +247,7 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
     }
 
     @Override
-    public boolean disagreeBatch(List<Long> idList) {
+    public boolean disagreeBatch(List<StuApply> list) {
         // System.out.println(idList);
         User loginUser = SessionUtils.getCurUser();
         List<String> userType = new ArrayList<>();
@@ -256,19 +256,20 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
         userType.add("3"); // 辅导员
 
 
-        if (idList == null) {
+        if (list == null) {
             return false;
         } else {
             if (userType.contains(loginUser.getUserType())) {
-                for (Long id : idList) {
+                for (StuApply temp : list) {
                     QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
-                    StuApply stuApply = super.getById(id);
+                    StuApply stuApply = super.getById(temp.getId());
                     if (stuApply == null) {
                         continue;
                     } else {
                         // System.out.println(stuApply.getId());
-                        stuApply.setState(0L);// 辅导员通过
-                        wrapper.eq("id", id);
+                        stuApply.setState(0L);// 拒绝
+                        stuApply.setRefReason(temp.getRefReason());
+                        wrapper.eq("id", temp.getId());
                         super.update(stuApply, wrapper);
                     }
                 }

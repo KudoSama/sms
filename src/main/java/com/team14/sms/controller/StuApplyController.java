@@ -73,9 +73,9 @@ public class StuApplyController extends BaseController {
 
     @RequestMapping(value = "/disagreeBatch", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "高级用户（非学生）批量拒绝接口", notes = "需填入idList（申请记录的乱码id，非学生id,JSON数组格式为[number1, number2]")
-    public JsonResponse disagreeBatch(@RequestBody @Valid List<Long> idList) {
-        if (!stuApplyService.disagreeBatch(idList)) {
+    @ApiOperation(value = "高级用户（非学生）批量拒绝接口", notes = "应传入id和refReason，需要批量处理就传入[id, refReason],[id, refReason]")
+    public JsonResponse disagreeBatch(@RequestBody @Valid List<StuApply> list) {
+        if (!stuApplyService.disagreeBatch(list)) {
             return JsonResponse.failure("拒绝审批失败");
         }
         return JsonResponse.success("拒绝审批成功");

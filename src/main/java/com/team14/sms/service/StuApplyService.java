@@ -26,5 +26,5 @@ public interface StuApplyService extends IService<StuApply> {
 
     boolean agreeBatch(List<Long> idList);
 
-    boolean disagreeBatch(List<Long> idList);
+    boolean disagreeBatch(List<StuApply> list);
 }

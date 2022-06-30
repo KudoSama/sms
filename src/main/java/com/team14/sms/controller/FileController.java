@@ -45,7 +45,6 @@ public class FileController {
         return i == -1 ? "" : fileName.substring(i + 1);
     }
 
-
     @GetMapping("/download")
     public void download(HttpServletResponse response){
         fileService.download(response);
