@@ -41,9 +41,9 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
 
     @Autowired
     private ClothSizeService clothSizeService;
+
     @Autowired
     private ManagerService managerService;
-
 
     @Autowired
     private StudentService studentService;
