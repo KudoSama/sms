@@ -20,5 +20,4 @@ import java.util.List;
 @Component
 public interface StuApplyMapper extends BaseMapper<StuApply> {
     List<countResult> countResult();
-
 }
