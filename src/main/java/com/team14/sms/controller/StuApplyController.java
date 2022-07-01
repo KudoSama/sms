@@ -115,6 +115,12 @@ public class StuApplyController extends BaseController {
         stuApplyService.exportState(response);
     }
 
+    @RequestMapping(value = "/exportResult", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "导出统计每个学院每个款式男女每个尺码各有多少个学生选了的接口", notes = " ")
+    public void exportResult(HttpServletResponse response) {
+        stuApplyService.exportResult(response);
+    }
 
     @RequestMapping(value = "/getStateByStu", produces = "application/json;charset=utf-8")
     @ResponseBody

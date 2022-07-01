@@ -21,12 +21,16 @@
         <result column="cloth_size" property="clothSize"/>
         <result column="num" property="num"/>
     </resultMap>
-    <select id="countResult" resultType="com.team14.sms.dao.countResult">
+    <select id="countResult" parameterType="java.lang.Long" resultType="com.team14.sms.dao.countResult">
         select col_id, cloth_id, cloth_size, count(*) as num
         from team14_t_stu_apply
-        where state = 1
-           or state = 2
-           or state = 3
+        where batch_id = #{batchId}
+          AND (
+                state = 1
+                or state = 2
+                or state = 3
+                or state = 4
+            )
         group by col_id, cloth_id, cloth_size;
     </select>
 

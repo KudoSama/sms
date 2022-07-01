@@ -117,9 +117,7 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "attachment; filename=exportResult.xls");
         Batch curBatch = (Batch) batchService.getNotExamineBatch().getData(); // 获取当前待审批批次
-        QueryWrapper<countResult> wrapper = new QueryWrapper<>();
-        wrapper.eq("batch_id", curBatch.getBatchId());
-        List<countResult> stuApplies = stuApplyMapper.countResult();
+        List<countResult> stuApplies = stuApplyMapper.countResult(curBatch.getBatchId());
         Workbook wb = new HSSFWorkbook();
         Sheet sheet = wb.createSheet();
 
@@ -141,17 +139,16 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
             row = sheet.createRow(i + 1);
 
             cell = row.createCell(0);
-            cell.setCellValue(stuApplies.get(i).getStuId());
+            cell.setCellValue(stuApplies.get(i).getColId());
 
             cell = row.createCell(1);
-            Student student = studentService.getByStuId(stuApplies.get(i).getStuId());
-            cell.setCellValue(student.getStuName());
+            cell.setCellValue(stuApplies.get(i).getClothId());
 
             cell = row.createCell(2);
-            cell.setCellValue(stuApplies.get(i).getBatchId());
+            cell.setCellValue(stuApplies.get(i).getClothSize());
 
             cell = row.createCell(3);
-            cell.setCellValue();
+            cell.setCellValue(stuApplies.get(i).getNum());
         }
 
         try {

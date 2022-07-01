@@ -19,5 +19,5 @@ import java.util.List;
 @Mapper
 @Component
 public interface StuApplyMapper extends BaseMapper<StuApply> {
-    List<countResult> countResult();
+    List<countResult> countResult(Long batchId);
 }
