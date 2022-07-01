@@ -3,7 +3,7 @@
 <mapper namespace="com.team14.sms.mapper.StudentMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.team14.sms.vo.Student">
+    <resultMap id="BaseResultMap" type="com.team14.sms.dao.Student">
         <id column="stu_id" property="stuId" />
         <result column="stu_name" property="stuName" />
         <result column="gender" property="gender" />

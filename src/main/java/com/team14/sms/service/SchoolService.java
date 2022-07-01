@@ -1,7 +1,7 @@
 package com.team14.sms.service;
 
 import com.team14.sms.base.JsonResponse;
-import com.team14.sms.vo.School;
+import com.team14.sms.dao.School;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

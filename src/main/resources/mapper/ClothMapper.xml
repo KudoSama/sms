@@ -3,7 +3,7 @@
 <mapper namespace="com.team14.sms.mapper.ClothMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.team14.sms.vo.Cloth">
+    <resultMap id="BaseResultMap" type="com.team14.sms.dao.Cloth">
         <id column="cloth_id" property="clothId" />
         <result column="cloth_name" property="clothName" />
         <result column="gender" property="gender" />

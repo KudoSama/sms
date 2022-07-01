@@ -7,8 +7,8 @@ import com.team14.sms.base.JsonResponse;
 import com.team14.sms.mapper.StudentMapper;
 import com.team14.sms.service.StudentService;
 import com.team14.sms.utls.SessionUtils;
-import com.team14.sms.vo.Student;
-import com.team14.sms.vo.User;
+import com.team14.sms.dao.Student;
+import com.team14.sms.dao.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

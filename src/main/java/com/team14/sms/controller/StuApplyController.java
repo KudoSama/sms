@@ -1,18 +1,17 @@
 package com.team14.sms.controller;
 
 
+import com.team14.sms.base.BaseController;
 import com.team14.sms.base.JsonResponse;
+import com.team14.sms.dao.StuApply;
 import com.team14.sms.dto.PageDTO;
 import com.team14.sms.service.StuApplyService;
-import com.team14.sms.vo.StuApply;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.team14.sms.base.BaseController;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -38,6 +37,20 @@ public class StuApplyController extends BaseController {
     @ApiOperation(value = "学生申请补助", notes = "需填入batchId、clothId、clothSize、appReason")
     public JsonResponse apply(@RequestBody @Valid StuApply stuApply) {
         return stuApplyService.apply(stuApply);
+    }
+
+    @RequestMapping(value = "/studentModify", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "学生在申请时间内修改申请记录", notes = "需填入id, batchId、clothId、clothSize、appReason")
+    public JsonResponse studentModify(@RequestBody @Valid StuApply stuApply) {
+        return stuApplyService.studentModify(stuApply);
+    }
+
+    @RequestMapping(value = "/schoolModify", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "学校修改学生衣服和尺码接口", notes = "应传入id、batchId、clothId、clothSize")
+    public JsonResponse schoolModify(@RequestBody @Valid StuApply stuApply) {
+        return stuApplyService.schoolModify(stuApply);
     }
 
     @RequestMapping(value = "/selectNotExamineStuApply", produces = "application/json;charset=utf-8")
@@ -66,6 +79,12 @@ public class StuApplyController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "高级用户（非学生）批量同意接口", notes = "需填入idList（申请记录的乱码id，非学生id,JSON数组格式为[number1, number2]")
     public JsonResponse agreeBatch(@RequestBody @Valid List<Long> idList) {
+//        List<Long> idsList = new ArrayList<>();
+//        //System.out.println(idList);
+//        for (String s : idList){
+//            idsList.add(Long.valueOf(s));
+//        }
+//        //System.out.println(idsList);
         if (!stuApplyService.agreeBatch(idList)) {
             return JsonResponse.failure("同意审批失败");
         }
@@ -76,6 +95,13 @@ public class StuApplyController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "高级用户（非学生）批量拒绝接口", notes = "应传入id和refReason，需要批量处理就传入[id, refReason],[id, refReason]")
     public JsonResponse disagreeBatch(@RequestBody @Valid List<StuApply> list) {
+//        List<StuApply> disagreeList = new ArrayList<>();
+//        for (StuApplyF temp : list) {
+//            StuApply stuApply = new StuApply();
+//            stuApply.setId(Long.valueOf(temp.getId()));
+//            stuApply.setRefReason(temp.getRefReason());
+//            disagreeList.add(stuApply);
+//        }
         if (!stuApplyService.disagreeBatch(list)) {
             return JsonResponse.failure("拒绝审批失败");
         }
@@ -84,9 +110,16 @@ public class StuApplyController extends BaseController {
 
     @RequestMapping(value = "/exportState", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "导出接口", notes = " ")
+    @ApiOperation(value = "导出当前待审批结束的批次的审核状态接口", notes = " ")
     public void exportState(HttpServletResponse response) {
         stuApplyService.exportState(response);
     }
 
+
+    @RequestMapping(value = "/getStateByStu", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "获取学生当前批次的所有申请的审核状态", notes = "随便用")
+    public JsonResponse getStateByStu() {
+        return stuApplyService.getStateByStu(); // 返回的是带申请list的JsonResponse
+    }
 }

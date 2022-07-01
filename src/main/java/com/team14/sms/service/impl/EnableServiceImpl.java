@@ -5,12 +5,12 @@ import com.team14.sms.base.JsonResponse;
 import com.team14.sms.mapper.StudentMapper;
 import com.team14.sms.service.StudentService;
 import com.team14.sms.utls.SessionUtils;
-import com.team14.sms.vo.Enable;
+import com.team14.sms.dao.Enable;
 import com.team14.sms.mapper.EnableMapper;
 import com.team14.sms.service.EnableService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.team14.sms.vo.Student;
-import com.team14.sms.vo.User;
+import com.team14.sms.dao.Student;
+import com.team14.sms.dao.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +39,11 @@ public class EnableServiceImpl extends ServiceImpl<EnableMapper, Enable> impleme
             // System.out.println(selectStudent);
             if (selectStudent != null) {
                 if (loginUser.getId().equals(selectStudent.getManId())) {
+                    QueryWrapper<Enable> wrapper = new QueryWrapper<>();
+                    wrapper.eq("stu_id", selectStudent.getStuId());
+                    if (super.getOne(wrapper) != null) {
+                        return JsonResponse.failure(selectStudent.getStuId() + "学生已经认定为贫困生，请勿重复添加");
+                    }
                     super.save(new Enable().setStuId(selectStudent.getStuId()));
                     return JsonResponse.success("添加贫困学生成功");
                 } else {

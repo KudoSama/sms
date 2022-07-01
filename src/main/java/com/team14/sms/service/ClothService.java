@@ -3,10 +3,8 @@ package com.team14.sms.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.team14.sms.base.JsonResponse;
 import com.team14.sms.dto.PageDTO;
-import com.team14.sms.vo.Cloth;
+import com.team14.sms.dao.Cloth;
 import com.baomidou.mybatisplus.extension.service.IService;
-
-import java.util.List;
 
 /**
  * <p>

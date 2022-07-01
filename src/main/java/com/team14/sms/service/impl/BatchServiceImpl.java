@@ -6,8 +6,8 @@ import com.team14.sms.base.JsonResponse;
 import com.team14.sms.mapper.BatchMapper;
 import com.team14.sms.service.BatchService;
 import com.team14.sms.utls.SessionUtils;
-import com.team14.sms.vo.Batch;
-import com.team14.sms.vo.User;
+import com.team14.sms.dao.Batch;
+import com.team14.sms.dao.User;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;

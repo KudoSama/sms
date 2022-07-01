@@ -2,7 +2,7 @@ package com.team14.sms.utls;
 
 
 import com.team14.sms.dto.UserInfoDTO;
-import com.team14.sms.vo.User;
+import com.team14.sms.dao.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

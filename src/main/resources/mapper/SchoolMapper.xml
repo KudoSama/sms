@@ -3,7 +3,7 @@
 <mapper namespace="com.team14.sms.mapper.SchoolMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.team14.sms.vo.School">
+    <resultMap id="BaseResultMap" type="com.team14.sms.dao.School">
         <id column="sch_id" property="schId" />
         <result column="sch_name" property="schName" />
         <result column="sch_password" property="schPassword" />

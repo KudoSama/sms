@@ -3,11 +3,11 @@ package com.team14.sms.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.team14.sms.base.JsonResponse;
 import com.team14.sms.utls.SessionUtils;
-import com.team14.sms.vo.School;
+import com.team14.sms.dao.School;
 import com.team14.sms.mapper.SchoolMapper;
 import com.team14.sms.service.SchoolService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.team14.sms.vo.User;
+import com.team14.sms.dao.User;
 import org.springframework.stereotype.Service;
 
 /**

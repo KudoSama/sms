@@ -3,7 +3,7 @@
 <mapper namespace="com.team14.sms.mapper.ManagerMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.team14.sms.vo.Manager">
+    <resultMap id="BaseResultMap" type="com.team14.sms.dao.Manager">
         <id column="man_id" property="manId" />
         <result column="man_name" property="manName" />
         <result column="man_password" property="manPassword" />

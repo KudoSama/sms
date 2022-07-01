@@ -4,7 +4,7 @@ package com.team14.sms.controller;
 import com.team14.sms.base.JsonResponse;
 import com.team14.sms.mapper.ClothSizeMapper;
 import com.team14.sms.service.ClothSizeService;
-import com.team14.sms.vo.ClothSize;
+import com.team14.sms.dao.ClothSize;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

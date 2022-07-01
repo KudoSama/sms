@@ -1,5 +1,6 @@
-package com.team14.sms.vo;
+package com.team14.sms.dao;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.io.Serializable;
@@ -14,31 +15,24 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author wmj
- * @since 2022-06-24
+ * @since 2022-06-25
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("team14_t_manager")
-@ApiModel(value="Manager对象", description="")
-public class Manager extends Model<Manager> {
+@TableName("team14_t_enable")
+@ApiModel(value="Enable对象", description="")
+public class Enable extends Model<Enable> {
 
     private static final long serialVersionUID = 1L;
 
-    private Long manId;
-
-    private String manName;
-
-    private String manPassword;
-
-    private Long colId;
-
-    private String userType;
+    @TableId
+    private Long stuId;
 
 
     @Override
     public Serializable pkVal() {
-        return this.manId;
+        return this.stuId;
     }
 
 }

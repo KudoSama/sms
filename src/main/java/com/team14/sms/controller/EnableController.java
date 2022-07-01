@@ -5,7 +5,7 @@ import com.team14.sms.base.BaseController;
 import com.team14.sms.base.JsonResponse;
 import com.team14.sms.mapper.EnableMapper;
 import com.team14.sms.service.EnableService;
-import com.team14.sms.vo.Student;
+import com.team14.sms.dao.Student;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

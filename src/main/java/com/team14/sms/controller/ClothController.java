@@ -5,9 +5,7 @@ import com.team14.sms.base.JsonResponse;
 import com.team14.sms.dto.PageDTO;
 import com.team14.sms.mapper.ClothMapper;
 import com.team14.sms.service.ClothService;
-import com.team14.sms.vo.Cloth;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
+import com.team14.sms.dao.Cloth;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.team14.sms.base.BaseController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * <p>

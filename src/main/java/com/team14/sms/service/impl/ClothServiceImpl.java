@@ -6,16 +6,13 @@ import com.team14.sms.base.JsonResponse;
 import com.team14.sms.dto.PageDTO;
 import com.team14.sms.service.BatchService;
 import com.team14.sms.utls.SessionUtils;
-import com.team14.sms.vo.Cloth;
+import com.team14.sms.dao.Cloth;
 import com.team14.sms.mapper.ClothMapper;
 import com.team14.sms.service.ClothService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.team14.sms.vo.StuApply;
-import com.team14.sms.vo.User;
+import com.team14.sms.dao.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * <p>

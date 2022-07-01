@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.team14.sms.base.JsonResponse;
 import com.team14.sms.dto.PageDTO;
-import com.team14.sms.vo.StuApply;
+import com.team14.sms.dao.StuApply;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -30,4 +30,10 @@ public interface StuApplyService extends IService<StuApply> {
     boolean agreeBatch(List<Long> idList);
 
     boolean disagreeBatch(List<StuApply> list);
+
+    JsonResponse getStateByStu();
+
+    JsonResponse schoolModify(StuApply stuApply);
+
+    JsonResponse studentModify(StuApply stuApply);
 }

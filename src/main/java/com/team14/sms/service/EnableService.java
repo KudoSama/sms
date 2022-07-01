@@ -1,9 +1,9 @@
 package com.team14.sms.service;
 
 import com.team14.sms.base.JsonResponse;
-import com.team14.sms.vo.Enable;
+import com.team14.sms.dao.Enable;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.team14.sms.vo.Student;
+import com.team14.sms.dao.Student;
 
 /**
  * <p>

@@ -1,7 +1,7 @@
 package com.team14.sms.service;
 
 import com.team14.sms.base.JsonResponse;
-import com.team14.sms.vo.Batch;
+import com.team14.sms.dao.Batch;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

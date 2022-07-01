@@ -1,6 +1,6 @@
 package com.team14.sms.mapper;
 
-import com.team14.sms.vo.Batch;
+import com.team14.sms.dao.Batch;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;

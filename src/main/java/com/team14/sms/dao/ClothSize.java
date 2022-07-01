@@ -1,4 +1,4 @@
-package com.team14.sms.vo;
+package com.team14.sms.dao;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -13,30 +13,29 @@ import lombok.experimental.Accessors;
  *
  * </p>
  *
- * @author wmj
- * @since 2022-06-25
+ * @author lmh
+ * @since 2022-06-27
  */
+
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("team14_t_school")
-@ApiModel(value="School对象", description="")
-public class School extends Model<School> {
+@TableName("team14_t_cloth_size")
+@ApiModel(value="ClothSize对象", description="")
+public class ClothSize extends Model<ClothSize> {
 
     private static final long serialVersionUID = 1L;
 
-    private Long schId;
+    private Long id;
 
-    private String schName;
+    private Long clothId;
 
-    private String schPassword;
-
-    private String userType;
+    private String clothSize;
 
 
     @Override
     public Serializable pkVal() {
-        return this.schId;
+        return this.id;
     }
 
 }

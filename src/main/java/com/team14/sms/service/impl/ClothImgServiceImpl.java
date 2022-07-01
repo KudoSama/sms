@@ -5,7 +5,7 @@ import com.team14.sms.base.JsonResponse;
 import com.team14.sms.service.ClothService;
 import com.team14.sms.mapper.ClothImgMapper;
 import com.team14.sms.service.ClothImgService;
-import com.team14.sms.vo.ClothImg;
+import com.team14.sms.dao.ClothImg;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
