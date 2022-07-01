@@ -44,6 +44,8 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
     @Autowired
     private ManagerService managerService;
 
+    @Autowired
+    private StuApplyMapper stuApplyMapper;
 
     @Autowired
     private StudentService studentService;

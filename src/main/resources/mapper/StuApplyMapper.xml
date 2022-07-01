@@ -24,6 +24,9 @@
     <select id="countResult" resultType="com.team14.sms.dao.countResult">
         select col_id, cloth_id, cloth_size, count(*) as num
         from team14_t_stu_apply
+        where state = 1
+           or state = 2
+           or state = 3
         group by col_id, cloth_id, cloth_size;
     </select>
 
