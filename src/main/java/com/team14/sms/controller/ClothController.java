@@ -60,11 +60,18 @@ public class ClothController extends BaseController {
         PageDTO pageDTO = new PageDTO();
         pageDTO.setPageNo(pageNo);
         pageDTO.setPageSize(pageSize);
-        System.out.println(pageDTO.getPageNo() + pageDTO.getPageSize());
+        // System.out.println(pageDTO.getPageNo() + pageDTO.getPageSize());
         if (clothService.getByGender(gender, pageDTO) == null) {
             return JsonResponse.failure("当前不属于审批时间，请等待学生申请结束");
         }
-        return JsonResponse.success(clothService.getByGender(gender, pageDTO), "查询成功");
+        Page<Cloth> clothPage = clothService.getByGender(gender, pageDTO);
+        JsonResponse jsonResponse = new JsonResponse();
+        for (Cloth cloth : clothPage.getRecords()) {
+            jsonResponse.addOtherData(String.valueOf(cloth.getClothId()), clothImgService.getByClothId(cloth.getClothId()));
+        }
+        jsonResponse.setData(clothPage);
+        jsonResponse.setMessage("查询成功");
+        return jsonResponse;
     }
 
     @RequestMapping(value = "/getClothByBatchId", produces = "application/json;charset=utf-8")
