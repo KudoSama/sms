@@ -1,6 +1,8 @@
 package com.team14.sms.dao;
 
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -10,6 +12,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class User {
     @TableId("id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     private String name;

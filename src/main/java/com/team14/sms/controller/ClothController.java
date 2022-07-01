@@ -2,8 +2,10 @@ package com.team14.sms.controller;
 
 
 import com.team14.sms.base.JsonResponse;
+import com.team14.sms.dao.ClothImg;
 import com.team14.sms.dto.PageDTO;
 import com.team14.sms.mapper.ClothMapper;
+import com.team14.sms.service.ClothImgService;
 import com.team14.sms.service.ClothService;
 import com.team14.sms.dao.Cloth;
 import io.swagger.annotations.ApiOperation;
@@ -36,6 +38,9 @@ public class ClothController extends BaseController {
 
     @Autowired
     private ClothMapper clothMapper;
+
+    @Autowired
+    private ClothImgService clothImgService;
 
     @RequestMapping(value = "/add", produces = "application/json;charset=utf-8")
     @ResponseBody
@@ -86,6 +91,10 @@ public class ClothController extends BaseController {
         if (cloth == null) {
             return JsonResponse.failure("查询失败，不存在该衣服");
         }
-        return JsonResponse.success(cloth, "查询成功");
+        JsonResponse jsonResponse = new JsonResponse();
+        jsonResponse.addOtherData("clothImg", clothImgService.getByClothId(clothId));
+        jsonResponse.setData(cloth);
+        jsonResponse.setMessage("查询成功");
+        return jsonResponse;
     }
 }

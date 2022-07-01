@@ -3,6 +3,9 @@ package com.team14.sms.dao;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,8 +29,10 @@ public class ClothSize extends Model<ClothSize> {
 
     private static final long serialVersionUID = 1L;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long clothId;
 
     private String clothSize;
