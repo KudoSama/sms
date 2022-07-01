@@ -14,7 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface BatchService extends IService<Batch> {
 
-    JsonResponse modifyByBatch(Batch batch);
+    JsonResponse modifyBatch(Batch batch);
 
     JsonResponse addState(Batch batch);
 

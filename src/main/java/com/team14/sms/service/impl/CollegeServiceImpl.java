@@ -59,6 +59,11 @@ public class CollegeServiceImpl extends ServiceImpl<CollegeMapper, College> impl
                 return JsonResponse.failure("添加失败，您未填写学院号、学院名或学院密码!");
             } else {
                 try {
+                    QueryWrapper<College> wrapper = new QueryWrapper<>();
+                    wrapper.eq("col_id", college.getColId());
+                    if (super.getOne(wrapper) != null) {
+                        return JsonResponse.failure("该学院账号" + college.getColId() + "已存在，请重新检查学院信息");
+                    }
                     college.setUserType("2");
                     super.save(college);
                     return JsonResponse.successMessage("添加成功");

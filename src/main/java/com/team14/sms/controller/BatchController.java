@@ -42,9 +42,9 @@ public class BatchController extends BaseController {
 
     @RequestMapping(value = "/modify", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "修改批次接口",notes = "应传入：batchId")
+    @ApiOperation(value = "修改批次接口",notes = "应传入：应传入：batchId, batchDatestart（时间戳, batchDateend（时间戳")
     public JsonResponse modifyBatch(@RequestBody @Valid Batch batch) {
-        return batchService.modifyByBatch(batch);
+        return batchService.modifyBatch(batch);
     }
 
     @RequestMapping(value = "/getCurBatch", produces = "application/json;charset=utf-8")

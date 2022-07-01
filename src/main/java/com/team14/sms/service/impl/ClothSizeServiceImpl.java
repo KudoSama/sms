@@ -46,6 +46,11 @@ public class ClothSizeServiceImpl extends ServiceImpl<ClothSizeMapper, ClothSize
         User loginUser = SessionUtils.getCurUser();
         if (loginUser.getUserType().equals("1")) {
             try {
+                QueryWrapper<ClothSize> wrapper = new QueryWrapper<>();
+                wrapper.eq("cloth_id", clothSize.getClothId()).eq("cloth_size", clothSize.getClothSize());
+                if (super.getOne(wrapper) != null) {
+                    return JsonResponse.failure("添加失败，该衣服的" + clothSize.getClothSize() +"号已经存在");
+                }
                 super.save(clothSize);
                 return JsonResponse.successMessage("添加成功");
             } catch (Exception e) {
