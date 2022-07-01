@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,24 +30,31 @@ public class StuApply extends Model<StuApply> {
 
     private static final long serialVersionUID = 1L;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long stuId;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long batchId;
 
     private String appReason;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long manId;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long colId;
 
     private Date scDate;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long clothId;
 
     private String clothSize;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long state;
 
     private String refReason;
