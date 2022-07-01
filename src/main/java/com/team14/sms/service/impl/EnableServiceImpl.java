@@ -39,6 +39,11 @@ public class EnableServiceImpl extends ServiceImpl<EnableMapper, Enable> impleme
             // System.out.println(selectStudent);
             if (selectStudent != null) {
                 if (loginUser.getId().equals(selectStudent.getManId())) {
+                    QueryWrapper<Enable> wrapper = new QueryWrapper<>();
+                    wrapper.eq("stu_id", selectStudent.getStuId());
+                    if (super.getOne(wrapper) != null) {
+                        return JsonResponse.failure(selectStudent.getStuId() + "学生已经认定为贫困生，请勿重复添加");
+                    }
                     super.save(new Enable().setStuId(selectStudent.getStuId()));
                     return JsonResponse.success("添加贫困学生成功");
                 } else {
