@@ -99,7 +99,7 @@ public class ClothController extends BaseController {
             for (ClothImg clothImg : clothImgService.getByClothId(cloth.getClothId())) {
                 clothImgs.add(clothImg.getClothImg());
             }
-            jsonResponse.addOtherData(String.valueOf(cloth.getClothId()), clothImgService.getByClothId(cloth.getClothId()));
+            jsonResponse.addOtherData(String.valueOf(cloth.getClothId()), clothImgs);
         }
         jsonResponse.setData(clothPage);
         jsonResponse.setMessage("查询成功");
