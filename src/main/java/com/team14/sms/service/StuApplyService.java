@@ -38,4 +38,6 @@ public interface StuApplyService extends IService<StuApply> {
     JsonResponse schoolModify(StuApply stuApply);
 
     JsonResponse studentModify(StuApply stuApply);
+
+    Page<StuApply> studentSelect(PageDTO pageDTO);
 }

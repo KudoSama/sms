@@ -348,6 +348,25 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
         return JsonResponse.failure("您无修改学生寒衣申请补助记录的权限，请联系系统管理员");
     }
 
+    // 学生查询自己的申请记录
+    @Override
+    public Page<StuApply> studentSelect(PageDTO pageDTO) {
+        if (batchService.getCurBatch().getData() == null) {
+            return null;
+        }
+        User loginUser = SessionUtils.getCurUser();
+        Page<StuApply> page = new Page<>(pageDTO.getPageNo(), pageDTO.getPageSize());
+        QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
+        Batch batch = (Batch) batchService.getCurBatch().getData();
+        if (!loginUser.getUserType().equals("4")) {
+            return null;
+        } else {
+            wrapper.eq("stu_id", loginUser.getId());
+            page = super.page(page, wrapper);
+            return page;
+        }
+    }
+
     // 根据学院号、辅导员号查询所属学生中未审核的记录
     @Override
     public Page<StuApply> selectNotExamineStuApply(PageDTO pageDTO) {

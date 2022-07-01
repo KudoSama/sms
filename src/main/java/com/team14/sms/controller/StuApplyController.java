@@ -46,6 +46,16 @@ public class StuApplyController extends BaseController {
         return stuApplyService.studentModify(stuApply);
     }
 
+    @RequestMapping(value = "/studentSelect", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "学生查询自己的申请记录", notes = "需传入pageNo, pageSize")
+    public JsonResponse studentModify(@RequestBody @Valid PageDTO pageDTO) {
+        if (stuApplyService.studentSelect(pageDTO) == null) {
+            return JsonResponse.failure("当前不属于申请时间");
+        }
+        return JsonResponse.success(stuApplyService.studentSelect(pageDTO), "查询成功");
+    }
+
     @RequestMapping(value = "/schoolModify", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "学校修改学生衣服和尺码接口", notes = "应传入id、batchId、clothId、clothSize")
