@@ -40,6 +40,20 @@ public class StuApplyController extends BaseController {
         return stuApplyService.apply(stuApply);
     }
 
+    @RequestMapping(value = "/studentModify", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "学生在申请时间内修改申请记录", notes = "需填入id, batchId、clothId、clothSize、appReason")
+    public JsonResponse studentModify(@RequestBody @Valid StuApply stuApply) {
+        return stuApplyService.studentModify(stuApply);
+    }
+
+    @RequestMapping(value = "/schoolModify", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "学校修改学生衣服和尺码接口", notes = "应传入id、batchId、clothId、clothSize")
+    public JsonResponse schoolModify(@RequestBody @Valid StuApply stuApply) {
+        return stuApplyService.schoolModify(stuApply);
+    }
+
     @RequestMapping(value = "/selectNotExamineStuApply", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "查询当前登录辅导员/学院直属学生中未审核的的申请记录", notes = "需传入pageNo, pageSize")
@@ -84,9 +98,16 @@ public class StuApplyController extends BaseController {
 
     @RequestMapping(value = "/exportState", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "导出接口", notes = " ")
+    @ApiOperation(value = "导出当前待审批结束的批次的审核状态接口", notes = " ")
     public void exportState(HttpServletResponse response) {
         stuApplyService.exportState(response);
     }
 
+
+    @RequestMapping(value = "/getStateByStu", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "获取学生当前批次的所有申请的审核状态", notes = "随便用")
+    public JsonResponse getStateByStu() {
+        return stuApplyService.getStateByStu(); // 返回的是带申请list的JsonResponse
+    }
 }

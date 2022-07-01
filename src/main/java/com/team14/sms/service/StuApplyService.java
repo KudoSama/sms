@@ -30,4 +30,10 @@ public interface StuApplyService extends IService<StuApply> {
     boolean agreeBatch(List<Long> idList);
 
     boolean disagreeBatch(List<StuApply> list);
+
+    JsonResponse getStateByStu();
+
+    JsonResponse schoolModify(StuApply stuApply);
+
+    JsonResponse studentModify(StuApply stuApply);
 }

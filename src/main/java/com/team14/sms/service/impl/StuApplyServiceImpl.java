@@ -58,14 +58,14 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
     public void exportState(HttpServletResponse response) {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "attachment; filename=exportState.xls");
-        List<StuApply> stuApplies = baseMapper.selectList(null);
+        Batch curBatch = (Batch) batchService.getNotExamineBatch().getData(); // 获取当前待审批批次
+        QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
+        wrapper.eq("batch_id", curBatch.getBatchId());
+        List<StuApply> stuApplies = super.list(wrapper);
         Workbook wb = new HSSFWorkbook();
         Sheet sheet = wb.createSheet();
 
         Row row = sheet.createRow(0);
-
-//        Cell cell = row.createCell(0);
-//        cell.setCellValue("ID");
 
         Cell cell = row.createCell(0);
         cell.setCellValue("学号");
@@ -83,8 +83,6 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
         for (int i = 0; i < stuApplies.size(); i++) {
             row = sheet.createRow(i + 1);
 
-//            cell = row.createCell(0);
-//            cell.setCellValue(stuApplies.get(i).getId());
 
             cell = row.createCell(0);
             cell.setCellValue(stuApplies.get(i).getStuId());
@@ -193,6 +191,119 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
         return JsonResponse.failure("您非本校学生，无提交寒衣申请补助的权限，请联系系统管理员");
     }
 
+    @Override
+    // 需填入id, 批次号、衣服号、衣服尺寸、申请原因（老生新生均可，但老生会检测）
+    public JsonResponse studentModify(StuApply stuApply) {
+        User loginUser = SessionUtils.getCurUser();
+        // 仅学生可以修改自己的申请记录
+        if (loginUser.getUserType().equals("4")) {
+            if (enableService.getByStuId(loginUser.getId()) == null) {
+                return JsonResponse.failure("您非贫困学生，请联系辅导员");
+            }
+            // 信息未填写完毕
+            if (stuApply.getBatchId() == null || stuApply.getClothId() == null || StringUtils.isBlank(stuApply.getClothSize())) {
+                return JsonResponse.failure("请检查您是否填写了批次、衣服商品号或衣服尺码");
+            } else {
+                // 填写的衣服不存在
+                if (clothService.getByClothId(stuApply.getClothId()) == null) {
+                    return JsonResponse.failure("您填写的衣服商品号不存在，请重新填写");
+                }
+
+                // 批次号填写错误
+                if (batchService.getByBatchId(stuApply.getBatchId()) == null) {
+                    return JsonResponse.failure("您填写的批次不存在，请重新填写");
+                }
+
+                // 当前非提交申请时间
+                if (batchService.getByBatchId(stuApply.getBatchId()).getBatchDateend().before(new Date())) {
+                    return JsonResponse.failure("当前日期非该批次申请时间");
+                }
+
+                // 填写的批次号错误
+                if (!stuApply.getBatchId().equals(clothService.getByClothId(stuApply.getClothId()).getBatchId())) {
+                    return JsonResponse.failure("您填写的批次号与当前仓库中衣服的批次号不对应");
+                }
+
+                // 衣服尺码填写错误
+                QueryWrapper<ClothSize> sizeQueryWrapper = new QueryWrapper<>();
+                sizeQueryWrapper.eq("cloth_id", stuApply.getClothId()).eq("cloth_size", stuApply.getClothSize());
+                if (clothSizeService.getOne(sizeQueryWrapper) == null) {
+                    return JsonResponse.failure("您填写的衣服尺码不存在，请重新填写");
+                }
+
+                // 前序检测无问题，进入提交申请阶段
+                Calendar enYear = Calendar.getInstance();
+                // 获取入学年份
+                enYear.setTime(studentService.getByStuId(loginUser.getId()).getEnDate());
+
+                Calendar batchYear = Calendar.getInstance();
+                // 获取批次年份
+                batchYear.setTime(batchService.getByBatchId(stuApply.getBatchId()).getBatchDatestart());
+
+                // 如果入学年份小于批次年份，即学生为老生
+                if (enYear.get(Calendar.YEAR) < batchYear.get(Calendar.YEAR)) {
+                    // 如果老生未填写申请理由，则返回提交申请失败
+                    if (StringUtils.isBlank(stuApply.getAppReason())) {
+                        return JsonResponse.failure("修改失败，请填写申请理由");
+                    }
+                }
+
+                // 如果入学时间晚于批次年份，则返回错误
+                if (enYear.get(Calendar.YEAR) > batchYear.get(Calendar.YEAR)) {
+                    return JsonResponse.failure("修改失败，您非该批次准许学生，该批次早于您的入学时间");
+                }
+                // 老生填写了申请理由或新生无需检测
+                stuApply.setScDate(new Date());
+                QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
+                wrapper.eq("id", stuApply.getId());
+                super.update(stuApply, wrapper);
+                return JsonResponse.success(stuApply, "修改成功，请等待审批结果");
+            }
+        }
+        return JsonResponse.failure("您非本校学生，无修改寒衣申请补助的权限，请联系系统管理员");
+    }
+
+    @Override
+    // 需填入批次号、衣服号、衣服尺寸
+    public JsonResponse schoolModify(StuApply stuApply) {
+        User loginUser = SessionUtils.getCurUser();
+        // 仅学校可以修改学生申请
+        if (loginUser.getUserType().equals("1")) {
+            // 信息未填写完毕
+            if (stuApply.getId() == null || stuApply.getClothId() == null || StringUtils.isBlank(stuApply.getClothSize())) {
+                return JsonResponse.failure("请检查您是否填写了记录id、衣服商品号或衣服尺码");
+            } else {
+                // 填写的衣服不存在
+                if (clothService.getByClothId(stuApply.getClothId()) == null) {
+                    return JsonResponse.failure("您填写的衣服商品号不存在，请重新填写");
+                }
+
+                // 当前批次中无本衣服
+                QueryWrapper<Cloth> clothQueryWrapper = new QueryWrapper<>();
+                clothQueryWrapper.eq("cloth_id", stuApply.getClothId()).
+                        eq("batch_id", stuApply.getBatchId());
+                if (clothService.getOne(clothQueryWrapper) == null) {
+                    return JsonResponse.failure("该衣服不属于申请记录的批次");
+                }
+
+                // 衣服尺码填写错误
+                QueryWrapper<ClothSize> sizeQueryWrapper = new QueryWrapper<>();
+                sizeQueryWrapper.eq("cloth_id", stuApply.getClothId()).eq("cloth_size", stuApply.getClothSize());
+                if (clothSizeService.getOne(sizeQueryWrapper) == null) {
+                    return JsonResponse.failure("您填写的衣服尺码不存在，请重新填写");
+                }
+
+                // 前序检测无问题，进入修改申请阶段
+                stuApply.setState(4L); // 未审批状态
+                stuApply.setScDate(new Date());
+                QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
+                wrapper.eq("id", stuApply.getId());
+                super.update(stuApply, wrapper);
+                return JsonResponse.success(stuApply, "修改成功，请该学生的辅导员学院在审批时间内进行审批");
+            }
+        }
+        return JsonResponse.failure("您无修改学生寒衣申请补助记录的权限，请联系系统管理员");
+    }
 
     // 根据学院号、辅导员号查询所属学生中未审核的记录
     @Override
@@ -350,5 +461,21 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
             }
         }
         return true;
+    }
+
+    @Override
+    public JsonResponse getStateByStu() {
+        User loginUser = SessionUtils.getCurUser();
+        if (loginUser.getUserType().equals("4")) {
+            Batch curBatch = (Batch) batchService.getNotExamineBatch().getData(); // 获取当前待审批批次
+            QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
+            wrapper.eq("batch_id", curBatch.getBatchId()).eq("stu_id", loginUser.getId());
+            List<StuApply> appList = super.list(wrapper);
+            if (appList == null) {
+            return JsonResponse.failure("您无申请记录");
+            }
+            return JsonResponse.success(appList, "查询成功");
+        }
+        return JsonResponse.failure("您无本操作权限，请联系系统管理员");
     }
 }
