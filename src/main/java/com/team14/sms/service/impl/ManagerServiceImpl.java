@@ -60,6 +60,11 @@ public class ManagerServiceImpl extends ServiceImpl<ManagerMapper, Manager> impl
                 try {
                     manager.setColId(loginUser.getId()); // 绑定学院号，无需前端操作
                     manager.setUserType("3");
+                    QueryWrapper<Manager> wrapper = new QueryWrapper<>();
+                    wrapper.eq("man_id", manager.getManId());
+                    if (super.getOne(wrapper) != null) {
+                        return JsonResponse.failure("该辅导员账号 " + manager.getManId() + " 已存在，请重新检查辅导员信息");
+                    }
                     super.save(manager);
                     return JsonResponse.successMessage("添加成功");
                 } catch (Exception e) {

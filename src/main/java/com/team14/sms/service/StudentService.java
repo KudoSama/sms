@@ -20,7 +20,7 @@ public interface StudentService extends IService<Student> {
 
     Student getByStuId(Long stuId);
 
-    JsonResponse addStudent(Student student);
+    JsonResponse addState(Student student);
 
     JsonResponse getByGender(String gender);
 

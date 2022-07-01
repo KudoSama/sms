@@ -53,7 +53,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
     }
 
     @Override
-    public JsonResponse addStudent(Student student) {
+    public JsonResponse addState(Student student) {
 
         User loginUser = SessionUtils.getCurUser();
         // 仅辅导员用户才能添加学生
@@ -66,6 +66,11 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
                 try {
                     student.setManId(loginUser.getId()); // 绑定当前辅导员号，无需前端操作
                     student.setUserType("4");
+                    QueryWrapper<Student> wrapper = new QueryWrapper<>();
+                    wrapper.eq("stu_id", student.getStuId());
+                    if (super.getOne(wrapper) != null) {
+                        return JsonResponse.failure("该学生账号 " + student.getStuId() +" 已存在，请重新检查学生信息");
+                    }
                     super.save(student);
                     return JsonResponse.successMessage("添加成功");
                 } catch (Exception e) {

@@ -26,7 +26,7 @@ import java.util.List;
 public class BatchServiceImpl extends ServiceImpl<BatchMapper, Batch> implements BatchService {
 
     @Override
-    public JsonResponse modifyByBatch(Batch batch) {
+    public JsonResponse modifyBatch(Batch batch) {
         QueryWrapper<Batch> wrapper =new QueryWrapper<>();
         wrapper.eq("batch_id", batch.getBatchId());
         User loginUser = SessionUtils.getCurUser();
@@ -67,6 +67,11 @@ public class BatchServiceImpl extends ServiceImpl<BatchMapper, Batch> implements
                         batch.getBatchDatestart() == null) {
                     return JsonResponse.failure("添加失败，您未填写批次号、开始日期或结束时间");
                 } else {
+                    QueryWrapper<Batch> wrapper = new QueryWrapper<>();
+                    wrapper.eq("batch_id", batch.getBatchId());
+                    if (super.getOne(wrapper) != null) {
+                        return JsonResponse.failure(batch.getBatchId() + "批次已经存在，请填写新的批次号");
+                    }
                     // 结束时间小于开始时间
                     if (batch.getBatchDateend().compareTo(batch.getBatchDatestart()) <= 0 ) {
                         return JsonResponse.failure("添加失败，您填写的结束日期早于开始日期");

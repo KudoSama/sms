@@ -42,7 +42,7 @@ public class StudentController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "添加学生接口",notes = "应传入：stuId, stuName, gender, enDate（时间戳, classId, stuPassword")
     public JsonResponse addStudent(@RequestBody @Valid Student student){
-        return studentService.addStudent(student);
+        return studentService.addState(student);
     }
 
     @RequestMapping(value = "/login", produces = "application/json;charset=utf-8")
