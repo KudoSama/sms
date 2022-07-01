@@ -2,8 +2,11 @@ package com.team14.sms.mapper;
 
 import com.team14.sms.dao.StuApply;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.team14.sms.dao.countResult;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * <p>
@@ -16,5 +19,6 @@ import org.springframework.stereotype.Component;
 @Mapper
 @Component
 public interface StuApplyMapper extends BaseMapper<StuApply> {
+    List<countResult> countResult();
 
 }

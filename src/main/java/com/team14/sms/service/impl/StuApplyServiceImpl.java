@@ -390,7 +390,6 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
         userType.add("2"); // 学院
         userType.add("3"); // 辅导员
 
-
         if (idList == null) {
             return false;
         } else {
@@ -398,6 +397,7 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
                 for (Long id : idList) {
                     QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
                     StuApply stuApply = super.getById(id);
+
                     if (stuApply == null || stuApply.getState().equals(0L)) {
                         continue;
                     } else {

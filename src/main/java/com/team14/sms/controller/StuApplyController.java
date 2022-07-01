@@ -1,18 +1,17 @@
 package com.team14.sms.controller;
 
 
+import com.team14.sms.base.BaseController;
 import com.team14.sms.base.JsonResponse;
+import com.team14.sms.dao.StuApply;
 import com.team14.sms.dto.PageDTO;
 import com.team14.sms.service.StuApplyService;
-import com.team14.sms.dao.StuApply;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.team14.sms.base.BaseController;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -80,6 +79,12 @@ public class StuApplyController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "高级用户（非学生）批量同意接口", notes = "需填入idList（申请记录的乱码id，非学生id,JSON数组格式为[number1, number2]")
     public JsonResponse agreeBatch(@RequestBody @Valid List<Long> idList) {
+//        List<Long> idsList = new ArrayList<>();
+//        //System.out.println(idList);
+//        for (String s : idList){
+//            idsList.add(Long.valueOf(s));
+//        }
+//        //System.out.println(idsList);
         if (!stuApplyService.agreeBatch(idList)) {
             return JsonResponse.failure("同意审批失败");
         }
@@ -90,6 +95,13 @@ public class StuApplyController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "高级用户（非学生）批量拒绝接口", notes = "应传入id和refReason，需要批量处理就传入[id, refReason],[id, refReason]")
     public JsonResponse disagreeBatch(@RequestBody @Valid List<StuApply> list) {
+//        List<StuApply> disagreeList = new ArrayList<>();
+//        for (StuApplyF temp : list) {
+//            StuApply stuApply = new StuApply();
+//            stuApply.setId(Long.valueOf(temp.getId()));
+//            stuApply.setRefReason(temp.getRefReason());
+//            disagreeList.add(stuApply);
+//        }
         if (!stuApplyService.disagreeBatch(list)) {
             return JsonResponse.failure("拒绝审批失败");
         }
