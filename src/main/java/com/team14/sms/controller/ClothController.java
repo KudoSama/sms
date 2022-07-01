@@ -1,6 +1,7 @@
 package com.team14.sms.controller;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.team14.sms.base.JsonResponse;
 import com.team14.sms.dao.ClothImg;
 import com.team14.sms.dto.PageDTO;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.team14.sms.base.BaseController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * <p>
@@ -72,13 +74,20 @@ public class ClothController extends BaseController {
                                           @RequestParam(value = "pageNo") Integer pageNo,
                                           @RequestParam(value = "pageSize") Integer pageSize){
         PageDTO pageDTO = new PageDTO();
-        System.out.println(pageNo + pageSize);
+        // System.out.println(pageNo + pageSize);
         pageDTO.setPageNo(pageNo);
         pageDTO.setPageSize(pageSize);
         if (clothService.getByBatchId(batchId, pageDTO) == null) {
             return JsonResponse.failure("当前不属于审批时间，请等待学生申请结束");
         }
-        return JsonResponse.success(clothService.getByBatchId(batchId, pageDTO), "查询成功");
+        Page<Cloth> clothPage = clothService.getByBatchId(batchId, pageDTO);
+        JsonResponse jsonResponse = new JsonResponse();
+        for (Cloth cloth : clothPage.getRecords()) {
+            jsonResponse.addOtherData(String.valueOf(cloth.getClothId()), clothImgService.getByClothId(cloth.getClothId()));
+        }
+        jsonResponse.setData(clothPage);
+        jsonResponse.setMessage("查询成功");
+        return jsonResponse;
     }
 
     @RequestMapping(value = "/getClothByClothId", produces = "application/json;charset=utf-8")
