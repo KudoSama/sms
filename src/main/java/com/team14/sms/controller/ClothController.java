@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.team14.sms.base.BaseController;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -67,7 +68,11 @@ public class ClothController extends BaseController {
         Page<Cloth> clothPage = clothService.getByGender(gender, pageDTO);
         JsonResponse jsonResponse = new JsonResponse();
         for (Cloth cloth : clothPage.getRecords()) {
-            jsonResponse.addOtherData(String.valueOf(cloth.getClothId()), clothImgService.getByClothId(cloth.getClothId()));
+            List<String> clothImgs = new ArrayList<>();
+            for (ClothImg clothImg : clothImgService.getByClothId(cloth.getClothId())) {
+                clothImgs.add(clothImg.getClothImg());
+            }
+            jsonResponse.addOtherData(String.valueOf(cloth.getClothId()), clothImgs);
         }
         jsonResponse.setData(clothPage);
         jsonResponse.setMessage("查询成功");
@@ -90,7 +95,11 @@ public class ClothController extends BaseController {
         Page<Cloth> clothPage = clothService.getByBatchId(batchId, pageDTO);
         JsonResponse jsonResponse = new JsonResponse();
         for (Cloth cloth : clothPage.getRecords()) {
-            jsonResponse.addOtherData(String.valueOf(cloth.getClothId()), clothImgService.getByClothId(cloth.getClothId()));
+            List<String> clothImgs = new ArrayList<>();
+            for (ClothImg clothImg : clothImgService.getByClothId(cloth.getClothId())) {
+                clothImgs.add(clothImg.getClothImg());
+            }
+            jsonResponse.addOtherData(String.valueOf(cloth.getClothId()), clothImgs);
         }
         jsonResponse.setData(clothPage);
         jsonResponse.setMessage("查询成功");
