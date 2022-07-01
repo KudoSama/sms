@@ -20,10 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -44,6 +41,8 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
     @Autowired
     private ManagerService managerService;
 
+    @Autowired
+    private StuApplyMapper stuApplyMapper;
 
     @Autowired
     private StudentService studentService;
@@ -76,13 +75,11 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
         cell = row.createCell(2);
         cell.setCellValue("批次号");
 
-
         cell = row.createCell(3);
         cell.setCellValue("审核状态");
 
         for (int i = 0; i < stuApplies.size(); i++) {
             row = sheet.createRow(i + 1);
-
 
             cell = row.createCell(0);
             cell.setCellValue(stuApplies.get(i).getStuId());
@@ -106,6 +103,55 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
             } else {
                 cell.setCellValue("已拒绝该申请");
             }
+        }
+
+        try {
+            ((HSSFWorkbook) wb).write(response.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void exportResult(HttpServletResponse response) {
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-Disposition", "attachment; filename=exportResult.xls");
+        Batch curBatch = (Batch) batchService.getNotExamineBatch().getData(); // 获取当前待审批批次
+        QueryWrapper<countResult> wrapper = new QueryWrapper<>();
+        wrapper.eq("batch_id", curBatch.getBatchId());
+        List<countResult> stuApplies = stuApplyMapper.countResult();
+        Workbook wb = new HSSFWorkbook();
+        Sheet sheet = wb.createSheet();
+
+        Row row = sheet.createRow(0);
+
+        Cell cell = row.createCell(0);
+        cell.setCellValue("学院号");
+
+        cell = row.createCell(1);
+        cell.setCellValue("服装编号");
+
+        cell = row.createCell(2);
+        cell.setCellValue("服装尺码");
+
+        cell = row.createCell(3);
+        cell.setCellValue("数量");
+
+        for (int i = 0; i < stuApplies.size(); i++) {
+            row = sheet.createRow(i + 1);
+
+            cell = row.createCell(0);
+            cell.setCellValue(stuApplies.get(i).getStuId());
+
+            cell = row.createCell(1);
+            Student student = studentService.getByStuId(stuApplies.get(i).getStuId());
+            cell.setCellValue(student.getStuName());
+
+            cell = row.createCell(2);
+            cell.setCellValue(stuApplies.get(i).getBatchId());
+
+            cell = row.createCell(3);
+            cell.setCellValue();
         }
 
         try {
