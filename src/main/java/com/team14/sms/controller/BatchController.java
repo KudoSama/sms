@@ -5,7 +5,7 @@ import com.team14.sms.base.BaseController;
 import com.team14.sms.base.JsonResponse;
 import com.team14.sms.mapper.BatchMapper;
 import com.team14.sms.service.BatchService;
-import com.team14.sms.vo.Batch;
+import com.team14.sms.dao.Batch;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

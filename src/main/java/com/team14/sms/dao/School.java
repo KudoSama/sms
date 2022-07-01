@@ -1,11 +1,8 @@
-package com.team14.sms.vo;
+package com.team14.sms.dao;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
-import java.util.Date;
-
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,29 +14,29 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author wmj
- * @since 2022-06-26
+ * @since 2022-06-25
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("team14_t_batch")
-@ApiModel(value="Batch对象", description="")
-public class Batch extends Model<Batch> {
+@TableName("team14_t_school")
+@ApiModel(value="School对象", description="")
+public class School extends Model<School> {
 
     private static final long serialVersionUID = 1L;
 
-    private Long batchId;
+    private Long schId;
 
-    @TableField("batch_dateStart")
-    private Date batchDatestart;
+    private String schName;
 
-    @TableField("batch_dateEnd")
-    private Date batchDateend;
+    private String schPassword;
+
+    private String userType;
 
 
     @Override
     public Serializable pkVal() {
-        return this.batchId;
+        return this.schId;
     }
 
 }

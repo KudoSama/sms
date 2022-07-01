@@ -4,11 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.team14.sms.base.JsonResponse;
 import com.team14.sms.utls.SessionUtils;
-import com.team14.sms.vo.College;
+import com.team14.sms.dao.College;
 import com.team14.sms.mapper.CollegeMapper;
 import com.team14.sms.service.CollegeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.team14.sms.vo.User;
+import com.team14.sms.dao.User;
 import org.springframework.stereotype.Service;
 
 /**

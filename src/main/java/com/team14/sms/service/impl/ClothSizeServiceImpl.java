@@ -4,11 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.team14.sms.base.JsonResponse;
 import com.team14.sms.service.ClothService;
 import com.team14.sms.utls.SessionUtils;
-import com.team14.sms.vo.ClothSize;
+import com.team14.sms.dao.ClothSize;
 import com.team14.sms.mapper.ClothSizeMapper;
 import com.team14.sms.service.ClothSizeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.team14.sms.vo.User;
+import com.team14.sms.dao.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

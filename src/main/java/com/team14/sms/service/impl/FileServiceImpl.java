@@ -1,9 +1,7 @@
 package com.team14.sms.service.impl;
 
-import com.team14.sms.base.JsonResponse;
 import com.team14.sms.service.ClothImgService;
 import com.team14.sms.service.FileService;
-import com.team14.sms.vo.ClothImg;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

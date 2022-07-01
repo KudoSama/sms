@@ -7,8 +7,8 @@ import com.team14.sms.base.JsonResponse;
 import com.team14.sms.mapper.ManagerMapper;
 import com.team14.sms.service.ManagerService;
 import com.team14.sms.utls.SessionUtils;
-import com.team14.sms.vo.Manager;
-import com.team14.sms.vo.User;
+import com.team14.sms.dao.Manager;
+import com.team14.sms.dao.User;
 import org.springframework.stereotype.Service;
 
 /**

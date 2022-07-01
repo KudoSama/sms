@@ -1,4 +1,4 @@
-package com.team14.sms.vo;
+package com.team14.sms.dao;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;

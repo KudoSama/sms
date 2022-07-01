@@ -3,7 +3,7 @@
 <mapper namespace="com.team14.sms.mapper.StuApplyMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.team14.sms.vo.StuApply">
+    <resultMap id="BaseResultMap" type="com.team14.sms.dao.StuApply">
         <id column="id" property="id" />
         <result column="stu_id" property="stuId" />
         <result column="batch_id" property="batchId" />

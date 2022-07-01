@@ -5,12 +5,12 @@ import com.team14.sms.base.JsonResponse;
 import com.team14.sms.mapper.StudentMapper;
 import com.team14.sms.service.StudentService;
 import com.team14.sms.utls.SessionUtils;
-import com.team14.sms.vo.Enable;
+import com.team14.sms.dao.Enable;
 import com.team14.sms.mapper.EnableMapper;
 import com.team14.sms.service.EnableService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.team14.sms.vo.Student;
-import com.team14.sms.vo.User;
+import com.team14.sms.dao.Student;
+import com.team14.sms.dao.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

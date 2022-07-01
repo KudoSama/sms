@@ -4,7 +4,7 @@ package com.team14.sms.controller;
 import com.team14.sms.base.JsonResponse;
 import com.team14.sms.dto.PageDTO;
 import com.team14.sms.service.StuApplyService;
-import com.team14.sms.vo.StuApply;
+import com.team14.sms.dao.StuApply;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

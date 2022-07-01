@@ -2,7 +2,7 @@ package com.team14.sms.utls;
 
 
 import com.team14.sms.base.JsonResponse;
-import com.team14.sms.vo.User;
+import com.team14.sms.dao.User;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 

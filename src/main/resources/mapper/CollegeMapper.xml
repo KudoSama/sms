@@ -3,7 +3,7 @@
 <mapper namespace="com.team14.sms.mapper.CollegeMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.team14.sms.vo.College">
+    <resultMap id="BaseResultMap" type="com.team14.sms.dao.College">
         <id column="col_id" property="colId" />
         <result column="col_name" property="colName" />
         <result column="col_password" property="colPassword" />

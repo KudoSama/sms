@@ -2,7 +2,7 @@ package com.team14.sms.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.team14.sms.base.JsonResponse;
-import com.team14.sms.vo.ClothImg;
+import com.team14.sms.dao.ClothImg;
 
 import java.util.List;
 
