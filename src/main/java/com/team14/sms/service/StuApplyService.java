@@ -21,6 +21,8 @@ public interface StuApplyService extends IService<StuApply> {
 
     void exportState(HttpServletResponse response);
 
+    void exportResult(HttpServletResponse response);
+
     JsonResponse apply(StuApply stuApply);
 
     Page<StuApply> selectNotExamineStuApply(PageDTO pageDTO);
