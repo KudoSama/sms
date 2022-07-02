@@ -18,7 +18,7 @@ public interface ClothService extends IService<Cloth> {
 
     Cloth getByClothId(Long clothId);
 
-    Page<Cloth> getByGender(String gender, PageDTO pageDTO);
+    Page<Cloth> getByGender(PageDTO pageDTO);
 
     Page<Cloth> getByBatchId(Long batchId, PageDTO pageDTO);
 

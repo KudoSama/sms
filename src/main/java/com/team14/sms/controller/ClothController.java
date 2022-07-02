@@ -55,17 +55,16 @@ public class ClothController extends BaseController {
     @RequestMapping(value = "/getClothByGender", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "服装性别接口",notes = "应传入gender：男、女（字符串）, pageNo, pageSize")
-    public JsonResponse getClothByGender(@RequestParam(value = "gender") String gender,
-                                         @RequestParam(value = "pageNo") Integer pageNo,
+    public JsonResponse getClothByGender( @RequestParam(value = "pageNo") Integer pageNo,
                                          @RequestParam(value = "pageSize") Integer pageSize){
         PageDTO pageDTO = new PageDTO();
         pageDTO.setPageNo(pageNo);
         pageDTO.setPageSize(pageSize);
         // System.out.println(pageDTO.getPageNo() + pageDTO.getPageSize());
-        if (clothService.getByGender(gender, pageDTO) == null) {
+        if (clothService.getByGender(pageDTO) == null) {
             return JsonResponse.failure("当前不属于审批时间，请等待学生申请结束");
         }
-        Page<Cloth> clothPage = clothService.getByGender(gender, pageDTO);
+        Page<Cloth> clothPage = clothService.getByGender(pageDTO);
         JsonResponse jsonResponse = new JsonResponse();
         for (Cloth cloth : clothPage.getRecords()) {
             List<String> clothImgs = new ArrayList<>();
@@ -105,6 +104,7 @@ public class ClothController extends BaseController {
         jsonResponse.setMessage("查询成功");
         return jsonResponse;
     }
+
 
     @RequestMapping(value = "/getClothByClothId", produces = "application/json;charset=utf-8")
     @ResponseBody

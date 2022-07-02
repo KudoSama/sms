@@ -3,8 +3,10 @@ package com.team14.sms.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.team14.sms.base.JsonResponse;
+import com.team14.sms.controller.UserController;
 import com.team14.sms.dto.PageDTO;
 import com.team14.sms.service.BatchService;
+import com.team14.sms.service.StudentService;
 import com.team14.sms.utls.SessionUtils;
 import com.team14.sms.dao.Cloth;
 import com.team14.sms.mapper.ClothMapper;
@@ -28,6 +30,9 @@ public class ClothServiceImpl extends ServiceImpl<ClothMapper, Cloth> implements
     @Autowired
     private BatchService batchService;
 
+    @Autowired
+    private StudentService studentService;
+
     @Override
     public Cloth getByClothId(Long clothId) {
         QueryWrapper<Cloth> wrapper = new QueryWrapper<>();
@@ -36,12 +41,17 @@ public class ClothServiceImpl extends ServiceImpl<ClothMapper, Cloth> implements
     }
 
     @Override
-    public Page<Cloth> getByGender(String gender, PageDTO pageDTO) {
-        Page<Cloth> page = new Page<>(pageDTO.getPageNo(), pageDTO.getPageSize());
-        QueryWrapper<Cloth> wrapper = new QueryWrapper<>();
-        wrapper.eq("gender", gender);
-        page = super.page(page, wrapper);
-        return page;
+    public Page<Cloth> getByGender(PageDTO pageDTO) {
+        User loginUser = SessionUtils.getCurUser();
+        if (loginUser.getUserType().equals("4")) {
+            Page<Cloth> page = new Page<>(pageDTO.getPageNo(), pageDTO.getPageSize());
+            QueryWrapper<Cloth> wrapper = new QueryWrapper<>();
+            String gender = studentService.getByStuId(loginUser.getId()).getGender();
+            wrapper.eq("gender", gender);
+            page = super.page(page, wrapper);
+            return page;
+        }
+        return null;
     }
 
     @Override
