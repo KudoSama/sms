@@ -254,7 +254,7 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
 
                 if (!clothService.getByClothId((stuApply.getClothId())).getGender().
                         equals(studentService.getByStuId(loginUser.getId()).getGender())) {
-                    return JsonResponse.failure("请选择属于您性别的衣服");
+                    return JsonResponse.failure("请选择属于您性别的衣服 ");
                 }
 
                 // 批次号填写错误
