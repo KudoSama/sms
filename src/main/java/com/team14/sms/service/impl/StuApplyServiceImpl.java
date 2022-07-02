@@ -252,6 +252,11 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
                     return JsonResponse.failure("您填写的衣服商品号不存在，请重新填写");
                 }
 
+                if (!clothService.getByClothId((stuApply.getClothId())).getGender().
+                        equals(studentService.getByStuId(loginUser.getId()).getGender())) {
+                    return JsonResponse.failure("请选择属于您性别的衣服");
+                }
+
                 // 批次号填写错误
                 if (batchService.getByBatchId(stuApply.getBatchId()) == null) {
                     return JsonResponse.failure("您填写的批次不存在，请重新填写");
