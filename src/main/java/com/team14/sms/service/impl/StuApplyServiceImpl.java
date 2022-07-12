@@ -117,7 +117,7 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "attachment; filename=exportResult.xls");
         Batch curBatch = (Batch) batchService.getNotExamineBatch().getData(); // 获取当前待审批批次
-        List<countResult> stuApplies = stuApplyMapper.countResult(curBatch.getBatchId());
+        List<CountResult> stuApplies = stuApplyMapper.countResult(curBatch.getBatchId());
         Workbook wb = new HSSFWorkbook();
         Sheet sheet = wb.createSheet();
 

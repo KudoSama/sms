@@ -49,7 +49,7 @@ public class StuApplyController extends BaseController {
     @RequestMapping(value = "/studentSelect", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "学生查询自己的申请记录", notes = "需传入pageNo, pageSize")
-    public JsonResponse studentModify(@RequestBody @Valid PageDTO pageDTO) {
+    public JsonResponse studentSelect(@RequestBody @Valid PageDTO pageDTO) {
         if (stuApplyService.studentSelect(pageDTO) == null) {
             return JsonResponse.failure("当前不属于申请时间");
         }

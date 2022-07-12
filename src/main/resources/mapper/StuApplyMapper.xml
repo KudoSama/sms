@@ -15,13 +15,13 @@
         <result column="ref_reason" property="refReason"/>
     </resultMap>
 
-    <resultMap id="CountResultMap" type="com.team14.sms.dao.countResult">
+    <resultMap id="CountResultMap" type="com.team14.sms.dao.CountResult">
         <result column="col_id" property="colId"/>
         <result column="cloth_id" property="clothId"/>
         <result column="cloth_size" property="clothSize"/>
         <result column="num" property="num"/>
     </resultMap>
-    <select id="countResult" parameterType="java.lang.Long" resultType="com.team14.sms.dao.countResult">
+    <select id="countResult" parameterType="java.lang.Long" resultType="com.team14.sms.dao.CountResult">
         select col_id, cloth_id, cloth_size, count(*) as num
         from team14_t_stu_apply
         where batch_id = #{batchId}
