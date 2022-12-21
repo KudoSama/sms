@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wmj.sms.mapper.ClothSizeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wmj.sms.dao.ClothSize">
+        <id column="id" property="id" />
+        <result column="cloth_id" property="clothId" />
+        <result column="cloth_size" property="clothSize" />
+    </resultMap>
+
+    <delete id="deleteByClothId" parameterType="java.lang.Long" >
+        delete from wmj_t_cloth_size
+        where cloth_id = #{clothId}
+    </delete>
+
+</mapper>

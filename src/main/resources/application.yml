@@ -1,0 +1,86 @@
+server:
+  port: 9000
+
+## 数据源配置
+spring:
+  mvc:
+    async:
+      request-timeout: 60000
+  jackson:
+    serialization:
+      write-dates-as-timestamps: true
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 18789513633gtxy
+    url: jdbc:mysql://localhost:3306/wmj_sms?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: LEGACYHTML5
+    encoding: UTF-8
+
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${file-upload-path}
+
+  #邮箱基本配置
+  mail:
+    #配置smtp服务主机地址
+    host: smtp.qq.com
+    #发送者邮箱
+    username: null0x00@qq.com
+    #配置密码,注意不是真正的密码，而是刚刚申请到的授权码
+    password: kxewkyyjkraxheeh
+    #端口号465或587
+    port: 587
+    #默认的邮件编码为UTF-8
+    default-encoding: UTF-8
+    #其他参数
+    properties:
+      mail:
+        #配置SSL 加密工厂
+        smtp:
+          ssl:
+            #本地测试，先放开ssl
+            enable: false
+            required: false
+          #开启debug模式，这样邮件发送过程的日志会在控制台打印出来，方便排查错误
+        debug: true
+
+
+## mybatis的配置
+mybatis:
+  mapper-locations: classpath:/mappers/*.xml
+  type-aliases-package: com.wmj.sms.mapper
+  configuration:
+    ## 下划线转驼峰
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    com:
+      wmj:
+        sms:
+          mapper: debug
+
+## 分页助手设置
+pagehelper:
+  helper-dialect: mysql
+
+#mybatis-plus:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+springfox:
+  documentation:
+    swagger-ui:
+      enabled: true
+
+file-upload-path: ./file
+
+

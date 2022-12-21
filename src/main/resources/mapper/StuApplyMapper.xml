@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wmj.sms.mapper.StuApplyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wmj.sms.dao.StuApply">
+        <id column="id" property="id"/>
+        <result column="stu_id" property="stuId"/>
+        <result column="batch_id" property="batchId"/>
+        <result column="app_reason" property="appReason"/>
+        <result column="sc_date" property="scDate"/>
+        <result column="cloth_id" property="clothId"/>
+        <result column="cloth_size" property="clothSize"/>
+        <result column="state" property="state"/>
+        <result column="ref_reason" property="refReason"/>
+    </resultMap>
+
+    <resultMap id="CountResultMap" type="com.wmj.sms.dao.CountResult">
+        <result column="col_id" property="colId"/>
+        <result column="cloth_id" property="clothId"/>
+        <result column="cloth_size" property="clothSize"/>
+        <result column="num" property="num"/>
+    </resultMap>
+    <select id="countResult" parameterType="java.lang.Long" resultType="com.wmj.sms.dao.CountResult">
+        select col_id, cloth_id, cloth_size, count(*) as num
+        from wmj_t_stu_apply
+        where batch_id = #{batchId}
+          AND (
+                state = 1
+                or state = 2
+                or state = 3
+                or state = 4
+            )
+        group by col_id, cloth_id, cloth_size;
+    </select>
+    <delete id="deleteByBatchId" parameterType="java.lang.Long" >
+        delete from wmj_t_stu_apply
+        where batch_id = #{batchId};
+    </delete>
+
+
+</mapper>
