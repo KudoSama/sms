@@ -150,8 +150,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         User loginUser = SessionUtils.getCurUser();
         // 通过辅导员号查询属于该辅导员的学生
         if (loginUser.getUserType().equals("3")) {
-            Long manId = null;
-            manId = loginUser.getId();
+            Long manId = loginUser.getId();
             Page<Student> page = new Page<>(pageDTO.getPageNo(), pageDTO.getPageSize());
             QueryWrapper<Student> wrapper = new QueryWrapper<>();
             wrapper.eq("man_id", manId);
@@ -163,8 +162,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
             page.setRecords(stuList);
             return JsonResponse.success(page, "查询成功");
         } else if (loginUser.getUserType().equals("2")) { // 通过学院号查询属于该学院的学生
-            Long colId = null;
-            colId = loginUser.getId();
+            Long colId = loginUser.getId();
             Page<Student> page = new Page<>(pageDTO.getPageNo(), pageDTO.getPageSize());
             QueryWrapper<Student> wrapper = new QueryWrapper<>();
             wrapper.eq("col_id", colId);
@@ -176,7 +174,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
             page.setRecords(stuList);
             return JsonResponse.success(page, "查询成功");
         }
-        return JsonResponse.failure("您非辅导员，无权限查询学生");
+        return JsonResponse.failure("您非辅导员或学院，无权限查询学生");
     }
 
     @Override

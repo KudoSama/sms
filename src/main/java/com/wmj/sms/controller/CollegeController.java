@@ -62,7 +62,7 @@ public class CollegeController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/resetPassword")
-    @ApiOperation(value = "重置密学院码接口",notes = "inNum")
+    @ApiOperation(value = "重置密学院码接口")
     public JsonResponse resetPassword(@RequestBody @Valid College college) {
         return collegeService.resetPassword(college);
     }

@@ -3,10 +3,11 @@ package com.wmj.sms.controller;
 
 import com.wmj.sms.base.BaseController;
 import com.wmj.sms.base.JsonResponse;
-import com.wmj.sms.mapper.ManagerMapper;
-import com.wmj.sms.service.ManagerService;
 import com.wmj.sms.dao.Manager;
 import com.wmj.sms.dao.User;
+import com.wmj.sms.dto.PageDTO;
+import com.wmj.sms.mapper.ManagerMapper;
+import com.wmj.sms.service.ManagerService;
 import com.wmj.sms.service.StudentService;
 import io.swagger.annotations.ApiOperation;
 import org.mybatis.logging.Logger;
@@ -49,6 +50,13 @@ public class ManagerController extends BaseController {
         return managerService.addState(manager);
     }
 
+    @ResponseBody
+    @RequestMapping("/resetPassword")
+    @ApiOperation(value = "重置密辅导员码接口")
+    public JsonResponse resetPassword(@RequestBody @Valid Manager manager) {
+        return managerService.resetPassword(manager);
+    }
+
     @RequestMapping(value = "/login", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "辅导员登录接口",notes = "应传入：id,password")
@@ -59,6 +67,14 @@ public class ManagerController extends BaseController {
         manager.setManPassword(new String (decoder.decode(user.getPassword())));
 
         return managerService.login(manager);
+    }
+
+    @RequestMapping(value = "/getManagerList", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "获取辅导员接口")
+    public JsonResponse getManagerList(@RequestBody @Valid PageDTO pageDTO){
+        return managerService.getManagerList(pageDTO);
+
     }
 
 }

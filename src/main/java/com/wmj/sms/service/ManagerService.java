@@ -3,6 +3,7 @@ package com.wmj.sms.service;
 import com.wmj.sms.base.JsonResponse;
 import com.wmj.sms.dao.Manager;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wmj.sms.dto.PageDTO;
 
 /**
  * <p>
@@ -19,4 +20,8 @@ public interface ManagerService extends IService<Manager> {
     JsonResponse login(Manager manager);
 
     JsonResponse addState(Manager manager);
+
+    JsonResponse resetPassword(Manager manager);
+
+    JsonResponse getManagerList(PageDTO pageDTO);
 }

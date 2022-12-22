@@ -94,7 +94,7 @@ public class StudentController extends BaseController {
 
     @RequestMapping(value = "/getByManagerId", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "通过辅导员账号查询学生列表")
+    @ApiOperation(value = "通过辅导员/学院账号查询学生列表")
     public JsonResponse getByManagerId(@RequestBody @Valid PageDTO pageDTO) {
         return studentService.getByManagerId(pageDTO);
     }
