@@ -4,10 +4,12 @@ package com.wmj.sms.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmj.sms.base.JsonResponse;
+import com.wmj.sms.dao.Batch;
 import com.wmj.sms.dao.ClothImg;
 import com.wmj.sms.dao.School;
 import com.wmj.sms.dto.PageDTO;
 import com.wmj.sms.mapper.ClothMapper;
+import com.wmj.sms.service.BatchService;
 import com.wmj.sms.service.ClothImgService;
 import com.wmj.sms.service.ClothService;
 import com.wmj.sms.dao.Cloth;
@@ -46,6 +48,9 @@ public class ClothController extends BaseController {
     private ClothMapper clothMapper;
 
     @Autowired
+    private BatchService batchService;
+
+    @Autowired
     private ClothImgService clothImgService;
 
     @Autowired
@@ -81,10 +86,9 @@ public class ClothController extends BaseController {
 
     @RequestMapping(value = "/getClothByBatchId", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "服装批次接口",notes = "应传入：batchId, pageNo, pageSize")
-    public JsonResponse getClothByBatchId(@RequestBody @Valid Map<String, Object> map){
-        PageDTO pageDTO = objectMapper.convertValue(map.get("pageList"), PageDTO.class);
-        Long batchId = objectMapper.convertValue(map.get("batchId"), Long.class);
+    @ApiOperation(value = "服装批次接口",notes = "应传入：pageNo, pageSize")
+    public JsonResponse getClothByBatchId(@RequestBody @Valid PageDTO pageDTO){
+        Long batchId = ((Batch) batchService.getCurBatch().getData()).getBatchId();
         if (clothService.getByBatchId(batchId, pageDTO) == null) {
             return JsonResponse.failure("当前不属于审批时间，请等待学生申请结束");
         }

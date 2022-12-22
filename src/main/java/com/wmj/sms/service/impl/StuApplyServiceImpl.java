@@ -168,7 +168,7 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
         // 仅学生可以提交申请
         if (loginUser.getUserType().equals("4")) {
             if (enableService.getByStuId(loginUser.getId()) == null) {
-                return JsonResponse.failure("您非贫困学生，请联系辅导员");
+                return JsonResponse.failure("您非贫困学生，请联系辅导员添加");
             }
             // 信息未填写完毕
             if (stuApply.getBatchId() == null || stuApply.getClothId() == null || StringUtils.isBlank(stuApply.getClothSize())) {
@@ -235,6 +235,24 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
             }
         }
         return JsonResponse.failure("您非本校学生，无提交寒衣申请补助的权限，请联系系统管理员");
+    }
+
+    @Override
+    public JsonResponse deleteApply(StuApply stuApply) {
+        User loginUser = SessionUtils.getCurUser();
+        QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
+        wrapper.eq("id", stuApply.getId());
+        super.remove(wrapper);
+        return JsonResponse.success("删除成功");
+    }
+
+    @Override
+    public JsonResponse deleteApplyByStuId(StuApply stuApply) {
+        User loginUser = SessionUtils.getCurUser();
+        QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
+        wrapper.eq("stu_id", stuApply.getStuId());
+        super.remove(wrapper);
+        return JsonResponse.success("删除成功");
     }
 
     @Override

@@ -39,4 +39,18 @@ public class EnableController extends BaseController {
     public JsonResponse add(@RequestBody @Valid Student student) {
         return enableService.addState(student);
     }
+
+    @RequestMapping(value = "/delete", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "添加贫困名单接口",notes = "传入stuId")
+    public JsonResponse delete(@RequestBody @Valid Student student) {
+        return enableService.delete(student);
+    }
+
+    @RequestMapping(value = "/getEnableList", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "查询贫困名单接口")
+    public JsonResponse getEnableList() {
+        return enableService.getEnableList();
+    }
 }

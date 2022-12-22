@@ -37,9 +37,13 @@ public interface StuApplyService extends IService<StuApply> {
 
     JsonResponse schoolModify(StuApply stuApply);
 
+    JsonResponse deleteApplyByStuId(StuApply stuApply);
+
     JsonResponse studentModify(StuApply stuApply);
 
     Page<StuApply> studentSelect(PageDTO pageDTO);
 
     Page<StuApply> selectAllStuApply(PageDTO pageDTO);
+
+    JsonResponse deleteApply(StuApply stuApply);
 }

@@ -26,4 +26,8 @@ public interface StudentService extends IService<Student> {
     JsonResponse getByGender(String gender, PageDTO pageDTO);
 
     JsonResponse getByManagerId(PageDTO pageDTO);
+
+    JsonResponse resetPassword(Student student);
+
+    JsonResponse deleteState(Student student);
 }

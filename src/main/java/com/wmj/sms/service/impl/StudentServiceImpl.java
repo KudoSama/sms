@@ -1,6 +1,7 @@
 package com.wmj.sms.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -8,14 +9,18 @@ import com.wmj.sms.base.JsonResponse;
 import com.wmj.sms.dao.StuApply;
 import com.wmj.sms.dto.PageDTO;
 import com.wmj.sms.mapper.StudentMapper;
+import com.wmj.sms.service.EnableService;
+import com.wmj.sms.service.StuApplyService;
 import com.wmj.sms.service.StudentService;
 import com.wmj.sms.utls.SessionUtils;
 import com.wmj.sms.dao.Student;
 import com.wmj.sms.dao.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.security.cert.PKIXParameters;
 import java.util.List;
+
+import static org.springframework.util.DigestUtils.md5DigestAsHex;
 
 /**
  * <p>
@@ -28,9 +33,15 @@ import java.util.List;
 @Service
 public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> implements StudentService {
 
+    @Autowired
+    private EnableService enableService;
+
+    @Autowired
+    private StuApplyService stuApplyService;
+
     @Override
     public JsonResponse login(Student student) {
-        QueryWrapper<Student> wrapper =new QueryWrapper<>();
+        QueryWrapper<Student> wrapper = new QueryWrapper<>();
         wrapper.eq("stu_id", student.getStuId()).eq("stu_password", student.getStuPassword());
         Student loginStudent = super.getOne(wrapper);
         if (loginStudent != null) {
@@ -51,14 +62,13 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         if (stuId == null) {
             return null;
         }
-        QueryWrapper<Student> wrapper =new QueryWrapper<>();
+        QueryWrapper<Student> wrapper = new QueryWrapper<>();
         wrapper.eq("stu_id", stuId);
         return super.getOne(wrapper);
     }
 
     @Override
     public JsonResponse addState(Student student) {
-
         User loginUser = SessionUtils.getCurUser();
         // 仅辅导员用户才能添加学生
         if (loginUser.getUserType().equals("3")) {
@@ -73,7 +83,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
                     QueryWrapper<Student> wrapper = new QueryWrapper<>();
                     wrapper.eq("stu_id", student.getStuId());
                     if (super.getOne(wrapper) != null) {
-                        return JsonResponse.failure("该学生账号 " + student.getStuId() +" 已存在，请重新检查学生信息");
+                        return JsonResponse.failure("该学生账号 " + student.getStuId() + " 已存在，请重新检查学生信息");
                     }
                     super.save(student);
                     return JsonResponse.successMessage("添加成功");
@@ -83,6 +93,23 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
             }
         }
         return JsonResponse.failure("添加失败，您无本操作权限，请联系系统管理员!");
+    }
+
+    @Override
+    public JsonResponse deleteState(Student student) {
+        User loginUser = SessionUtils.getCurUser();
+        // 仅辅导员用户才能删除学生
+        if (loginUser.getUserType().equals("3")) {
+            enableService.delete(student);
+            StuApply stuApply = new StuApply();
+            stuApply.setStuId(student.getStuId());
+            stuApplyService.deleteApplyByStuId(stuApply);
+            QueryWrapper<Student> wrapper = new QueryWrapper<>();
+            wrapper.eq("stu_id", student.getStuId());
+            super.remove(wrapper);
+            return JsonResponse.successMessage("删除成功");
+        }
+        return JsonResponse.failure("删除失败，您无本操作权限，请联系系统管理员!");
     }
 
     @Override
@@ -96,7 +123,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
                 wrapper.eq("gender", gender).eq("man_id", manId);
                 page = super.page(page, wrapper);
                 List<Student> stuList = page.getRecords();
-                for (Student student: stuList) {
+                for (Student student : stuList) {
                     student.setStuPassword("");
                 }
                 page.setRecords(stuList);
@@ -108,7 +135,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
                 wrapper.eq("gender", gender).eq("col_id", colId);
                 page = super.page(page, wrapper);
                 List<Student> stuList = page.getRecords();
-                for (Student student: stuList) {
+                for (Student student : stuList) {
                     student.setStuPassword("");
                 }
                 page.setRecords(stuList);
@@ -130,7 +157,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
             wrapper.eq("man_id", manId);
             page = super.page(page, wrapper);
             List<Student> stuList = page.getRecords();
-            for (Student student: stuList) {
+            for (Student student : stuList) {
                 student.setStuPassword("");
             }
             page.setRecords(stuList);
@@ -143,12 +170,28 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
             wrapper.eq("col_id", colId);
             page = super.page(page, wrapper);
             List<Student> stuList = page.getRecords();
-            for (Student student: stuList) {
+            for (Student student : stuList) {
                 student.setStuPassword("");
             }
             page.setRecords(stuList);
             return JsonResponse.success(page, "查询成功");
         }
         return JsonResponse.failure("您非辅导员，无权限查询学生");
+    }
+
+    @Override
+    public JsonResponse resetPassword(Student student) {
+        User loginUser = SessionUtils.getCurUser();
+        if (loginUser.getUserType().equals("3")) {
+            // 仅辅导员能进行本项操作
+            UpdateWrapper<Student> wrapper = new UpdateWrapper<>();
+            String password = md5DigestAsHex("123456".getBytes());
+            wrapper.eq("stu_id", student.getStuId())
+                    .eq("stu_name", student.getStuName())
+                    .set("stu_password", password);
+            super.update(null, wrapper);
+            return JsonResponse.successMessage("已经重置 " + student.getStuName() + " 的账号密码为123456");
+        }
+        return JsonResponse.failure("重置失败，您无本操作权限，请联系系统管理员!");
     }
 }

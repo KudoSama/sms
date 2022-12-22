@@ -3,6 +3,7 @@ package com.wmj.sms.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmj.sms.base.BaseController;
 import com.wmj.sms.base.JsonResponse;
+import com.wmj.sms.dao.College;
 import com.wmj.sms.dto.PageDTO;
 import com.wmj.sms.mapper.StudentMapper;
 import com.wmj.sms.service.StudentService;
@@ -52,6 +53,13 @@ public class StudentController extends BaseController {
         return studentService.addState(student);
     }
 
+    @RequestMapping(value = "/delete", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "删除学生接口",notes = "应传入：stuId")
+    public JsonResponse deleteStudent(@RequestBody @Valid Student student){
+        return studentService.deleteState(student);
+    }
+
     @RequestMapping(value = "/login", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "学生登录接口",notes = "应传入：id,password")
@@ -89,5 +97,12 @@ public class StudentController extends BaseController {
     @ApiOperation(value = "通过辅导员账号查询学生列表")
     public JsonResponse getByManagerId(@RequestBody @Valid PageDTO pageDTO) {
         return studentService.getByManagerId(pageDTO);
+    }
+
+    @RequestMapping("/resetPassword")
+    @ResponseBody
+    @ApiOperation(value = "重置密学生码接口")
+    public JsonResponse resetPassword(@RequestBody @Valid Student student) {
+        return studentService.resetPassword(student);
     }
 }

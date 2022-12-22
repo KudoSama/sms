@@ -129,10 +129,13 @@ public class BatchServiceImpl extends ServiceImpl<BatchMapper, Batch> implements
     @Override
     public JsonResponse addState(Batch batch) {
         User loginUser = SessionUtils.getCurUser();
-        // System.out.println(loginUser);
         // 只有学校用户才能添加批次
         if (loginUser.getUserType().equals("1")) {
             try {
+                // 当前时间存在批次
+                if (getCurBatch().getData() != null) {
+                    return JsonResponse.failure("添加失败，当前时间段存在批次");
+                }
                 // 未填写批次号、开始时间或结束时间
                 if (batch.getBatchId() == null || batch.getBatchDateend() == null ||
                         batch.getBatchDatestart() == null) {
@@ -185,7 +188,6 @@ public class BatchServiceImpl extends ServiceImpl<BatchMapper, Batch> implements
         // 查找结束时间早于等于今天，且今天早于等于批次结束日期的下个月
         wrapper.ge("batch_dateEnd", curDate);
         List<Batch> notExamineBatchList = super.list(wrapper);// 查询到比当前时间早结束的批次列表
-
         Batch notExamineBatch = null;
         Date notExamineDate;
         for (Batch batch: notExamineBatchList) {

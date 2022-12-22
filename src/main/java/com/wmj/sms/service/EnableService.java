@@ -18,4 +18,8 @@ public interface EnableService extends IService<Enable> {
     JsonResponse addState(Student student);
 
     Enable getByStuId(Long id);
+
+    JsonResponse delete(Student student);
+
+    JsonResponse getEnableList();
 }
