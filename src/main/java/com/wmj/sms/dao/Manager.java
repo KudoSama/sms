@@ -1,5 +1,7 @@
 package com.wmj.sms.dao;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.io.Serializable;
@@ -25,6 +27,7 @@ import lombok.experimental.Accessors;
 @TableName("wmj_t_manager")
 @ApiModel(value="Manager对象", description="")
 public class Manager extends Model<Manager> {
+    @TableId(value = "man_id",type = IdType.AUTO)
 
     private static final long serialVersionUID = 1L;
 

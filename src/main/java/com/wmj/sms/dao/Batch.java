@@ -1,5 +1,7 @@
 package com.wmj.sms.dao;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -27,6 +29,7 @@ import lombok.experimental.Accessors;
 @TableName("wmj_t_batch")
 @ApiModel(value="Batch对象", description="")
 public class Batch extends Model<Batch> {
+    @TableId(value = "batch_id",type = IdType.AUTO)
 
     private static final long serialVersionUID = 1L;
 
