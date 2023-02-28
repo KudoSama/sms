@@ -55,7 +55,6 @@ public class SchoolServiceImpl extends ServiceImpl<SchoolMapper, School> impleme
     @Override
     public JsonResponse getSchool() {
         User loginUser = SessionUtils.getCurUser();
-        // 仅学校可以修改学生申请
         if (loginUser.getUserType().equals("1")) {
             QueryWrapper<School> wrapper = new QueryWrapper<>();
             wrapper.eq("sch_id", loginUser.getId());
@@ -63,7 +62,7 @@ public class SchoolServiceImpl extends ServiceImpl<SchoolMapper, School> impleme
             school.setSchPassword(null);
             return JsonResponse.success(school, "获取学校信息成功");
         }
-        return JsonResponse.failure("获取信息失败，您非学校用户录");
+        return JsonResponse.failure("获取信息失败，您非学校用户");
     }
 
     @Override
@@ -77,7 +76,7 @@ public class SchoolServiceImpl extends ServiceImpl<SchoolMapper, School> impleme
             // 信息未填写完毕
             if (school.getSchName() == null ||
             school.getSchEmail() == null) {
-                return JsonResponse.failure("请检查您是否填写了用户名、密码和电子邮箱");
+                return JsonResponse.failure("请检查您是否填写了用户名、电子邮箱");
             } else if (school.getSchPassword() == null) {
                 UpdateWrapper<School> wrapper = new UpdateWrapper<>();
                 wrapper.eq("sch_id", school.getSchId()).set("sch_name", school.getSchName())
@@ -93,7 +92,7 @@ public class SchoolServiceImpl extends ServiceImpl<SchoolMapper, School> impleme
                 return JsonResponse.successMessage("信息已完成修改，请注意保管");
             }
         }
-        return JsonResponse.failure("修改信息失败，您非学校用户，无权限修改学生申请记录");
+        return JsonResponse.failure("修改信息失败，您非学校用户，无权限修改账户信息");
     }
 
     @Override

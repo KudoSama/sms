@@ -25,4 +25,8 @@ public interface CollegeService extends IService<College> {
     JsonResponse resetPassword(College college);
 
     JsonResponse getCollegeList();
+
+    JsonResponse modify(College college);
+
+    JsonResponse getCollege();
 }

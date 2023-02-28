@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import static org.springframework.util.DigestUtils.md5DigestAsHex;
@@ -34,6 +35,8 @@ public class CollegeServiceImpl extends ServiceImpl<CollegeMapper, College> impl
     @Autowired
     private CollegeMapper collegeMapper;
 
+    final Base64.Decoder decoder = Base64.getDecoder();
+
     @Override
     public College getByColId(Long colId) {
         QueryWrapper<College> wrapper =new QueryWrapper<>();
@@ -51,6 +54,42 @@ public class CollegeServiceImpl extends ServiceImpl<CollegeMapper, College> impl
             college.setUserType("");
         }
         return JsonResponse.success(list);
+    }
+
+    @Override
+    public JsonResponse modify(College college) {
+        User loginUser = SessionUtils.getCurUser();
+        // 仅学院可以修改账户信息
+        if (loginUser.getUserType().equals("2")) {
+            if (college.getColName() == null) {
+                return JsonResponse.failure("请检查您是否填写了用户名");
+            } else if (college.getColPassword() == null) {
+                UpdateWrapper<College> wrapper = new UpdateWrapper<>();
+                wrapper.eq("col_id", college.getColId()).set("col_name", college.getColName());
+                super.update(null, wrapper);
+                return JsonResponse.successMessage("信息已完成修改，请注意保管");
+            } else {
+                UpdateWrapper<College> wrapper = new UpdateWrapper<>();
+                wrapper.eq("col_id", college.getColId()).set("col_name", college.getColName()).
+                        set("col_password", new String(decoder.decode(college.getColPassword())));
+                super.update(null, wrapper);
+                return JsonResponse.successMessage("信息已完成修改，请注意保管");
+            }
+        }
+        return JsonResponse.failure("修改信息失败，您非学院用户，无权限修改账户信息");
+    }
+
+    @Override
+    public JsonResponse getCollege() {
+        User loginUser = SessionUtils.getCurUser();
+        if (loginUser.getUserType().equals("2")) {
+            QueryWrapper<College> wrapper = new QueryWrapper<>();
+            wrapper.eq("col_id", loginUser.getId());
+            College college = super.getOne(wrapper);
+            college.setColPassword(null);
+            return JsonResponse.success(college, "获取学院信息成功");
+        }
+        return JsonResponse.failure("获取信息失败，您非学院用户");
     }
 
     @Override

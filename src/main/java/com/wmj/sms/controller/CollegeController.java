@@ -79,4 +79,18 @@ public class CollegeController extends BaseController {
         return collegeService.login(college);
     }
 
+    @ResponseBody
+    @RequestMapping("/modify")
+    @ApiOperation(value = "学院信息修改接口",notes = "colId, colName, userType,colPassword")
+    public JsonResponse modify(@RequestBody @Valid College college) {
+        return collegeService.modify(college);
+    }
+
+    @ResponseBody
+    @RequestMapping("/getCollege")
+    @ApiOperation(value = "获取学院信息接口")
+    public JsonResponse getCollege() {
+        return collegeService.getCollege();
+    }
+
 }
