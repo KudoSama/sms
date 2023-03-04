@@ -102,6 +102,7 @@ public class ClothController extends BaseController {
             }
             jsonResponse.addOtherData(String.valueOf(cloth.getClothId()), clothImgs);
         }
+        jsonResponse.setStatus(true);
         jsonResponse.setData(clothPage);
         jsonResponse.setMessage("查询成功");
         return jsonResponse;

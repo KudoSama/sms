@@ -423,8 +423,8 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
             // 学校
             case "1":
                 wrapper.eq("batch_id", batch.getBatchId()); // 待审核批次
-                wrapper.eq("state", 2);
-                page = super.page(page, wrapper); // 学院审核通过
+                wrapper.eq("state", 2); // 学院审核通过
+                page = super.page(page, wrapper);
                 break;
         }
         return page;
@@ -441,7 +441,6 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
         Page<StuApply> page = new Page<>(pageDTO.getPageNo(), pageDTO.getPageSize());
         QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
         Batch batch = (Batch) batchService.getNotExamineBatch().getData();
-
         wrapper.eq("batch_id", batch.getBatchId()); // 待审核批次
         page = super.page(page, wrapper); // 获取所有当前批次下学生申请记录
         return page;

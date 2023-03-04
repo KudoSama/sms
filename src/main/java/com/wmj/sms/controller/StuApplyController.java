@@ -75,7 +75,7 @@ public class StuApplyController extends BaseController {
 
     @RequestMapping(value = "/selectAllStuApply", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "查询当前登录辅导员/学院直属学生中未审核的的申请记录", notes = "需传入pageNo, pageSize")
+    @ApiOperation(value = "查询当前所有申请记录", notes = "需传入pageNo, pageSize")
     public JsonResponse selectAllStuApply(@RequestBody @Valid PageDTO pageDTO) {
         if (stuApplyService.selectAllStuApply(pageDTO) == null) {
             return JsonResponse.failure("当前不属于审批时间，请等待学生申请结束");
