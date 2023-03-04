@@ -6,16 +6,15 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wmj.sms.base.JsonResponse;
-import com.wmj.sms.dao.College;
+import com.wmj.sms.dao.Manager;
+import com.wmj.sms.dao.User;
 import com.wmj.sms.dto.PageDTO;
 import com.wmj.sms.mapper.ManagerMapper;
 import com.wmj.sms.service.ManagerService;
 import com.wmj.sms.utls.SessionUtils;
-import com.wmj.sms.dao.Manager;
-import com.wmj.sms.dao.User;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import static org.springframework.util.DigestUtils.md5DigestAsHex;
@@ -31,6 +30,7 @@ import static org.springframework.util.DigestUtils.md5DigestAsHex;
 @Service
 public class ManagerServiceImpl extends ServiceImpl<ManagerMapper, Manager> implements ManagerService {
 
+    final Base64.Decoder decoder = Base64.getDecoder();
     @Override
     public Manager getByManId(Long manId) {
         QueryWrapper<Manager> wrapper =new QueryWrapper<>();
@@ -72,6 +72,29 @@ public class ManagerServiceImpl extends ServiceImpl<ManagerMapper, Manager> impl
             return JsonResponse.success(page, "查询成功");
         }
         return JsonResponse.failure("您无本操作权限，请联系系统管理员!");
+    }
+
+    @Override
+    public JsonResponse modify(Manager manager) {
+        User loginUser = SessionUtils.getCurUser();
+        // 仅辅导员可以修改账户信息
+        if (loginUser.getUserType().equals("3")) {
+            if (manager.getManName() == null) {
+                return JsonResponse.failure("请检查您是否填写了用户名");
+            } else if (manager.getManPassword() == null) {
+                UpdateWrapper<Manager> wrapper = new UpdateWrapper<>();
+                wrapper.eq("man_id", manager.getManId()).set("man_name", manager.getManName());
+                super.update(null, wrapper);
+                return JsonResponse.successMessage("信息已完成修改，请注意保管");
+            } else {
+                UpdateWrapper<Manager> wrapper = new UpdateWrapper<>();
+                wrapper.eq("man_id", manager.getManId()).set("man_name", manager.getManName()).
+                        set("man_password", new String(decoder.decode(manager.getManPassword())));
+                super.update(null, wrapper);
+                return JsonResponse.successMessage("信息已完成修改，请注意保管");
+            }
+        }
+        return JsonResponse.failure("修改信息失败，您非辅导员用户，无权限修改账户信息");
     }
 
     @Override

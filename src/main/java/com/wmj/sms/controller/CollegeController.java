@@ -49,7 +49,6 @@ public class CollegeController extends BaseController {
     @ApiOperation(value = "添加学院接口",notes = "应传入：colId,colName,colPassword")
     public JsonResponse addCollege(@RequestBody @Valid College college){
         return collegeService.addState(college);
-
     }
 
     @RequestMapping(value = "/getCollegeList", produces = "application/json;charset=utf-8")
@@ -57,7 +56,6 @@ public class CollegeController extends BaseController {
     @ApiOperation(value = "添加学院接口")
     public JsonResponse getCollegeList(){
         return collegeService.getCollegeList();
-
     }
 
     @ResponseBody

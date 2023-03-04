@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wmj.sms.base.JsonResponse;
+import com.wmj.sms.dao.Manager;
 import com.wmj.sms.dao.StuApply;
 import com.wmj.sms.dto.PageDTO;
 import com.wmj.sms.mapper.StudentMapper;
@@ -18,6 +19,7 @@ import com.wmj.sms.dao.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.List;
 
 import static org.springframework.util.DigestUtils.md5DigestAsHex;
@@ -38,6 +40,8 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
 
     @Autowired
     private StuApplyService stuApplyService;
+
+    final Base64.Decoder decoder = Base64.getDecoder();
 
     @Override
     public JsonResponse login(Student student) {
@@ -110,6 +114,29 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
             return JsonResponse.successMessage("删除成功");
         }
         return JsonResponse.failure("删除失败，您无本操作权限，请联系系统管理员!");
+    }
+
+    @Override
+    public JsonResponse modify(Student student) {
+        User loginUser = SessionUtils.getCurUser();
+        // 仅学生可以修改账户信息
+        if (loginUser.getUserType().equals("4")) {
+            if (student.getStuName() == null) {
+                return JsonResponse.failure("请检查您是否填写了用户名");
+            } else if (student.getStuPassword() == null) {
+                UpdateWrapper<Student> wrapper = new UpdateWrapper<>();
+                wrapper.eq("stu_id", student.getStuId()).set("stu_name", student.getStuName());
+                super.update(null, wrapper);
+                return JsonResponse.successMessage("信息已完成修改，请注意保管");
+            } else {
+                UpdateWrapper<Student> wrapper = new UpdateWrapper<>();
+                wrapper.eq("stu_id", student.getStuId()).set("stu_name", student.getStuName()).
+                        set("stu_password", new String(decoder.decode(student.getStuPassword())));
+                super.update(null, wrapper);
+                return JsonResponse.successMessage("信息已完成修改，请注意保管");
+            }
+        }
+        return JsonResponse.failure("修改信息失败，您非学生用户，无权限修改账户信息");
     }
 
     @Override

@@ -30,4 +30,6 @@ public interface StudentService extends IService<Student> {
     JsonResponse resetPassword(Student student);
 
     JsonResponse deleteState(Student student);
+
+    JsonResponse modify(Student student);
 }

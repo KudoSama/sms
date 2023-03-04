@@ -25,4 +25,6 @@ public interface SchoolService extends IService<School> {
     JsonResponse getSchool();
 
     JsonResponse setEmailById(String email, int num);
+
+    JsonResponse getSchoolById(School school);
 }

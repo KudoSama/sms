@@ -4,11 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wmj.sms.base.BaseController;
 import com.wmj.sms.base.JsonResponse;
 import com.wmj.sms.dao.College;
+import com.wmj.sms.dao.Manager;
 import com.wmj.sms.dto.PageDTO;
 import com.wmj.sms.mapper.StudentMapper;
 import com.wmj.sms.service.StudentService;
 import com.wmj.sms.dao.Student;
 import com.wmj.sms.dao.User;
+import com.wmj.sms.utls.SessionUtils;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.mybatis.logging.Logger;
@@ -58,6 +60,26 @@ public class StudentController extends BaseController {
     @ApiOperation(value = "删除学生接口",notes = "应传入：stuId")
     public JsonResponse deleteStudent(@RequestBody @Valid Student student){
         return studentService.deleteState(student);
+    }
+
+    @ResponseBody
+    @RequestMapping("/getStudent")
+    @ApiOperation(value = "获取学生信息接口")
+    public JsonResponse getStudent() {
+        User loginUser = SessionUtils.getCurUser();
+        if (loginUser.getUserType().equals("4")) {
+            Student student = studentService.getByStuId(loginUser.getId());
+            student.setStuPassword(null);
+            return JsonResponse.success(student, "获取学生信息成功");
+        }
+        return JsonResponse.failure("获取信息失败，您非学生用户");
+    }
+
+    @ResponseBody
+    @RequestMapping("/modify")
+    @ApiOperation(value = "学生信息修改接口",notes = "stuId, stuName, userType,stuPassword")
+    public JsonResponse modify(@RequestBody @Valid Student student) {
+        return studentService.modify(student);
     }
 
     @RequestMapping(value = "/login", produces = "application/json;charset=utf-8")

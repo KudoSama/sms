@@ -69,6 +69,13 @@ public class SchoolController extends BaseController {
     }
 
     @ResponseBody
+    @RequestMapping("/getSchoolById")
+    @ApiOperation(value = "获取学校信息接口")
+    public JsonResponse getSchoolById( @RequestBody @Valid School school) {
+        return schoolService.getSchoolById(school);
+    }
+
+    @ResponseBody
     @RequestMapping("/modify")
     @ApiOperation(value = "学校信息修改接口",notes = "schId, schName, userType,schPassword, schEmail")
     public JsonResponse modify(@RequestBody @Valid Map<String,Object> map) {

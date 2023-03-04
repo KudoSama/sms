@@ -117,6 +117,17 @@ public class SchoolServiceImpl extends ServiceImpl<SchoolMapper, School> impleme
     }
 
     @Override
+    public JsonResponse getSchoolById(School school) {
+        QueryWrapper<School> wrapper = new QueryWrapper<>();
+        wrapper.eq("sch_id", school.getSchId());
+        School schoolTemp = super.getOne(wrapper);
+        if (schoolTemp == null) {
+            return JsonResponse.failure("账号错误，请重新输入");
+        }
+        return JsonResponse.successMessage( "账号填写正确");
+    }
+
+    @Override
     public JsonResponse resetPassword(int inNum, int num) {
         if (inNum != num) {
             return JsonResponse.failure("邮件验证码错误，请检查填写的验证码后重新填写");

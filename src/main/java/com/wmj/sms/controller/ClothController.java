@@ -68,7 +68,7 @@ public class ClothController extends BaseController {
     @ApiOperation(value = "服装性别接口",notes = ("应传入pageNo, pageSize"))
     public JsonResponse getClothByGender(@RequestBody @Valid PageDTO pageDTO){
         if (clothService.getByGender(pageDTO) == null) {
-            return JsonResponse.failure("当前不属于审批时间，请等待学生申请结束");
+            return JsonResponse.failure("当前不属于申请时间，无衣物展示");
         }
         Page<Cloth> clothPage = clothService.getByGender(pageDTO);
         JsonResponse jsonResponse = new JsonResponse();
@@ -81,6 +81,7 @@ public class ClothController extends BaseController {
         }
         jsonResponse.setData(clothPage);
         jsonResponse.setMessage("查询成功");
+        jsonResponse.setStatus(true);
         return jsonResponse;
     }
 
@@ -90,7 +91,7 @@ public class ClothController extends BaseController {
     public JsonResponse getClothByBatchId(@RequestBody @Valid PageDTO pageDTO){
         Long batchId = ((Batch) batchService.getCurBatch().getData()).getBatchId();
         if (clothService.getByBatchId(batchId, pageDTO) == null) {
-            return JsonResponse.failure("当前不属于审批时间，请等待学生申请结束");
+            return JsonResponse.failure("当前不属于申请时间，无衣物展示");
         }
         Page<Cloth> clothPage = clothService.getByBatchId(batchId, pageDTO);
         JsonResponse jsonResponse = new JsonResponse();

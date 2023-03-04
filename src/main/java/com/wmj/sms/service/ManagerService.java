@@ -24,4 +24,6 @@ public interface ManagerService extends IService<Manager> {
     JsonResponse resetPassword(Manager manager);
 
     JsonResponse getManagerList(PageDTO pageDTO);
+
+    JsonResponse modify(Manager manager);
 }

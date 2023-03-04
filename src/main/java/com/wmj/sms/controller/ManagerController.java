@@ -3,12 +3,14 @@ package com.wmj.sms.controller;
 
 import com.wmj.sms.base.BaseController;
 import com.wmj.sms.base.JsonResponse;
+import com.wmj.sms.dao.College;
 import com.wmj.sms.dao.Manager;
 import com.wmj.sms.dao.User;
 import com.wmj.sms.dto.PageDTO;
 import com.wmj.sms.mapper.ManagerMapper;
 import com.wmj.sms.service.ManagerService;
 import com.wmj.sms.service.StudentService;
+import com.wmj.sms.utls.SessionUtils;
 import io.swagger.annotations.ApiOperation;
 import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.print.attribute.standard.MediaName;
 import javax.validation.Valid;
 import java.util.Base64;
 
@@ -48,6 +51,26 @@ public class ManagerController extends BaseController {
     @ApiOperation(value = "添加辅导员接口",notes = "应传入：manId, manName, manPassword")
     public JsonResponse addManager(@RequestBody @Valid Manager manager){
         return managerService.addState(manager);
+    }
+
+    @ResponseBody
+    @RequestMapping("/getManager")
+    @ApiOperation(value = "获取辅导员信息接口")
+    public JsonResponse getManager() {
+        User loginUser = SessionUtils.getCurUser();
+        if (loginUser.getUserType().equals("3")) {
+            Manager manager = managerService.getByManId(loginUser.getId());
+            manager.setManPassword(null);
+            return JsonResponse.success(manager, "获取辅导员信息成功");
+        }
+        return JsonResponse.failure("获取信息失败，您非辅导员用户");
+    }
+
+    @ResponseBody
+    @RequestMapping("/modify")
+    @ApiOperation(value = "辅导员信息修改接口",notes = "manId, manName, userType,manPassword")
+    public JsonResponse modify(@RequestBody @Valid Manager manager) {
+        return managerService.modify(manager);
     }
 
     @ResponseBody

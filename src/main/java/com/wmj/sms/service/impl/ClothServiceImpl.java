@@ -42,6 +42,10 @@ public class ClothServiceImpl extends ServiceImpl<ClothMapper, Cloth> implements
 
     @Override
     public Page<Cloth> getByGender(PageDTO pageDTO) {
+        Batch batch = (Batch) batchService.getCurBatch().getData();
+        if (batch == null) {
+            return null;
+        }
         User loginUser = SessionUtils.getCurUser();
         Page<Cloth> page = new Page<>(pageDTO.getPageNo(), pageDTO.getPageSize());
         QueryWrapper<Cloth> wrapper = new QueryWrapper<>();
