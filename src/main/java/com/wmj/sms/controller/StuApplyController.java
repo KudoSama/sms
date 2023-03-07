@@ -105,7 +105,7 @@ public class StuApplyController extends BaseController {
 
     @RequestMapping(value = "/deleteApply", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "删除申请记录接口", notes = "擦混入记录ID")
+    @ApiOperation(value = "删除申请记录接口", notes = "应传入记录ID")
     public JsonResponse deleteApply(@RequestBody @Valid StuApply stuApply) {
         return stuApplyService.deleteApply(stuApply);
     }

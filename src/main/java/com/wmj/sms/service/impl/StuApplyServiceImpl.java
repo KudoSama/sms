@@ -239,13 +239,11 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
 
     @Override
     public JsonResponse deleteApply(StuApply stuApply) {
-        User loginUser = SessionUtils.getCurUser();
         QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
         wrapper.eq("id", stuApply.getId());
         super.remove(wrapper);
         return JsonResponse.success("删除成功");
     }
-
     @Override
     public JsonResponse deleteApplyByStuId(StuApply stuApply) {
         User loginUser = SessionUtils.getCurUser();
