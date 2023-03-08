@@ -33,6 +33,44 @@
             )
         group by col_id, cloth_id, cloth_size;
     </select>
+
+    <resultMap id="CountResultByManagerMap" type="com.wmj.sms.dao.CountResultByManager">
+        <result column="man_id" property="manId"/>
+        <result column="cloth_id" property="clothId"/>
+        <result column="cloth_size" property="clothSize"/>
+        <result column="num" property="num"/>
+    </resultMap>
+    <select id="countResultByManager" parameterType="java.lang.Long" resultType="com.wmj.sms.dao.CountResultByManager">
+        select man_id, cloth_id, cloth_size, count(*) as num
+        from wmj_t_stu_apply
+        where batch_id = #{batchId} AND col_id = #{colId}
+          AND (
+                    state = 1
+                or state = 2
+                or state = 3
+                or state = 4
+            )
+        group by man_id, cloth_id, cloth_size;
+    </select>
+
+    <resultMap id="CountResultByStudentMap" type="com.wmj.sms.dao.CountResultByStudent">
+        <result column="stu_id" property="stuId"/>
+        <result column="cloth_id" property="clothId"/>
+        <result column="cloth_size" property="clothSize"/>
+        <result column="num" property="num"/>
+    </resultMap>
+    <select id="countResultByStudent" parameterType="java.lang.Long" resultType="com.wmj.sms.dao.CountResultByStudent">
+        select stu_id, cloth_id, cloth_size, count(*) as num
+        from wmj_t_stu_apply
+        where batch_id = #{batchId} AND man_id = #{manId}
+          AND (
+                    state = 1
+                or state = 2
+                or state = 3
+                or state = 4
+            )
+        group by stu_id, cloth_id, cloth_size;
+    </select>
     <delete id="deleteByBatchId" parameterType="java.lang.Long" >
         delete from wmj_t_stu_apply
         where batch_id = #{batchId};

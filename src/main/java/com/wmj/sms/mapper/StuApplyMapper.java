@@ -1,5 +1,7 @@
 package com.wmj.sms.mapper;
 
+import com.wmj.sms.dao.CountResultByManager;
+import com.wmj.sms.dao.CountResultByStudent;
 import com.wmj.sms.dao.StuApply;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wmj.sms.dao.CountResult;
@@ -20,6 +22,10 @@ import java.util.List;
 @Component
 public interface StuApplyMapper extends BaseMapper<StuApply> {
     List<CountResult> countResult(Long batchId);
+
+    List<CountResultByManager> countResultByManager(Long batchId, Long colId);
+
+    List<CountResultByStudent> countResultByStudent(Long batchId, Long manId);
 
     void deleteByBatchId(Long batchId);
 }
