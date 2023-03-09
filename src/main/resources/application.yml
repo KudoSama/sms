@@ -4,6 +4,12 @@ server:
     key-store: classpath:scs1671852680947_www.kudosama.cn_server.jks
     key-store-type: JKS
     key-store-password: Pe9*19GdoE31i#Hu
+  tomcat:
+    max-threads: 400 #最大工作线程 一般为核心数*200
+    min-spare-threads: 20 # 最小工作线程
+    max-connections: 10000 # 一瞬间最大支持的并发连接数
+    accept-count: 300 # 等待队列长度
+
 #  address: 192.168.10.16
 
 ## 数据源配置
