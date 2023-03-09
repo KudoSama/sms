@@ -34,9 +34,10 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
         // 只有学校用户才能添加公告
         if (loginUser.getUserType().equals("1")) {
             try {
-                // 未填写批次号、开始时间或结束时间
-                if (notice.getStartDate() == null || notice.getEndDate() == null) {
-                    return JsonResponse.failure("添加失败，您未填写开始日期或结束时间");
+                // 未填写通知内容、开始时间或结束时间
+                if (notice.getNotice().equals("") || notice.getNotice() == null ||
+                        notice.getStartDate() == null || notice.getEndDate() == null) {
+                    return JsonResponse.failure("添加失败，您未填写通知内容、开始日期或结束时间");
                 } else {
                     QueryWrapper<Notice> wrapper = new QueryWrapper<>();
                     // 结束时间小于开始时间
@@ -61,8 +62,9 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
         User loginUser = SessionUtils.getCurUser();
         if (loginUser.getUserType().equals("1")) {
             // 未输入开始时间或结束时间
-            if (notice.getStartDate() == null || notice.getEndDate() == null) {
-                return JsonResponse.failure("修改失败，您未填写开始日期或结束时间");
+            if (notice.getNotice().equals("") || notice.getNotice() == null ||
+                    notice.getStartDate() == null || notice.getEndDate() == null) {
+                return JsonResponse.failure("修改失败，您未填写通知内容、开始日期或结束时间");
             } else {
                 // 结束时间小于开始时间
                 if (notice.getEndDate().compareTo(notice.getStartDate()) <= 0) {
@@ -72,6 +74,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
                     if (temp == null) {
                         return JsonResponse.failure("修改失败，不存在该通知");
                     }
+                    temp.setNotice(notice.getNotice());
                     temp.setStartDate(notice.getStartDate());
                     temp.setEndDate(notice.getEndDate());
                     super.update(temp, wrapper);

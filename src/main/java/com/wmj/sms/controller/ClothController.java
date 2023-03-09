@@ -63,6 +63,13 @@ public class ClothController extends BaseController {
         return clothService.addState(cloth);
     }
 
+    @RequestMapping(value = "/modify", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "修改服装接口",notes = "应传入：clothId,clothName,gender,batchId")
+    public JsonResponse modifyCloth(@RequestBody @Valid Cloth cloth){
+        return clothService.modifyState(cloth);
+    }
+
     @RequestMapping(value = "/getClothByGender", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "服装性别接口",notes = ("应传入pageNo, pageSize"))

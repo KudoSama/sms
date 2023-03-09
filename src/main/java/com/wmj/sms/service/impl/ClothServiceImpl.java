@@ -74,6 +74,30 @@ public class ClothServiceImpl extends ServiceImpl<ClothMapper, Cloth> implements
     }
 
     @Override
+    public JsonResponse modifyState(Cloth cloth) {
+        User loginUser = SessionUtils.getCurUser();
+        if (loginUser.getUserType().equals("1")) {
+            try {
+                if (cloth.getClothId() == null || cloth.getBatchId() == null || cloth.getGender() == null) {
+                    return JsonResponse.failure("请见窜是否已经填写了衣服商品号、批次号或性别");
+                }
+                if (batchService.getByBatchId(cloth.getBatchId()) == null) {
+                    return JsonResponse.failure("不存在该批次号，请检查填写的信息是否正确");
+                }
+                QueryWrapper<Cloth> wrapper = new QueryWrapper<>();
+                wrapper.eq("cloth_id", cloth.getClothId()).eq("batch_id", cloth.getBatchId());
+                Cloth temp = super.getOne(wrapper);
+                temp.setClothName(cloth.getClothName());
+                super.update(temp, wrapper);
+                return JsonResponse.successMessage("修改成功");
+            } catch (Exception e) {
+                return JsonResponse.failure("添修改败");
+            }
+        }
+        return JsonResponse.failure("修改失败，您无操作权限，请联系系统管理员");
+    }
+
+    @Override
     public JsonResponse addState(Cloth cloth) {
         User loginUser = SessionUtils.getCurUser();
         if (loginUser.getUserType().equals("1")) {
