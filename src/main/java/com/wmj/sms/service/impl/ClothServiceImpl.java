@@ -68,7 +68,9 @@ public class ClothServiceImpl extends ServiceImpl<ClothMapper, Cloth> implements
     public JsonResponse schoolGetClothByGender(String gender, PageDTO pageDTO) {
         Page<Cloth> page = new Page<>(pageDTO.getPageNo(), pageDTO.getPageSize());
         QueryWrapper<Cloth> wrapper = new QueryWrapper<>();
-        wrapper.eq("gender", gender);
+        if (!gender.equals("")) {
+            wrapper.eq("gender", gender);
+        }
         page = super.page(page, wrapper);
         return JsonResponse.success(page, "查询成功");
     }
