@@ -4,17 +4,21 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wmj.sms.base.JsonResponse;
 import com.wmj.sms.dao.Batch;
+import com.wmj.sms.dao.ClothImg;
 import com.wmj.sms.dto.PageDTO;
-import com.wmj.sms.service.BatchService;
-import com.wmj.sms.service.StudentService;
+import com.wmj.sms.mapper.ClothImgMapper;
+import com.wmj.sms.mapper.ClothSizeMapper;
+import com.wmj.sms.mapper.StuApplyMapper;
+import com.wmj.sms.service.*;
 import com.wmj.sms.utls.SessionUtils;
 import com.wmj.sms.dao.Cloth;
 import com.wmj.sms.mapper.ClothMapper;
-import com.wmj.sms.service.ClothService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wmj.sms.dao.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -32,6 +36,18 @@ public class ClothServiceImpl extends ServiceImpl<ClothMapper, Cloth> implements
 
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private ClothSizeMapper clothSizeMapper;
+
+    @Autowired
+    private ClothImgMapper clothImgMapper;
+
+    @Autowired
+    private StuApplyMapper stuApplyMapper;
+
+    @Autowired
+    private FileService fileService;
 
     @Override
     public Cloth getByClothId(Long clothId) {
@@ -65,14 +81,14 @@ public class ClothServiceImpl extends ServiceImpl<ClothMapper, Cloth> implements
     }
 
     @Override
-    public JsonResponse schoolGetClothByGender(String gender, PageDTO pageDTO) {
+    public Page<Cloth> schoolGetClothByGender(String gender, PageDTO pageDTO) {
         Page<Cloth> page = new Page<>(pageDTO.getPageNo(), pageDTO.getPageSize());
         QueryWrapper<Cloth> wrapper = new QueryWrapper<>();
         if (!gender.equals("")) {
             wrapper.eq("gender", gender);
         }
         page = super.page(page, wrapper);
-        return JsonResponse.success(page, "查询成功");
+        return page;
     }
 
     @Override
@@ -97,6 +113,43 @@ public class ClothServiceImpl extends ServiceImpl<ClothMapper, Cloth> implements
             }
         }
         return JsonResponse.failure("修改失败，您无操作权限，请联系系统管理员");
+    }
+
+    @Override
+    public JsonResponse deleteState(Cloth cloth) {
+        QueryWrapper<Cloth> wrapper = new QueryWrapper<>();
+        wrapper.eq("cloth_id", cloth.getClothId());
+        User loginUser = SessionUtils.getCurUser();
+        // 学校可以删除衣物
+        if (loginUser.getUserType().equals("1")) {
+            Cloth temp = super.getOne(wrapper);
+            if (temp == null) {
+                return JsonResponse.failure("删除失败，不存在该衣物");
+            }
+            Long clothId = temp.getClothId(); // 获取衣物ID
+
+            // 删除衣物尺码
+            clothSizeMapper.deleteByClothId(clothId);
+
+            // 删除图片文件
+            QueryWrapper<ClothImg> clothImgWrapper = new QueryWrapper<>();
+            clothImgWrapper.eq("cloth_id", clothId);
+            List<ClothImg> clothImgList = clothImgMapper.selectList(clothImgWrapper); // 获取图片链接列表
+            for (ClothImg clothImg: clothImgList) {
+                fileService.delete(clothImg.getClothImg()); // 循环删除图片文件
+            }
+            // 删除图片记录
+            clothImgMapper.deleteByClothId(clothId);
+
+            // 删除申请记录
+            stuApplyMapper.deleteByClothId(clothId);
+
+            // 删除衣服
+            super.remove(wrapper);
+
+            return JsonResponse.successMessage("删除成功");
+        }
+        return JsonResponse.failure("删除失败，您无本操作权限，请联系系统管理员");
     }
 
     @Override

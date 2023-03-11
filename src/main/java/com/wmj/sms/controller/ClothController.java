@@ -70,6 +70,13 @@ public class ClothController extends BaseController {
         return clothService.modifyState(cloth);
     }
 
+    @RequestMapping(value = "/delete", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "删除服装接口",notes = "应传入：clothId")
+    public JsonResponse deleteCloth(@RequestBody @Valid Cloth cloth){
+        return clothService.deleteState(cloth);
+    }
+
     @RequestMapping(value = "/getClothByGender", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "服装性别接口",notes = ("应传入pageNo, pageSize"))
@@ -138,6 +145,18 @@ public class ClothController extends BaseController {
     public JsonResponse schoolGetClothByGender(@RequestBody @Valid Map<String, Object> map){
         PageDTO pageDTO = objectMapper.convertValue(map.get("pageList"), PageDTO.class);
         String gender = objectMapper.convertValue(map.get("gender"), String.class);
-        return clothService.schoolGetClothByGender(gender, pageDTO);
+        Page<Cloth> clothPage = clothService.schoolGetClothByGender(gender, pageDTO);
+        JsonResponse jsonResponse = new JsonResponse();
+        for (Cloth cloth : clothPage.getRecords()) {
+            List<String> clothImgs = new ArrayList<>();
+            for (ClothImg clothImg : clothImgService.getByClothId(cloth.getClothId())) {
+                clothImgs.add(clothImg.getClothImg());
+            }
+            jsonResponse.addOtherData(String.valueOf(cloth.getClothId()), clothImgs);
+        }
+        jsonResponse.setStatus(true);
+        jsonResponse.setData(clothPage);
+        jsonResponse.setMessage("查询成功");
+        return jsonResponse;
     }
 }

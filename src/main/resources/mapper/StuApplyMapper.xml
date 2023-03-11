@@ -75,6 +75,10 @@
         delete from wmj_t_stu_apply
         where batch_id = #{batchId};
     </delete>
+    <delete id="deleteByClothId" parameterType="java.lang.Long" >
+        delete from wmj_t_stu_apply
+        where cloth_id = #{clothId};
+    </delete>
 
 
 </mapper>

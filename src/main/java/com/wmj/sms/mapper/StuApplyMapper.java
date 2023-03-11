@@ -28,4 +28,6 @@ public interface StuApplyMapper extends BaseMapper<StuApply> {
     List<CountResultByStudent> countResultByStudent(Long batchId, Long manId);
 
     void deleteByBatchId(Long batchId);
+
+    void deleteByClothId(Long clothId);
 }

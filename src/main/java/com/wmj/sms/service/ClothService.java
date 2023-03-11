@@ -24,7 +24,9 @@ public interface ClothService extends IService<Cloth> {
 
     JsonResponse addState(Cloth cloth);
 
-    JsonResponse schoolGetClothByGender(String gender, PageDTO pageDTO);
+    Page<Cloth> schoolGetClothByGender(String gender, PageDTO pageDTO);
 
     JsonResponse modifyState(Cloth cloth);
+
+    JsonResponse deleteState(Cloth cloth);
 }
