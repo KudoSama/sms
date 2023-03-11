@@ -3,8 +3,6 @@ package com.wmj.sms.config;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import org.mybatis.spring.annotation.MapperScan;
-import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,7 +17,6 @@ public class MybatisPlusConfig {
                 PaginationInnerInterceptor(DbType.MYSQL));
         return interceptor;
     }
-
 //    @Bean
 //    public ConfigurationCustomizer configurationCustomizer() {
 //        return configuration -> configuration.set .setUseDeprecatedExecutor(false);

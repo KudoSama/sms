@@ -18,4 +18,6 @@ import org.springframework.stereotype.Component;
 public interface ClothImgMapper extends BaseMapper<ClothImg> {
 
     void deleteByClothId(Long clothId);
+
+    void deleteByClothImg(String clothImg);
 }

@@ -52,4 +52,11 @@ public class ClothImgController extends BaseController {
         return clothImgService.addState(clothImg);
     }
 
+    @RequestMapping(value = "/delete", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "保存衣服对应图片路径",notes = "上传clothId，clothImg")
+    public JsonResponse delete(@RequestBody @Valid ClothImg clothImg) {
+        return clothImgService.deleteState(clothImg);
+    }
+
 }

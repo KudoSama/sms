@@ -20,4 +20,6 @@ public interface ClothImgService extends IService<ClothImg> {
     List<ClothImg> getByClothId(Long clothId);
 
     JsonResponse addState(ClothImg clothImg);
+
+    JsonResponse deleteState(ClothImg clothImg);
 }

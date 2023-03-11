@@ -14,4 +14,9 @@
         where cloth_id = #{clothId}
     </select>
 
+    <select id="deleteByClothImg" parameterType="java.lang.String" >
+        delete from wmj_t_cloth_img
+        where cloth_img = #{clothImg}
+    </select>
+
 </mapper>
