@@ -20,7 +20,11 @@ public class UserController extends BaseController {
             JsonResponse temp = JsonResponse.success(SecurityUtils.getUserInfo());
             return temp;
         } catch(Exception e) {
-            return JsonResponse.failure("未登录，请重新登陆");
+            JsonResponse jsonResponse = new JsonResponse<>();
+            jsonResponse.setStatus(false);
+            jsonResponse.setCode(70005); // 前端使用70005来检测未登录
+            jsonResponse.setMessage("未登录，请重新登陆");
+            return jsonResponse;
         }
     }
 
