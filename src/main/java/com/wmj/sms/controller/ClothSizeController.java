@@ -44,6 +44,13 @@ public class ClothSizeController extends BaseController {
         return clothSizeService.addState(clothSize);
     }
 
+    @RequestMapping(value = "/delete", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "删除服装尺寸接口",notes = "应传入：clothId,clothSize")
+    public JsonResponse deleteClothSize(@RequestBody @Valid ClothSize clothSize){
+        return clothSizeService.deleteState(clothSize);
+    }
+
     @RequestMapping(value = "/getClothSizeByClothId", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "服装号查询接口",notes = "应传入clothId")

@@ -60,4 +60,22 @@ public class ClothSizeServiceImpl extends ServiceImpl<ClothSizeMapper, ClothSize
         return JsonResponse.failure("添加失败，您无本操作权限，请联系系统管理员！");
     }
 
+    @Override
+    public JsonResponse deleteState(ClothSize clothSize) {
+        if (clothSize.getClothId() == null) {
+            return JsonResponse.failure("添加失败，您未填写衣服商品号");
+        }
+        if (clothService.getByClothId(clothSize.getClothId()) == null) {
+            return JsonResponse.failure("添加失败，衣服商品号不存在");
+        }
+        User loginUser = SessionUtils.getCurUser();
+        if (loginUser.getUserType().equals("1")) {
+            QueryWrapper<ClothSize> wrapper = new QueryWrapper<>();
+            wrapper.eq("cloth_id", clothSize.getClothId()).eq("cloth_size", clothSize.getClothSize());
+            super.remove(wrapper);
+            return JsonResponse.successMessage("删除成功");
+        }
+        return JsonResponse.failure("删除失败，您无本操作权限，请联系系统管理员！");
+    }
+
 }

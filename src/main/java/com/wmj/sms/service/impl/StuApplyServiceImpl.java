@@ -583,10 +583,12 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
                 }
                 // 老生填写了申请理由或新生无需检测
                 stuApply.setScDate(new Date());
+                stuApply.setRefReason(null);
+                stuApply.setState(4L); // 重置状态和拒绝理由
                 QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
                 wrapper.eq("id", stuApply.getId());
                 super.update(stuApply, wrapper);
-                return JsonResponse.success(stuApply, "修改成功，请等待审批结果");
+                return JsonResponse.success(stuApply, "修改成功，请联系辅导员重新审核");
             }
         }
         return JsonResponse.failure("您非本校学生，无修改寒衣申请补助的权限，请联系系统管理员");
@@ -624,6 +626,8 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
 
                 // 前序检测无问题，进入修改申请阶段
                 stuApply.setScDate(new Date());
+                stuApply.setRefReason(null);
+                stuApply.setState(4L); // 重置状态和拒绝理由
                 QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
                 wrapper.eq("id", stuApply.getId());
                 super.update(stuApply, wrapper);
@@ -643,10 +647,11 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
         Page<StuApply> page = new Page<>(pageDTO.getPageNo(), pageDTO.getPageSize());
         QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
         Batch batch = (Batch) batchService.getCurBatch().getData();
-        if (!loginUser.getUserType().equals("4")) {
+        if (!loginUser.getUserType().equals("4") || batch == null) {
             return null;
         } else {
             wrapper.eq("stu_id", loginUser.getId());
+            wrapper.eq("batch_id", batch.getBatchId());
             page = super.page(page, wrapper);
             return page;
         }
@@ -798,7 +803,6 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
         userType.add("1"); // 学校
         userType.add("2"); // 学院
         userType.add("3"); // 辅导员
-
 
         if (list == null) {
             return false;

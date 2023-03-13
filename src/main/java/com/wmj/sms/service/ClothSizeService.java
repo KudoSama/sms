@@ -19,4 +19,6 @@ public interface ClothSizeService extends IService<ClothSize> {
     List<ClothSize> getByClothId(Long clothId);
 
     JsonResponse addState(ClothSize clothSize);
+
+    JsonResponse deleteState(ClothSize clothSize);
 }
