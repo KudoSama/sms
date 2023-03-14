@@ -1,5 +1,7 @@
 server:
   port: 9000
+  http2:
+    enabled: true
   ssl:
     key-store: classpath:scs1671852680947_www.kudosama.cn_server.jks
     key-store-type: JKS
@@ -55,7 +57,7 @@ spring:
     #其他参数
     properties:
       mail:
-        #配置SSL 加密工厂
+        #配置SSL
         smtp:
           ssl:
             #本地测试，先放开ssl
@@ -84,9 +86,6 @@ logging:
 pagehelper:
   helper-dialect: mysql
 
-#mybatis-plus:
-#  configuration:
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 springfox:
   documentation:
     swagger-ui:

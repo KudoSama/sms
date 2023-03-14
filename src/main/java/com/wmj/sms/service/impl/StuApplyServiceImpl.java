@@ -647,7 +647,7 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
         Page<StuApply> page = new Page<>(pageDTO.getPageNo(), pageDTO.getPageSize());
         QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
         Batch batch = (Batch) batchService.getCurBatch().getData();
-        if (!loginUser.getUserType().equals("4") || batch == null) {
+        if (!loginUser.getUserType().equals("4") && batch == null) {
             return null;
         } else {
             wrapper.eq("stu_id", loginUser.getId());
