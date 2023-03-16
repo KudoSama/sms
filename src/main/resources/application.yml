@@ -49,9 +49,9 @@ spring:
     #发送者邮箱
     username: null0x00@qq.com
     #配置密码,注意不是真正的密码，而是刚刚申请到的授权码
-    password: wkgwmezecpwiiege
-    #端口号465或587
-    port: 587
+    password: pjclkhculuynbaeg
+    #端口号465或587，SSL必须使用465
+    port: 465
     #默认的邮件编码为UTF-8
     default-encoding: UTF-8
     #其他参数
@@ -60,9 +60,9 @@ spring:
         #配置SSL
         smtp:
           ssl:
-            #本地测试，先放开ssl
-            enable: false
-            required: false
+            #放开ssl
+            enable: true
+            required: true
           #开启debug模式，这样邮件发送过程的日志会在控制台打印出来，方便排查错误
         debug: true
 

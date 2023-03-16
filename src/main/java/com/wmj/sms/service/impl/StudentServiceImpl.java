@@ -68,7 +68,9 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         }
         QueryWrapper<Student> wrapper = new QueryWrapper<>();
         wrapper.eq("stu_id", stuId);
-        return super.getOne(wrapper);
+        Student temp = super.getOne(wrapper);
+        temp.setStuPassword(null);
+        return temp;
     }
 
     @Override
