@@ -3,7 +3,6 @@ package com.wmj.sms.controller;
 
 import com.wmj.sms.base.BaseController;
 import com.wmj.sms.base.JsonResponse;
-import com.wmj.sms.dao.College;
 import com.wmj.sms.dao.Manager;
 import com.wmj.sms.dao.User;
 import com.wmj.sms.dto.PageDTO;
@@ -12,6 +11,7 @@ import com.wmj.sms.service.ManagerService;
 import com.wmj.sms.service.StudentService;
 import com.wmj.sms.utls.SessionUtils;
 import io.swagger.annotations.ApiOperation;
+import jakarta.validation.Valid;
 import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.print.attribute.standard.MediaName;
-import javax.validation.Valid;
 import java.util.Base64;
 
 /**

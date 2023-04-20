@@ -7,16 +7,19 @@ server:
     key-store-type: JKS
     key-store-password: Pe9*19GdoE31i#Hu
   tomcat:
-    max-threads: 400 #最大工作线程 一般为核心数*200
-    min-spare-threads: 20 # 最小工作线程
     max-connections: 10000 # 一瞬间最大支持的并发连接数
     accept-count: 300 # 等待队列长度
+    threads:
+      max: 400 #最大工作线程 一般为核心数*200
+      min-spare: 20 # 最小工作线程
 
 #  address: 192.168.10.16
 
 ## 数据源配置
 spring:
   mvc:
+    path match:
+      matching-strategy: ant_path_matcher
     async:
       request-timeout: 60000
   jackson:
@@ -31,16 +34,13 @@ spring:
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
-    mode: LEGACYHTML5
+    mode: LEGACY-HTML5
     encoding: UTF-8
 
   servlet:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
-
-  resources:
-    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${file-upload-path}
 
   #邮箱基本配置
   mail:
@@ -65,6 +65,11 @@ spring:
             required: true
           #开启debug模式，这样邮件发送过程的日志会在控制台打印出来，方便排查错误
         debug: true
+  main:
+    allow-circular-references: true
+  web:
+    resources:
+      static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${file-upload-path}
 
 
 ## mybatis的配置
@@ -83,7 +88,7 @@ logging:
           mapper: debug
 
 ## 分页助手设置
-pagehelper:
+page helper:
   helper-dialect: mysql
 
 springfox:

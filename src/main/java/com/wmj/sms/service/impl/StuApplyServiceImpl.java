@@ -18,7 +18,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -62,173 +62,180 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
     @Override
     public void exportState(HttpServletResponse response) {
         User loginUser = SessionUtils.getCurUser();
-        if (loginUser.getUserType().equals("1")) { // 学校用户导出所有申请记录审核状态
-            response.setContentType("application/vnd.ms-excel");
-            response.setHeader("Content-Disposition", "attachment; filename=exportState.xls");
-            Batch curBatch = (Batch) batchService.getNotExamineBatch().getData(); // 获取当前待审批批次
-            QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
-            wrapper.eq("batch_id", curBatch.getBatchId());
-            List<StuApply> stuApplies = super.list(wrapper);
-            Workbook wb = new HSSFWorkbook();
-            Sheet sheet = wb.createSheet();
+        switch (loginUser.getUserType()) {
+            case "1" -> { // 学校用户导出所有申请记录审核状态
+                response.setContentType("application/vnd.ms-excel");
+                response.setHeader("Content-Disposition", "attachment; filename=exportState.xls");
+                Batch curBatch = (Batch) batchService.getNotExamineBatch().getData(); // 获取当前待审批批次
 
-            Row row = sheet.createRow(0);
+                QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
+                wrapper.eq("batch_id", curBatch.getBatchId());
+                List<StuApply> stuApplies = super.list(wrapper);
+                Workbook wb = new HSSFWorkbook();
+                Sheet sheet = wb.createSheet();
 
-            Cell cell = row.createCell(0);
-            cell.setCellValue("学号");
+                Row row = sheet.createRow(0);
 
-            cell = row.createCell(1);
-            cell.setCellValue("姓名");
-
-            cell = row.createCell(2);
-            cell.setCellValue("批次号");
-
-            cell = row.createCell(3);
-            cell.setCellValue("审核状态");
-
-            for (int i = 0; i < stuApplies.size(); i++) {
-                row = sheet.createRow(i + 1);
-
-                cell = row.createCell(0);
-                cell.setCellValue(stuApplies.get(i).getStuId());
+                Cell cell = row.createCell(0);
+                cell.setCellValue("学号");
 
                 cell = row.createCell(1);
-                Student student = studentService.getByStuId(stuApplies.get(i).getStuId());
-                cell.setCellValue(student.getStuName());
+                cell.setCellValue("姓名");
 
                 cell = row.createCell(2);
-                cell.setCellValue(stuApplies.get(i).getBatchId());
+                cell.setCellValue("批次号");
 
                 cell = row.createCell(3);
-                if (stuApplies.get(i).getState() == 1) {
-                    cell.setCellValue("学校同意申请");
-                } else if (stuApplies.get(i).getState() == 2) {
-                    cell.setCellValue("学院同意申请");
-                } else if (stuApplies.get(i).getState() == 3) {
-                    cell.setCellValue("辅导员同意申请");
-                } else if (stuApplies.get(i).getState() == 4) {
-                    cell.setCellValue("当前未审批");
-                } else {
-                    cell.setCellValue("已拒绝该申请");
+                cell.setCellValue("审核状态");
+
+                for (int i = 0; i < stuApplies.size(); i++) {
+                    row = sheet.createRow(i + 1);
+
+                    cell = row.createCell(0);
+                    cell.setCellValue(stuApplies.get(i).getStuId());
+
+                    cell = row.createCell(1);
+                    Student student = studentService.getByStuId(stuApplies.get(i).getStuId());
+                    cell.setCellValue(student.getStuName());
+
+                    cell = row.createCell(2);
+                    cell.setCellValue(stuApplies.get(i).getBatchId());
+
+                    cell = row.createCell(3);
+                    if (stuApplies.get(i).getState() == 1) {
+                        cell.setCellValue("学校同意申请");
+                    } else if (stuApplies.get(i).getState() == 2) {
+                        cell.setCellValue("学院同意申请");
+                    } else if (stuApplies.get(i).getState() == 3) {
+                        cell.setCellValue("辅导员同意申请");
+                    } else if (stuApplies.get(i).getState() == 4) {
+                        cell.setCellValue("当前未审批");
+                    } else {
+                        cell.setCellValue("已拒绝该申请");
+                    }
+                }
+
+                try {
+                    ((HSSFWorkbook) wb).write(response.getOutputStream());
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
+            case "2" -> { // 学院用户导出自己学院学生的申请状态
+                response.setContentType("application/vnd.ms-excel");
+                response.setHeader("Content-Disposition", "attachment; filename=exportState.xls");
+                Batch curBatch = (Batch) batchService.getNotExamineBatch().getData(); // 获取当前待审批批次
 
-            try {
-                ((HSSFWorkbook) wb).write(response.getOutputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (loginUser.getUserType().equals("2")) { // 学院用户导出自己学院学生的申请状态
-            response.setContentType("application/vnd.ms-excel");
-            response.setHeader("Content-Disposition", "attachment; filename=exportState.xls");
-            Batch curBatch = (Batch) batchService.getNotExamineBatch().getData(); // 获取当前待审批批次
-            QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
-            wrapper.eq("batch_id", curBatch.getBatchId()).eq("col_id", loginUser.getId());
-            List<StuApply> stuApplies = super.list(wrapper);
-            Workbook wb = new HSSFWorkbook();
-            Sheet sheet = wb.createSheet();
+                QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
+                wrapper.eq("batch_id", curBatch.getBatchId()).eq("col_id", loginUser.getId());
+                List<StuApply> stuApplies = super.list(wrapper);
+                Workbook wb = new HSSFWorkbook();
+                Sheet sheet = wb.createSheet();
 
-            Row row = sheet.createRow(0);
+                Row row = sheet.createRow(0);
 
-            Cell cell = row.createCell(0);
-            cell.setCellValue("学号");
-
-            cell = row.createCell(1);
-            cell.setCellValue("姓名");
-
-            cell = row.createCell(2);
-            cell.setCellValue("批次号");
-
-            cell = row.createCell(3);
-            cell.setCellValue("审核状态");
-
-            for (int i = 0; i < stuApplies.size(); i++) {
-                row = sheet.createRow(i + 1);
-
-                cell = row.createCell(0);
-                cell.setCellValue(stuApplies.get(i).getStuId());
+                Cell cell = row.createCell(0);
+                cell.setCellValue("学号");
 
                 cell = row.createCell(1);
-                Student student = studentService.getByStuId(stuApplies.get(i).getStuId());
-                cell.setCellValue(student.getStuName());
+                cell.setCellValue("姓名");
 
                 cell = row.createCell(2);
-                cell.setCellValue(stuApplies.get(i).getBatchId());
+                cell.setCellValue("批次号");
 
                 cell = row.createCell(3);
-                if (stuApplies.get(i).getState() == 1) {
-                    cell.setCellValue("学校同意申请");
-                } else if (stuApplies.get(i).getState() == 2) {
-                    cell.setCellValue("学院同意申请");
-                } else if (stuApplies.get(i).getState() == 3) {
-                    cell.setCellValue("辅导员同意申请");
-                } else if (stuApplies.get(i).getState() == 4) {
-                    cell.setCellValue("当前未审批");
-                } else {
-                    cell.setCellValue("已拒绝该申请");
+                cell.setCellValue("审核状态");
+
+                for (int i = 0; i < stuApplies.size(); i++) {
+                    row = sheet.createRow(i + 1);
+
+                    cell = row.createCell(0);
+                    cell.setCellValue(stuApplies.get(i).getStuId());
+
+                    cell = row.createCell(1);
+                    Student student = studentService.getByStuId(stuApplies.get(i).getStuId());
+                    cell.setCellValue(student.getStuName());
+
+                    cell = row.createCell(2);
+                    cell.setCellValue(stuApplies.get(i).getBatchId());
+
+                    cell = row.createCell(3);
+                    if (stuApplies.get(i).getState() == 1) {
+                        cell.setCellValue("学校同意申请");
+                    } else if (stuApplies.get(i).getState() == 2) {
+                        cell.setCellValue("学院同意申请");
+                    } else if (stuApplies.get(i).getState() == 3) {
+                        cell.setCellValue("辅导员同意申请");
+                    } else if (stuApplies.get(i).getState() == 4) {
+                        cell.setCellValue("当前未审批");
+                    } else {
+                        cell.setCellValue("已拒绝该申请");
+                    }
+                }
+
+                try {
+                    ((HSSFWorkbook) wb).write(response.getOutputStream());
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
+            case "3" -> { // 辅导员用户导出自己学生的申请状态
+                response.setContentType("application/vnd.ms-excel");
+                response.setHeader("Content-Disposition", "attachment; filename=exportState.xls");
+                Batch curBatch = (Batch) batchService.getNotExamineBatch().getData(); // 获取当前待审批批次
 
-            try {
-                ((HSSFWorkbook) wb).write(response.getOutputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }  else if (loginUser.getUserType().equals("3")) { // 辅导员用户导出自己学生的申请状态
-            response.setContentType("application/vnd.ms-excel");
-            response.setHeader("Content-Disposition", "attachment; filename=exportState.xls");
-            Batch curBatch = (Batch) batchService.getNotExamineBatch().getData(); // 获取当前待审批批次
-            QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
-            wrapper.eq("batch_id", curBatch.getBatchId()).eq("man_id", loginUser.getId());
-            List<StuApply> stuApplies = super.list(wrapper);
-            Workbook wb = new HSSFWorkbook();
-            Sheet sheet = wb.createSheet();
+                QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
+                wrapper.eq("batch_id", curBatch.getBatchId()).eq("man_id", loginUser.getId());
+                List<StuApply> stuApplies = super.list(wrapper);
+                Workbook wb = new HSSFWorkbook();
+                Sheet sheet = wb.createSheet();
 
-            Row row = sheet.createRow(0);
+                Row row = sheet.createRow(0);
 
-            Cell cell = row.createCell(0);
-            cell.setCellValue("学号");
-
-            cell = row.createCell(1);
-            cell.setCellValue("姓名");
-
-            cell = row.createCell(2);
-            cell.setCellValue("批次号");
-
-            cell = row.createCell(3);
-            cell.setCellValue("审核状态");
-
-            for (int i = 0; i < stuApplies.size(); i++) {
-                row = sheet.createRow(i + 1);
-
-                cell = row.createCell(0);
-                cell.setCellValue(stuApplies.get(i).getStuId());
+                Cell cell = row.createCell(0);
+                cell.setCellValue("学号");
 
                 cell = row.createCell(1);
-                Student student = studentService.getByStuId(stuApplies.get(i).getStuId());
-                cell.setCellValue(student.getStuName());
+                cell.setCellValue("姓名");
 
                 cell = row.createCell(2);
-                cell.setCellValue(stuApplies.get(i).getBatchId());
+                cell.setCellValue("批次号");
 
                 cell = row.createCell(3);
-                if (stuApplies.get(i).getState() == 1) {
-                    cell.setCellValue("学校同意申请");
-                } else if (stuApplies.get(i).getState() == 2) {
-                    cell.setCellValue("学院同意申请");
-                } else if (stuApplies.get(i).getState() == 3) {
-                    cell.setCellValue("辅导员同意申请");
-                } else if (stuApplies.get(i).getState() == 4) {
-                    cell.setCellValue("当前未审批");
-                } else {
-                    cell.setCellValue("已拒绝该申请");
-                }
-            }
+                cell.setCellValue("审核状态");
 
-            try {
-                ((HSSFWorkbook) wb).write(response.getOutputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
+                for (int i = 0; i < stuApplies.size(); i++) {
+                    row = sheet.createRow(i + 1);
+
+                    cell = row.createCell(0);
+                    cell.setCellValue(stuApplies.get(i).getStuId());
+
+                    cell = row.createCell(1);
+                    Student student = studentService.getByStuId(stuApplies.get(i).getStuId());
+                    cell.setCellValue(student.getStuName());
+
+                    cell = row.createCell(2);
+                    cell.setCellValue(stuApplies.get(i).getBatchId());
+
+                    cell = row.createCell(3);
+                    if (stuApplies.get(i).getState() == 1) {
+                        cell.setCellValue("学校同意申请");
+                    } else if (stuApplies.get(i).getState() == 2) {
+                        cell.setCellValue("学院同意申请");
+                    } else if (stuApplies.get(i).getState() == 3) {
+                        cell.setCellValue("辅导员同意申请");
+                    } else if (stuApplies.get(i).getState() == 4) {
+                        cell.setCellValue("当前未审批");
+                    } else {
+                        cell.setCellValue("已拒绝该申请");
+                    }
+                }
+
+                try {
+                    ((HSSFWorkbook) wb).write(response.getOutputStream());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -237,188 +244,195 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
     public void exportResult(HttpServletResponse response) {
         User loginUser = SessionUtils.getCurUser();
         // 学校用户按学院导出结果
-        if (loginUser.getUserType().equals("1")) {
-            response.setContentType("application/vnd.ms-excel");
-            response.setHeader("Content-Disposition", "attachment; filename=exportResult.xls");
-            Batch curBatch = (Batch) batchService.getNotExamineBatch().getData(); // 获取当前待审批批次
-            List<CountResult> stuApplies = stuApplyMapper.countResult(curBatch.getBatchId());
-            Workbook wb = new HSSFWorkbook();
-            Sheet sheet = wb.createSheet();
+        switch (loginUser.getUserType()) {
+            case "1" -> {
+                response.setContentType("application/vnd.ms-excel");
+                response.setHeader("Content-Disposition", "attachment; filename=exportResult.xls");
+                Batch curBatch = (Batch) batchService.getNotExamineBatch().getData(); // 获取当前待审批批次
 
-            Row row = sheet.createRow(0);
+                List<CountResult> stuApplies = stuApplyMapper.countResult(curBatch.getBatchId());
+                Workbook wb = new HSSFWorkbook();
+                Sheet sheet = wb.createSheet();
 
-            Cell cell = row.createCell(0);
-            cell.setCellValue("学院号");
+                Row row = sheet.createRow(0);
 
-            cell = row.createCell(1);
-            cell.setCellValue("学院名");
-
-            cell = row.createCell(2);
-            cell.setCellValue("服装编号");
-
-            cell = row.createCell(3);
-            cell.setCellValue("服装名");
-
-            cell = row.createCell(4);
-            cell.setCellValue("服装尺码");
-
-            cell = row.createCell(5);
-            cell.setCellValue("数量");
-
-            for (int i = 0; i < stuApplies.size(); i++) {
-                row = sheet.createRow(i + 1);
-
-                cell = row.createCell(0);
-                cell.setCellValue(stuApplies.get(i).getColId());
+                Cell cell = row.createCell(0);
+                cell.setCellValue("学院号");
 
                 cell = row.createCell(1);
-                QueryWrapper<College> collegeWrapper = new QueryWrapper<>();
-                collegeWrapper.eq("col_id", stuApplies.get(i).getColId());
-                College college = collegeService.getOne(collegeWrapper);
-                cell.setCellValue(college.getColName());
+                cell.setCellValue("学院名");
 
                 cell = row.createCell(2);
-                cell.setCellValue(stuApplies.get(i).getClothId());
+                cell.setCellValue("服装编号");
 
                 cell = row.createCell(3);
-                QueryWrapper<Cloth> clothWrapper = new QueryWrapper<>();
-                clothWrapper.eq("cloth_id", stuApplies.get(i).getClothId());
-                Cloth cloth = clothService.getOne(clothWrapper);
-                cell.setCellValue(cloth.getClothName());
+                cell.setCellValue("服装名");
 
                 cell = row.createCell(4);
-                cell.setCellValue(stuApplies.get(i).getClothSize());
+                cell.setCellValue("服装尺码");
 
                 cell = row.createCell(5);
-                cell.setCellValue(stuApplies.get(i).getNum());
+                cell.setCellValue("数量");
+
+                for (int i = 0; i < stuApplies.size(); i++) {
+                    row = sheet.createRow(i + 1);
+
+                    cell = row.createCell(0);
+                    cell.setCellValue(stuApplies.get(i).getColId());
+
+                    cell = row.createCell(1);
+                    QueryWrapper<College> collegeWrapper = new QueryWrapper<>();
+                    collegeWrapper.eq("col_id", stuApplies.get(i).getColId());
+                    College college = collegeService.getOne(collegeWrapper);
+                    cell.setCellValue(college.getColName());
+
+                    cell = row.createCell(2);
+                    cell.setCellValue(stuApplies.get(i).getClothId());
+
+                    cell = row.createCell(3);
+                    QueryWrapper<Cloth> clothWrapper = new QueryWrapper<>();
+                    clothWrapper.eq("cloth_id", stuApplies.get(i).getClothId());
+                    Cloth cloth = clothService.getOne(clothWrapper);
+                    cell.setCellValue(cloth.getClothName());
+
+                    cell = row.createCell(4);
+                    cell.setCellValue(stuApplies.get(i).getClothSize());
+
+                    cell = row.createCell(5);
+                    cell.setCellValue(stuApplies.get(i).getNum());
+                }
+
+                try {
+                    ((HSSFWorkbook) wb).write(response.getOutputStream());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+            case "2" -> { // 学院用户按辅导员导出结果
+                response.setContentType("application/vnd.ms-excel");
+                response.setHeader("Content-Disposition", "attachment; filename=exportResult.xls");
+                Batch curBatch = (Batch) batchService.getNotExamineBatch().getData(); // 获取当前待审批批次
 
-            try {
-                ((HSSFWorkbook) wb).write(response.getOutputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (loginUser.getUserType().equals("2")) { // 学院用户按辅导员导出结果
-            response.setContentType("application/vnd.ms-excel");
-            response.setHeader("Content-Disposition", "attachment; filename=exportResult.xls");
-            Batch curBatch = (Batch) batchService.getNotExamineBatch().getData(); // 获取当前待审批批次
-            List<CountResultByManager> stuApplies = stuApplyMapper.countResultByManager(curBatch.getBatchId(), loginUser.getId());
-            Workbook wb = new HSSFWorkbook();
-            Sheet sheet = wb.createSheet();
+                List<CountResultByManager> stuApplies = stuApplyMapper.countResultByManager(curBatch.getBatchId(), loginUser.getId());
+                Workbook wb = new HSSFWorkbook();
+                Sheet sheet = wb.createSheet();
 
-            Row row = sheet.createRow(0);
+                Row row = sheet.createRow(0);
 
-            Cell cell = row.createCell(0);
-            cell.setCellValue("辅导员号");
-
-            cell = row.createCell(1);
-            cell.setCellValue("辅导员名");
-
-            cell = row.createCell(2);
-            cell.setCellValue("服装编号");
-
-            cell = row.createCell(3);
-            cell.setCellValue("服装名");
-
-            cell = row.createCell(4);
-            cell.setCellValue("服装尺码");
-
-            cell = row.createCell(5);
-            cell.setCellValue("数量");
-
-            for (int i = 0; i < stuApplies.size(); i++) {
-                row = sheet.createRow(i + 1);
-
-                cell = row.createCell(0);
-                cell.setCellValue(stuApplies.get(i).getManId());
+                Cell cell = row.createCell(0);
+                cell.setCellValue("辅导员号");
 
                 cell = row.createCell(1);
-                QueryWrapper<Manager> managerWrapper = new QueryWrapper<>();
-                managerWrapper.eq("man_id", stuApplies.get(i).getManId());
-                Manager manager = managerService.getOne(managerWrapper);
-                cell.setCellValue(manager.getManName());
+                cell.setCellValue("辅导员名");
 
                 cell = row.createCell(2);
-                cell.setCellValue(stuApplies.get(i).getClothId());
+                cell.setCellValue("服装编号");
 
                 cell = row.createCell(3);
-                QueryWrapper<Cloth> clothWrapper = new QueryWrapper<>();
-                clothWrapper.eq("cloth_id", stuApplies.get(i).getClothId());
-                Cloth cloth = clothService.getOne(clothWrapper);
-                cell.setCellValue(cloth.getClothName());
+                cell.setCellValue("服装名");
 
                 cell = row.createCell(4);
-                cell.setCellValue(stuApplies.get(i).getClothSize());
+                cell.setCellValue("服装尺码");
 
                 cell = row.createCell(5);
-                cell.setCellValue(stuApplies.get(i).getNum());
+                cell.setCellValue("数量");
+
+                for (int i = 0; i < stuApplies.size(); i++) {
+                    row = sheet.createRow(i + 1);
+
+                    cell = row.createCell(0);
+                    cell.setCellValue(stuApplies.get(i).getManId());
+
+                    cell = row.createCell(1);
+                    QueryWrapper<Manager> managerWrapper = new QueryWrapper<>();
+                    managerWrapper.eq("man_id", stuApplies.get(i).getManId());
+                    Manager manager = managerService.getOne(managerWrapper);
+                    cell.setCellValue(manager.getManName());
+
+                    cell = row.createCell(2);
+                    cell.setCellValue(stuApplies.get(i).getClothId());
+
+                    cell = row.createCell(3);
+                    QueryWrapper<Cloth> clothWrapper = new QueryWrapper<>();
+                    clothWrapper.eq("cloth_id", stuApplies.get(i).getClothId());
+                    Cloth cloth = clothService.getOne(clothWrapper);
+                    cell.setCellValue(cloth.getClothName());
+
+                    cell = row.createCell(4);
+                    cell.setCellValue(stuApplies.get(i).getClothSize());
+
+                    cell = row.createCell(5);
+                    cell.setCellValue(stuApplies.get(i).getNum());
+                }
+
+                try {
+                    ((HSSFWorkbook) wb).write(response.getOutputStream());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+            case "3" -> { // 辅导员用户按学生导出结果
+                response.setContentType("application/vnd.ms-excel");
+                response.setHeader("Content-Disposition", "attachment; filename=exportResult.xls");
+                Batch curBatch = (Batch) batchService.getNotExamineBatch().getData(); // 获取当前待审批批次
 
-            try {
-                ((HSSFWorkbook) wb).write(response.getOutputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (loginUser.getUserType().equals("3")) { // 辅导员用户按学生导出结果
-            response.setContentType("application/vnd.ms-excel");
-            response.setHeader("Content-Disposition", "attachment; filename=exportResult.xls");
-            Batch curBatch = (Batch) batchService.getNotExamineBatch().getData(); // 获取当前待审批批次
-            List<CountResultByStudent> stuApplies = stuApplyMapper.countResultByStudent(curBatch.getBatchId(), loginUser.getId());
-            Workbook wb = new HSSFWorkbook();
-            Sheet sheet = wb.createSheet();
+                List<CountResultByStudent> stuApplies = stuApplyMapper.countResultByStudent(curBatch.getBatchId(), loginUser.getId());
+                Workbook wb = new HSSFWorkbook();
+                Sheet sheet = wb.createSheet();
 
-            Row row = sheet.createRow(0);
+                Row row = sheet.createRow(0);
 
-            Cell cell = row.createCell(0);
-            cell.setCellValue("学生号");
-
-            cell = row.createCell(1);
-            cell.setCellValue("学生名");
-
-            cell = row.createCell(2);
-            cell.setCellValue("服装编号");
-
-            cell = row.createCell(3);
-            cell.setCellValue("服装名");
-
-            cell = row.createCell(4);
-            cell.setCellValue("服装尺码");
-
-            cell = row.createCell(5);
-            cell.setCellValue("数量");
-
-            for (int i = 0; i < stuApplies.size(); i++) {
-                row = sheet.createRow(i + 1);
-
-                cell = row.createCell(0);
-                cell.setCellValue(stuApplies.get(i).getStuId());
+                Cell cell = row.createCell(0);
+                cell.setCellValue("学生号");
 
                 cell = row.createCell(1);
-                QueryWrapper<Student> studentWrapper = new QueryWrapper<>();
-                studentWrapper.eq("stu_id", stuApplies.get(i).getStuId());
-                Student student = studentService.getOne(studentWrapper);
-                cell.setCellValue(student.getStuName());
+                cell.setCellValue("学生名");
 
                 cell = row.createCell(2);
-                cell.setCellValue(stuApplies.get(i).getClothId());
+                cell.setCellValue("服装编号");
 
                 cell = row.createCell(3);
-                QueryWrapper<Cloth> clothWrapper = new QueryWrapper<>();
-                clothWrapper.eq("cloth_id", stuApplies.get(i).getClothId());
-                Cloth cloth = clothService.getOne(clothWrapper);
-                cell.setCellValue(cloth.getClothName());
+                cell.setCellValue("服装名");
 
                 cell = row.createCell(4);
-                cell.setCellValue(stuApplies.get(i).getClothSize());
+                cell.setCellValue("服装尺码");
 
                 cell = row.createCell(5);
-                cell.setCellValue(stuApplies.get(i).getNum());
-            }
+                cell.setCellValue("数量");
 
-            try {
-                ((HSSFWorkbook) wb).write(response.getOutputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
+                for (int i = 0; i < stuApplies.size(); i++) {
+                    row = sheet.createRow(i + 1);
+
+                    cell = row.createCell(0);
+                    cell.setCellValue(stuApplies.get(i).getStuId());
+
+                    cell = row.createCell(1);
+                    QueryWrapper<Student> studentWrapper = new QueryWrapper<>();
+                    studentWrapper.eq("stu_id", stuApplies.get(i).getStuId());
+                    Student student = studentService.getOne(studentWrapper);
+                    cell.setCellValue(student.getStuName());
+
+                    cell = row.createCell(2);
+                    cell.setCellValue(stuApplies.get(i).getClothId());
+
+                    cell = row.createCell(3);
+                    QueryWrapper<Cloth> clothWrapper = new QueryWrapper<>();
+                    clothWrapper.eq("cloth_id", stuApplies.get(i).getClothId());
+                    Cloth cloth = clothService.getOne(clothWrapper);
+                    cell.setCellValue(cloth.getClothName());
+
+                    cell = row.createCell(4);
+                    cell.setCellValue(stuApplies.get(i).getClothSize());
+
+                    cell = row.createCell(5);
+                    cell.setCellValue(stuApplies.get(i).getNum());
+                }
+
+                try {
+                    ((HSSFWorkbook) wb).write(response.getOutputStream());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -601,7 +615,8 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
         // 仅学校可以修改学生申请
         if (loginUser.getUserType().equals("1")) {
             // 信息未填写完毕
-            if (stuApply.getId() == null || stuApply.getClothId() == null || StringUtils.isBlank(stuApply.getClothSize())) {
+            if (stuApply.getId() == null || stuApply.getClothId() == null ||
+                    StringUtils.isBlank(stuApply.getClothSize())) {
                 return JsonResponse.failure("请检查您是否填写了记录id、衣服商品号或衣服尺码");
             } else {
                 // 填写的衣服不存在
@@ -627,7 +642,6 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
                 // 前序检测无问题，进入修改申请阶段
                 stuApply.setScDate(new Date());
                 stuApply.setRefReason(null);
-                stuApply.setState(4L); // 重置状态和拒绝理由
                 QueryWrapper<StuApply> wrapper = new QueryWrapper<>();
                 wrapper.eq("id", stuApply.getId());
                 super.update(stuApply, wrapper);
@@ -671,26 +685,26 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
 
         switch (loginUser.getUserType()) {
             // 辅导员
-            case "3":
+            case "3" -> {
                 wrapper.eq("batch_id", batch.getBatchId()); // 待审核批次
                 wrapper.eq("man_id", loginUser.getId());
                 wrapper.eq("state", 4); // 未审核
                 page = super.page(page, wrapper);
-                // System.out.println(stuApplyPage);
-                break;
+            }
+            // System.out.println(stuApplyPage);
             // 学院
-            case "2":
+            case "2" -> {
                 wrapper.eq("batch_id", batch.getBatchId()); // 待审核批次
                 wrapper.eq("col_id", loginUser.getId());
                 wrapper.eq("state", 3); // 辅导员审核通过
                 page = super.page(page, wrapper);
-                break;
+            }
             // 学校
-            case "1":
+            case "1" -> {
                 wrapper.eq("batch_id", batch.getBatchId()); // 待审核批次
                 wrapper.eq("state", 2); // 学院审核通过
                 page = super.page(page, wrapper);
-                break;
+            }
         }
         return page;
     }
@@ -725,27 +739,27 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
 
         switch (loginUser.getUserType()) {
             // 辅导员
-            case "3":
+            case "3" -> {
                 wrapper.eq("batch_id", batch.getBatchId()); // 待审核批次
                 wrapper.eq("man_id", loginUser.getId());
                 wrapper.ne("state", 0).ne("state", 4);
                 page = super.page(page, wrapper);
-                // System.out.println(stuApplyPage);
-                break;
+            }
+            // System.out.println(stuApplyPage);
             // 学院
-            case "2":
+            case "2" -> {
                 wrapper.eq("batch_id", batch.getBatchId()); // 待审核批次
                 wrapper.eq("col_id", loginUser.getId());
                 wrapper.ne("state", 0).ne("state", 4).ne("state", 3);
                 page = super.page(page, wrapper);
-                break;
+            }
             // 学校
-            case "1":
+            case "1" -> {
                 wrapper.eq("batch_id", batch.getBatchId()); // 待审核批次
                 wrapper.ne("state", 0).ne("state", 4)
                         .ne("state", 3).ne("state", 2);
                 page = super.page(page, wrapper); // 学院审核通过
-                break;
+            }
         }
         return page;
     }
@@ -770,21 +784,21 @@ public class StuApplyServiceImpl extends ServiceImpl<StuApplyMapper, StuApply> i
                         continue;
                     } else {
                         switch (loginUser.getUserType()) {
-                            case "1":
+                            case "1" -> {
                                 stuApply.setState(1L); // 学校通过
                                 wrapper.eq("id", id);
                                 super.update(stuApply, wrapper);
-                                break;
-                            case "2":
+                            }
+                            case "2" -> {
                                 stuApply.setState(2L);// 学院通过
                                 wrapper.eq("id", id);
                                 super.update(stuApply, wrapper);
-                                break;
-                            case "3":
+                            }
+                            case "3" -> {
                                 stuApply.setState(3L);// 辅导员通过
                                 wrapper.eq("id", id);
                                 super.update(stuApply, wrapper);
-                                break;
+                            }
                         }
                     }
                 }

@@ -4,7 +4,7 @@ import com.wmj.sms.base.JsonResponse;
 import com.wmj.sms.dao.College;
 import com.baomidou.mybatisplus.extension.service.IService;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 /**
  * <p>

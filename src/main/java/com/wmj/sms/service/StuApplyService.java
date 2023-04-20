@@ -6,7 +6,7 @@ import com.wmj.sms.base.JsonResponse;
 import com.wmj.sms.dto.PageDTO;
 import com.wmj.sms.dao.StuApply;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
